@@ -1,0 +1,17 @@
+{
+  "name": "Graphium",
+  "homepage": "https://github.com/glaucomunsberg/graphium",
+  "authors": [
+    "Glauco Roberto <glaucomunsberg@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

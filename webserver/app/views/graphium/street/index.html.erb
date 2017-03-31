@@ -1,0 +1,21 @@
+<table class="highlight">
+    <thead>
+      <tr>
+          <th>Name</th>
+          <th>Tipo</th>
+          <th>Superfice</th>
+          <th>Nº de nodos</th>
+      </tr>
+    </thead>
+
+    <tbody>
+        <%@streets.each do |street|%>
+            <tr>
+                <td><%=street.name_osm%></td>
+                <td><%=street.type_osm%></td>
+                <td><%=street.surface_osm%></td>
+                <td><%=street.nodes.length%></td>
+              </tr>
+        <%end%>
+    </tbody>
+</table>

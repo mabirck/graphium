@@ -1,0 +1,2 @@
+module Graphium::StreetHelper
+end

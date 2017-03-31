@@ -1,0 +1,274 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfw7x1Y5XXJXcGwQAFGG_069ZKEgpGEBE&callback=initTheMap" defer></script>
+
+<div class='row'>
+    <div id='column_left' class="col s8">
+        <div style="margin-top: 10px;">
+            <div class="z-depth-1">
+                <div class='row' style='padding: 15px 15px 10px 15px;'>
+                    <a id='delete' onClick="clean()" class="col s2" style='cursor:pointer' ><i class="material-icons">delete_sweep</i>
+                    </a>
+                    <div class="input-field col s6 offset-s4">
+                        <select id='the_swarm_select' onchange="update()">
+                          <option value="" disabled selected>Escolha a execução</option>
+                          <%@swarms.each do |swarm|%>
+                            <option value="<%=swarm%>"><%=swarm%></option>
+                          <%end%>
+                        </select>
+                        <label>Execução</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='map' class="map">
+        </div>
+    </div>
+    <div class="col s4">
+        <ul class="collapsible" data-collapsible="accordion">
+            <li class='open'>
+                <div class="collapsible-header"><i class="material-icons">place</i>Agentes</div>
+                <div class="collapsible-body">
+                    <div id='agent_sleeping' style='display:none'>
+                        <div class="row valign-wrapper">
+                            <img style='width: 100%;' src='/assets/analytics/sleeping.jpg' class='col s12 valign'>
+                        </div>
+                        <div class="row" style="text-align: center;">
+                            Zzz...
+                        </div>
+                    </div>
+                    <div id='agent_showing' style='display:none'>
+                    </div>
+                </div>
+            </li>
+            <li>
+                  <div class="collapsible-header"><i class="material-icons">directions</i>Ruas analisadas</div>
+                  <div id='street_names' class="collapsible-body"><span>Nenhuma</span></div>
+            </li>
+            <li>
+                  <div class="collapsible-header"><i class="material-icons">info_outline</i>Informações</div>
+                  <div id='informations' class="collapsible-body"><span>Nenhuma.</span></div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    var map;
+    var markers = []
+    var lines = []
+    var infoWindow = "";
+    var play = false;
+    var time_out = 3000;
+    var lineSymbol = {
+        path: 'M 0,-1 0,1',
+        strokeOpacity: 1,
+        scale: 4
+      };
+    var visited_streets = []
+    var agents = []
+    
+    function clean(){
+        for(var a=0; a < markers.length;a++){
+          markers[a].setMap(null);
+
+        }  
+        for(var a=0; a <lines.length;a++){
+          lines[a].setMap(null);
+        }
+        markers = [];
+        lines = [];
+        google.maps.event.trigger(map, 'resize');
+        $('#street_names').html('<span>Nenhuma</span>');
+        console.log('clean')
+    }
+    
+    function initTheMap() {
+        // Start map
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -31.769016, lng: -52.3347313},
+            zoom: 13
+        });
+        // show infowindow location
+        infoWindow = new google.maps.InfoWindow({map: map});
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+              var pos = {
+                //lat: position.coords.latitude,
+                //lng: position.coords.longitude
+                lat: -31.769016,
+                lng: -52.3347313
+              };
+
+              infoWindow.setPosition(pos);
+              infoWindow.setContent('Sua localização');
+              map.setCenter(pos);
+            }, function() {
+              handleLocationError(true, infoWindow, map.getCenter());
+            });
+          } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+          }
+    }
+    
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      infoWindow.setPosition(pos);
+      infoWindow.setContent(browserHasGeolocation ?
+                            'Error: O serviço de localização falhou.' :
+                            'Error: Seu navegador não tem suporte de geolocalização.');
+    }
+    
+    
+    function addMarker(name,lat,lng){
+        
+        latLng = new google.maps.LatLng(lat, lng);
+        
+        marker = new google.maps.Marker({
+              position: latLng,
+              title:name,
+              visible: true
+        });
+        marker.setMap(map);
+        console.log('adding marker!',lat,lng)
+        markers.push(marker)
+    }
+    
+    function addLine(color,lat_1,lng_1,lat_2,lng_2,jump){
+        var latLngCoordenates = [
+            {lat: lat_1, lng: lng_1},
+            {lat: lat_2, lng: lng_2},
+        ];
+        
+        line_finish = ""
+        if(jump === false){
+            line_finish = new google.maps.Polyline({
+                path: latLngCoordenates,
+                geodesic: true,
+                strokeColor: color,
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+        }else{
+            line_finish = new google.maps.Polyline({
+                path: latLngCoordenates,
+                geodesic: true,
+                strokeColor: color,
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+                icons: [{
+                  icon: lineSymbol,
+                  offset: '0',
+                  repeat: '20px'
+                }],
+            });
+            
+        }
+        lines.push(line_finish)
+        line_finish.setMap(map);
+        
+    }
+    
+    function addNameToHtml(name,color,lat,lng){
+        the_html= "<li class='collection-item avatar' onclick=\"location.href='/graphium/agent'\"><i class='material-icons circle red' style='background-color:"+color+"!important;padding-left: 12px;'>places</i><span class='title'>"+name+"</span><p>"+lat+"<br>"+lng+"</p><a href='#!' class='secondary-content'></a></li>"
+        return the_html;
+    }
+    
+    function update(){
+        console.log('update!');
+        var e = document.getElementById("the_swarm_select");
+        var value = e.options[e.selectedIndex].value;
+        console.log('value=',value)
+        
+        $.ajax({
+            url: "/graphium/analytics/getAgentsBySwarm",
+            dataType: "json",
+            data: {
+              "swarm_identifier": value
+            },
+            complete: function(){
+              for(var a=0; a < markers.length;a++){
+                  //markers[a].setMap(null);
+                  
+              }  
+              for(var a=0; a <lines.length;a++){
+                  //lines[a].setMap(null);
+              }
+              //markers = [];
+              //lines = [];
+            },
+            success: function($data) {
+                if($data.length > 0){
+                    the_html_to_show = "<ul class='collection'>"
+                    for(var a=0;a < $data.length;a++){
+                        
+                        the_html_to_show += addNameToHtml($data[a].name,$data[a].color,$data[a].last_street,$data[a].last_lat+","+$data[a].last_lng);
+                        addMarker($data[a].name,$data[a].last_lat, $data[a].last_lng);
+                        
+                        for(var b=0; b < $data[a].pathbread.length;b++){
+                            
+                           if(b!=0 && b < $data[a].pathbread.length-2){
+                              addLine($data[a].color, $data[a].pathbread[b].lat, $data[a].pathbread[b].lng,
+                                      $data[a].pathbread[b+1].lat, $data[a].pathbread[b+1].lng,$data[a].pathbread[b].jump) 
+                           }
+                           
+                        }
+                        
+                        for(var b=0; b < $data[a].visited_streets.length;b++){
+                            if($data[a].visited_streets[b]!=""){
+                                visited_streets.push($data[a].visited_streets[b])
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                    var uniqueNames = [];
+                    $.each(visited_streets, function(i, el){
+                        if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+                    });
+                    
+                    streets_to_show = "<table class='highlight'><tbody>";
+                    for(var a=0;a< uniqueNames.length;a++){
+                        streets_to_show +="<tr>"+uniqueNames[a]+"</br></tr>";
+                    }
+                    streets_to_show += "</tbody></table>";
+                    
+                    $('#street_names').html(streets_to_show);
+                    
+                    the_html_to_show +="</ul>"
+                    $('#agent_sleeping').hide();
+                    $('#agent_showing').html(the_html_to_show);
+                    $('#agent_showing').show();
+                }else{
+                    $('#agent_sleeping').show();
+                    $('#agent_showing').hide();
+                }
+                Materialize.toast('Atualizado!', 1000,'rounded')
+                console.log('success',$data);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                console.log('error',thrownError);
+                $('#agent_sleeping').hide();
+                $('#agent_showing').hide();
+                $('#street_names').html('<span>Nenhuma</span>');
+            }
+        });
+    }
+    
+
+    $(document).ready(function(){
+        $('#map').width($('#column_left').width()+"px");
+        $('#map').css('min-height',$('#column_left').width()+"px");
+        $('.collapsible').collapsible('open', 0);
+        $('select').material_select();
+        $('select').material_select();
+        document.querySelector('select').addEventListener("onChange", update());
+    });
+    
+</script>
+<style>
+    #map {
+        min-height: 100%;
+        width: 100%;
+      }
+</style>

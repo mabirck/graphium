@@ -1,0 +1,2 @@
+module Graphium::HistoryHelper
+end

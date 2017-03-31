@@ -1,0 +1,2 @@
+module Graphium::AgentHelper
+end

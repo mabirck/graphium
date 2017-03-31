@@ -1,0 +1,2 @@
+module Graphium::AnalyticsHelper
+end

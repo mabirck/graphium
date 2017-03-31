@@ -1,0 +1,33 @@
+<table class="highlight">
+    <thead>
+      <tr>
+          <th>Name</th>
+          <th>Identificador</th>
+          <th>Ativo</th>
+          <th>Última Lat.</th>
+          <th>Última Lng.</th>
+      </tr>
+    </thead>
+
+    <tbody>
+        <%@agents.each do |agent|%>
+            <tr>
+                <td><%=agent.name%></td>
+                <td><%=agent.swarm_identifier%></td>
+                <%if agent.active%>
+                    <td><i class="material-icons">location_off</i></td>
+                <%else%>
+                    <td><i class="material-icons">location_on</i></td>
+                <%end%>
+                
+                <td><%=agent.last_lat%></td>
+                <td><%=agent.last_lng%></td>
+              </tr>
+        <%end%>
+        <%if @agents.length == 0%>
+            <tr>
+                <td style="text-align: center;" colspan='5'>Nenhum agente na história</td>
+            </tr>
+        <%end%>
+    </tbody>
+</table>
