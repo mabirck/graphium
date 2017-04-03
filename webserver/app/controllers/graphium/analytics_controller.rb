@@ -1,6 +1,6 @@
 class Graphium::AnalyticsController < ApplicationController
     respond_to :json, :html, :js
-    
+    layout "inside"
     def index
         
     end

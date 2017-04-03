@@ -1,0 +1,637 @@
+DEBUG:root:Swarm: We are start me...
+DEBUG:root:Swarm: Starting agents...
+INFO:root:Carl Decesare: find the street '223623817' and id Santa Cecília to start! :D
+INFO:root:Carl Decesare: cicle 1 end
+INFO:root:Carl Decesare the distance is 35.9605123722 =D
+INFO:root:Carl Decesare: cicle 2 end
+INFO:root:Simon Dihel: find the street '221233271' and id Rua Conselheiro Jerônimo Coelho to start! :D
+INFO:root:Simon Dihel: cicle 1 end
+INFO:root:Simon Dihel: process, but we need change the street =S
+INFO:root:Jerome Howey: find the street '204048175' and id Rua Barroso Neto to start! :D
+INFO:root:Simon Dihel the distance is 166.107948203 =D
+INFO:root:Jerome Howey: cicle 1 end
+INFO:root:Simon Dihel: Calculate the distance to 2302811760 and 2302811751
+INFO:root:Jerome Howey the distance is 75.1247173802 =D
+INFO:root:Jerome Howey: cicle 2 end
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2302811751/ways HTTP/1.1" 200 577
+INFO:root:Simon Dihel: choosing a new street... :)
+INFO:root:Simon Dihel: the new street is 'Rua Conselheiro Jerônimo Coelho' and id 221233271 ;)
+INFO:root:Simon Dihel: cicle 2 end
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+ERROR:root:Swarm: Swarm die! x(
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+ERROR:root:Swarm: Swarm die! x(
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+ERROR:root:Swarm: Swarm die! x(
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+ERROR:root:Swarm: Swarm die! x(
+CRITICAL:root:'Agent' object has no attribute 'info'
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+ERROR:root:Swarm: Swarm die! x(
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+ERROR:root:Swarm: Swarm die! x(
+CRITICAL:root:'Agent' object has no attribute 'info'
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+INFO:root:Delana Rienzo: Hello! I'm ready! ;)
+INFO:root:Faustina Derosby: Hello! I'm ready! ;)
+INFO:root:Carmelia Evitts: Hello! I'm ready! ;)
+INFO:root:Delana Rienzo: Let start the job! =D
+INFO:root:Faustina Derosby: Let start the job! =D
+INFO:root:Carmelia Evitts: Let start the job! =D
+INFO:root:Carmelia Evitts: find the street '297832371' and id Rua Osmar Schuch to start! :D
+INFO:root:Delana Rienzo: find the street '338510475' and id Rua Paulo de Souza Lobo to start! :D
+INFO:root:Faustina Derosby: find the street '338510457' and id Rua Tapes to start! :D
+INFO:root:Carmelia Evitts: cicle 1 end
+INFO:root:Delana Rienzo: cicle 1 end
+INFO:root:Faustina Derosby: cicle 1 end
+INFO:root:Delana Rienzo the distance is 83.7791370133 =D
+INFO:root:Carmelia Evitts the distance is 79.6685109123 =D
+INFO:root:Faustina Derosby the distance is 129.653965169 =D
+INFO:root:Delana Rienzo: cicle 2 end
+INFO:root:Carmelia Evitts: cicle 2 end
+INFO:root:Faustina Derosby: cicle 2 end
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+INFO:root:Hugh Heybrock: Hello! I'm ready! ;)
+INFO:root:Napoleon Ypina: Hello! I'm ready! ;)
+INFO:root:Luana Hendler: Hello! I'm ready! ;)
+INFO:root:Hugh Heybrock: Let start the job! =D
+INFO:root:Napoleon Ypina: Let start the job! =D
+INFO:root:Luana Hendler: Let start the job! =D
+INFO:root:Luana Hendler: find the street '174787421' and id Rua Apolinário Porto Alegre to start! :D
+INFO:root:Napoleon Ypina: find the street '333628032' and id Praça Coronel Pedro Osorio to start! :D
+INFO:root:Hugh Heybrock: find the street '223094903' and id Largo Antônio Gomes da Silva to start! :D
+ERROR:root:Luana Hendler: Agent die! x(
+ERROR:root:Napoleon Ypina: Agent die! x(
+ERROR:root:Hugh Heybrock: Agent die! x(
+CRITICAL:root:'NoneType' object has no attribute 'keys'
+CRITICAL:root:'NoneType' object has no attribute 'keys'
+CRITICAL:root:'NoneType' object has no attribute 'keys'
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+INFO:root:Jane Guevera: Hello! I'm ready! ;)
+INFO:root:Eusebio Hennessee: Hello! I'm ready! ;)
+INFO:root:Eloy Treib: Hello! I'm ready! ;)
+INFO:root:Jane Guevera: Let start the job! =D
+INFO:root:Eusebio Hennessee: Let start the job! =D
+INFO:root:Eloy Treib: Let start the job! =D
+INFO:root:Eusebio Hennessee: find the street '450683817' and id Rua Quinze de Novembro to start! :D
+INFO:root:Eloy Treib: find the street '274193531' and id Avenida Getúlio Vargas to start! :D
+INFO:root:Jane Guevera: find the street '361656301' and id Avenida Francisco Caruccio to start! :D
+ERROR:root:Eloy Treib: Agent die! x(
+ERROR:root:Jane Guevera: Agent die! x(
+ERROR:root:Eusebio Hennessee: Agent die! x(
+CRITICAL:root:'cross_streets_osm_id'
+CRITICAL:root:'cross_streets_osm_id'
+CRITICAL:root:'cross_streets_osm_id'
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+INFO:root:Bruce Ruballos: Hello! I'm ready! ;)
+INFO:root:Margot Cruickshank: Hello! I'm ready! ;)
+INFO:root:Gaylord Suddreth: Hello! I'm ready! ;)
+INFO:root:Bruce Ruballos: Let start the job! =D
+INFO:root:Gaylord Suddreth: Let start the job! =D
+INFO:root:Margot Cruickshank: Let start the job! =D
+INFO:root:Bruce Ruballos: find the street '203164958' and id Rua Doca Serpa to start! :D
+INFO:root:Margot Cruickshank: find the street '203173445' and id Rua Silveira Martins to start! :D
+INFO:root:Gaylord Suddreth: find the street '204049065' and id Rua Doutor Cardoso Fontes to start! :D
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131541695/ways HTTP/1.1" 200 483
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2140617450/ways HTTP/1.1" 200 440
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131439038/ways HTTP/1.1" 200 561
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2140605633/ways HTTP/1.1" 200 429
+ERROR:root:Gaylord Suddreth: Agent die! x(
+CRITICAL:root:'id'
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2147399146/ways HTTP/1.1" 200 525
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2780591692/ways HTTP/1.1" 200 481
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131439039/ways HTTP/1.1" 200 404
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131541694/ways HTTP/1.1" 200 508
+ERROR:root:Margot Cruickshank: Agent die! x(
+CRITICAL:root:'id'
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131525909/ways HTTP/1.1" 200 561
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2147399335/ways HTTP/1.1" 200 549
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2147399334/ways HTTP/1.1" 200 580
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2147399333/ways HTTP/1.1" 200 567
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2782300916/ways HTTP/1.1" 200 462
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131439036/ways HTTP/1.1" 200 494
+ERROR:root:Bruce Ruballos: Agent die! x(
+CRITICAL:root:'id'
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+INFO:root:Claudio Kollmeyer: Hello! I'm ready! ;)
+INFO:root:Isidro Weinberg: Hello! I'm ready! ;)
+INFO:root:Von Filhiol: Hello! I'm ready! ;)
+INFO:root:Claudio Kollmeyer: Let start the job! =D
+INFO:root:Isidro Weinberg: Let start the job! =D
+INFO:root:Von Filhiol: Let start the job! =D
+INFO:root:Isidro Weinberg: find the street '174560347' and id Rua Barão de Itamaracá to start! :D
+INFO:root:Von Filhiol: find the street '347302361' and id Rua João de Deus Nunes to start! :D
+INFO:root:Claudio Kollmeyer: find the street '203624098' and id Rua General Sampaio to start! :D
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1852331129/ways HTTP/1.1" 200 457
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2136314146/ways HTTP/1.1" 200 405
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2915335788/ways HTTP/1.1" 200 740
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1852331155/ways HTTP/1.1" 200 442
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2136314156/ways HTTP/1.1" 200 421
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2915335787/ways HTTP/1.1" 200 478
+ERROR:root:Von Filhiol: Agent die! x(
+CRITICAL:root:list.remove(x): x not in list
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1852331074/ways HTTP/1.1" 200 469
+ERROR:root:Isidro Weinberg: Agent die! x(
+CRITICAL:root:list.remove(x): x not in list
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2136314157/ways HTTP/1.1" 200 413
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2136314163/ways HTTP/1.1" 200 463
+ERROR:root:Claudio Kollmeyer: Agent die! x(
+CRITICAL:root:list.remove(x): x not in list
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+INFO:root:Sherwood Wolhok: Hello! I'm ready! ;)
+INFO:root:Santiago Hervig: Hello! I'm ready! ;)
+INFO:root:Hobert Woolery: Hello! I'm ready! ;)
+INFO:root:Sherwood Wolhok: Let start the job! =D
+INFO:root:Santiago Hervig: Let start the job! =D
+INFO:root:Hobert Woolery: Let start the job! =D
+INFO:root:Hobert Woolery: find the street '204048174' and id Passeio Visconde de Itaboraí to start! :D
+INFO:root:Sherwood Wolhok: find the street '338511113' and id Rua Herval do Sul to start! :D
+INFO:root:Santiago Hervig: find the street '203496995' and id Avenida Assis Brasil to start! :D
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3455911265/ways HTTP/1.1" 200 384
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2140605663/ways HTTP/1.1" 200 503
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135116153/ways HTTP/1.1" 200 558
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3520565271/ways HTTP/1.1" 200 497
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2140605631/ways HTTP/1.1" 200 441
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135116162/ways HTTP/1.1" 200 467
+ERROR:root:Hobert Woolery: Agent die! x(
+CRITICAL:root:list.remove(x): x not in list
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3455903662/ways HTTP/1.1" 200 533
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135116163/ways HTTP/1.1" 200 475
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3455911272/ways HTTP/1.1" 200 491
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135116164/ways HTTP/1.1" 200 467
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3455911266/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135116165/ways HTTP/1.1" 200 468
+ERROR:root:Sherwood Wolhok: Agent die! x(
+CRITICAL:root:list.remove(x): x not in list
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135116166/ways HTTP/1.1" 200 468
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135116167/ways HTTP/1.1" 200 466
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135116168/ways HTTP/1.1" 200 513
+ERROR:root:Santiago Hervig: Agent die! x(
+CRITICAL:root:list.remove(x): x not in list
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+INFO:root:Virgilio Ochsenbein: Hello! I'm ready! ;)
+INFO:root:Mark Amoako: Hello! I'm ready! ;)
+INFO:root:Agustin Stidam: Hello! I'm ready! ;)
+INFO:root:Virgilio Ochsenbein: Let start the job! =D
+INFO:root:Mark Amoako: Let start the job! =D
+INFO:root:Agustin Stidam: Let start the job! =D
+INFO:root:Virgilio Ochsenbein: find the street '461743614' and id Rua Francisco de Paula Barreto to start! :D
+INFO:root:Agustin Stidam: find the street '462791619' and id Rua Vila de Ovar to start! :D
+INFO:root:Mark Amoako: find the street '223785695' and id Rua Romano Zanusso to start! :D
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2326588128/ways HTTP/1.1" 200 493
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/4581285802/ways HTTP/1.1" 200 462
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1890169853/ways HTTP/1.1" 200 588
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2326588149/ways HTTP/1.1" 200 378
+INFO:root:Mark Amoako: The distance from 2326588128 to 2326588149 is 265.26973169! :P
+ERROR:root:Mark Amoako: Agent die! x(
+CRITICAL:root:list index out of range
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/4581285803/ways HTTP/1.1" 200 369
+INFO:root:Agustin Stidam: The distance from 4581285802 to 4581285803 is 77.2848653233! :P
+ERROR:root:Agustin Stidam: Agent die! x(
+CRITICAL:root:list index out of range
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1890170016/ways HTTP/1.1" 200 381
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1890169263/ways HTTP/1.1" 200 381
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1890169759/ways HTTP/1.1" 200 381
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1890170233/ways HTTP/1.1" 200 472
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1890169777/ways HTTP/1.1" 200 455
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1890169792/ways HTTP/1.1" 200 381
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1890170064/ways HTTP/1.1" 200 524
+INFO:root:Virgilio Ochsenbein: The distance from 1890169853 to 1890170016 is 32.5930193493! :P
+INFO:root:Virgilio Ochsenbein: The distance from 1890170016 to 1890169263 is 26.1961246434! :P
+INFO:root:Virgilio Ochsenbein: The distance from 1890169263 to 1890169759 is 33.5255455784! :P
+INFO:root:Virgilio Ochsenbein: The distance from 1890169759 to 1890170233 is 11.1613625564! :P
+INFO:root:Virgilio Ochsenbein: The distance from 1890170233 to 1890169777 is 83.5265836088! :P
+INFO:root:Virgilio Ochsenbein: The distance from 1890169777 to 1890169792 is 111.504170941! :P
+INFO:root:Virgilio Ochsenbein: The distance from 1890169792 to 1890170064 is 32.47341155! :P
+ERROR:root:Virgilio Ochsenbein: Agent die! x(
+CRITICAL:root:list index out of range
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+INFO:root:Claretha Mateos: Hello! I'm ready! ;)
+INFO:root:Karina Dymek: Hello! I'm ready! ;)
+INFO:root:Annika Farinella: Hello! I'm ready! ;)
+INFO:root:Claretha Mateos: Let start the job! =D
+INFO:root:Karina Dymek: Let start the job! =D
+INFO:root:Annika Farinella: Let start the job! =D
+INFO:root:Claretha Mateos: find the street '461889902' and id Rua Leopoldo Gotuzzo to start! :D
+INFO:root:Karina Dymek: find the street '22323567' and id Rua Prof. Araújo to start! :D
+INFO:root:Annika Farinella: find the street '108175453' and id Avenida República do Líbano to start! :D
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3722373303/ways HTTP/1.1" 200 407
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1241471066/ways HTTP/1.1" 200 607
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3662678115/ways HTTP/1.1" 200 587
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3722373304/ways HTTP/1.1" 200 354
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1890534530/ways HTTP/1.1" 200 552
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1675174930/ways HTTP/1.1" 200 584
+INFO:root:Karina Dymek: The distance from 3662678115 to 1675174930 is 122.569181981! :P
+ERROR:root:Karina Dymek: Agent die! x(
+CRITICAL:root:list index out of range
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3722373305/ways HTTP/1.1" 200 354
+INFO:root:Claretha Mateos: The distance from 3722373303 to 3722373304 is 12.0125055474! :P
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1890943777/ways HTTP/1.1" 200 520
+ERROR:root:Claretha Mateos: Agent die! x(
+CRITICAL:root:firstNode() takes exactly 2 arguments (3 given)
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1241471059/ways HTTP/1.1" 200 548
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1241471072/ways HTTP/1.1" 200 542
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1890943789/ways HTTP/1.1" 200 541
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1241471076/ways HTTP/1.1" 200 449
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1241471064/ways HTTP/1.1" 200 815
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1241471091/ways HTTP/1.1" 200 530
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1241471081/ways HTTP/1.1" 200 449
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3661824200/ways HTTP/1.1" 200 449
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3661824197/ways HTTP/1.1" 200 449
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1241471022/ways HTTP/1.1" 200 745
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1241471050/ways HTTP/1.1" 200 651
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1244808523/ways HTTP/1.1" 200 599
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3661807736/ways HTTP/1.1" 200 511
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3661807737/ways HTTP/1.1" 200 655
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1241471071/ways HTTP/1.1" 200 417
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1241471085/ways HTTP/1.1" 200 601
+INFO:root:Annika Farinella: The distance from 1241471066 to 1890534530 is 187.89169588! :P
+INFO:root:Annika Farinella: The distance from 1890534530 to 1890943777 is 245.806844284! :P
+INFO:root:Annika Farinella: The distance from 1890943777 to 1241471059 is 140.013279258! :P
+INFO:root:Annika Farinella: The distance from 1241471059 to 1241471072 is 135.308682442! :P
+INFO:root:Annika Farinella: The distance from 1241471072 to 1890943789 is 135.162364848! :P
+INFO:root:Annika Farinella: The distance from 1890943789 to 1241471076 is 53.9722880249! :P
+INFO:root:Annika Farinella: The distance from 1241471076 to 1241471064 is 59.8288247564! :P
+INFO:root:Annika Farinella: The distance from 1241471064 to 1241471091 is 37.5314549402! :P
+INFO:root:Annika Farinella: The distance from 1241471091 to 1241471081 is 60.6394629331! :P
+INFO:root:Annika Farinella: The distance from 1241471081 to 3661824200 is 10.4192256178! :P
+INFO:root:Annika Farinella: The distance from 3661824200 to 3661824197 is 11.3426945644! :P
+INFO:root:Annika Farinella: The distance from 3661824197 to 1241471022 is 19.9303024407! :P
+INFO:root:Annika Farinella: The distance from 1241471022 to 1241471050 is 44.1004403487! :P
+INFO:root:Annika Farinella: The distance from 1241471050 to 1244808523 is 21.1831755781! :P
+INFO:root:Annika Farinella: The distance from 1244808523 to 3661807736 is 12.2835919183! :P
+INFO:root:Annika Farinella: The distance from 3661807736 to 3661807737 is 18.5953865526! :P
+INFO:root:Annika Farinella: The distance from 3661807737 to 1241471071 is 31.7753588586! :P
+INFO:root:Annika Farinella: The distance from 1241471071 to 1241471085 is 73.2829449315! :P
+ERROR:root:Annika Farinella: Agent die! x(
+CRITICAL:root:list index out of range
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+INFO:root:Chance Tammo: Hello! I'm ready! ;)
+INFO:root:Marisha Giusti: Hello! I'm ready! ;)
+INFO:root:Debby Caldeira: Hello! I'm ready! ;)
+INFO:root:Marisha Giusti: Let start the job! =D
+INFO:root:Chance Tammo: Let start the job! =D
+INFO:root:Debby Caldeira: Let start the job! =D
+INFO:root:Marisha Giusti: find the street '174415067' and id Rua Capitão Luiz L. de Barros to start! :D
+INFO:root:Debby Caldeira: find the street '368396605' and id Rua Alcindo Guanabara to start! :D
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+INFO:root:Chance Tammo: find the street '203177808' and id Rua Santa Cruz to start! :D
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131568203/ways HTTP/1.1" 200 457
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3722373215/ways HTTP/1.1" 200 550
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1851118288/ways HTTP/1.1" 200 520
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3722373216/ways HTTP/1.1" 200 375
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131561331/ways HTTP/1.1" 200 471
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1851118416/ways HTTP/1.1" 200 454
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3722373217/ways HTTP/1.1" 200 375
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131568206/ways HTTP/1.1" 200 436
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1851118207/ways HTTP/1.1" 200 465
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3722373219/ways HTTP/1.1" 200 415
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131561832/ways HTTP/1.1" 200 465
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/1851118306/ways HTTP/1.1" 200 535
+INFO:root:Marisha Giusti: The distance from 1851118288 to 1851118416 is 147.792295413! :P
+ERROR:root:Marisha Giusti: Agent die! x(
+CRITICAL:root:firstNode() takes exactly 2 arguments (3 given)
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3722373218/ways HTTP/1.1" 200 375
+INFO:root:Debby Caldeira: The distance from 3722373215 to 3722373216 is 87.9492943779! :P
+ERROR:root:Debby Caldeira: Agent die! x(
+CRITICAL:root:firstNode() takes exactly 2 arguments (3 given)
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131568200/ways HTTP/1.1" 200 506
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131568198/ways HTTP/1.1" 200 485
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131568201/ways HTTP/1.1" 200 373
+INFO:root:Chance Tammo: The distance from 2131568203 to 2131561331 is 113.446363767! :P
+ERROR:root:Chance Tammo: Agent die! x(
+CRITICAL:root:firstNode() takes exactly 2 arguments (3 given)
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+INFO:root:Faustino Simmers: Hello! I'm ready! ;)
+INFO:root:Otha Vicknair: Hello! I'm ready! ;)
+INFO:root:Hilaria Mortenson: Hello! I'm ready! ;)
+INFO:root:Otha Vicknair: Let start the job! =D
+INFO:root:Faustino Simmers: Let start the job! =D
+INFO:root:Hilaria Mortenson: Let start the job! =D
+INFO:root:Faustino Simmers: find the street '204050495' and id Passeio Marechal Bittencourt to start! :D
+INFO:root:Hilaria Mortenson: find the street '330084446' and id Estrada do Quilombo to start! :D
+INFO:root:Otha Vicknair: find the street '222821940' and id Rua Arthur Rocha to start! :D
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2317661574/ways HTTP/1.1" 200 443
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646133/ways HTTP/1.1" 200 536
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2140633401/ways HTTP/1.1" 200 424
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2317661745/ways HTTP/1.1" 200 460
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3370507081/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2140633388/ways HTTP/1.1" 200 443
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2317661656/ways HTTP/1.1" 200 431
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2140633403/ways HTTP/1.1" 200 449
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646132/ways HTTP/1.1" 200 482
+INFO:root:Faustino Simmers: The distance from 2140633401 to 2140633388 is 50.814568871! :P
+INFO:root:Faustino Simmers: It is the first node with id 2140633388 :T
+ERROR:root:Faustino Simmers: Agent die! x(
+CRITICAL:root:list index out of range
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646131/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2317661713/ways HTTP/1.1" 200 464
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646130/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2317661761/ways HTTP/1.1" 200 461
+INFO:root:Otha Vicknair: The distance from 2317661574 to 2317661745 is 64.9081105888! :P
+INFO:root:Otha Vicknair: It is the first node with id 2317661745 :T
+INFO:root:Otha Vicknair: The distance from 2317661656 to 2317661713 is 78.1363225315! :P
+INFO:root:Otha Vicknair: It is the last node of this street with id 2317661713 :)
+ERROR:root:Otha Vicknair: Agent die! x(
+CRITICAL:root:list index out of range
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646129/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646128/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646127/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646126/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646125/ways HTTP/1.1" 200 550
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646124/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3510213842/ways HTTP/1.1" 200 674
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646123/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646122/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646121/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646120/ways HTTP/1.1" 200 482
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646119/ways HTTP/1.1" 200 610
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646118/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3238646117/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/4012070273/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560311/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560310/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560309/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560308/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560307/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560306/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560305/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560304/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560303/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560302/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560301/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560300/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560299/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560298/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560297/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560296/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560295/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560294/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560293/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560292/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560291/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560290/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3170560289/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514349/ways HTTP/1.1" 200 738
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514350/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514351/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514352/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514353/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514354/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514355/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514356/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514357/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514358/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514359/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514360/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514361/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514362/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514363/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514364/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514365/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514366/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514367/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514368/ways HTTP/1.1" 200 578
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2916514369/ways HTTP/1.1" 200 661
+INFO:root:Hilaria Mortenson: The distance from 3238646133 to 3370507081 is 19.1607338917! :P
+INFO:root:Hilaria Mortenson: It is the first node with id 3370507081 :T
+INFO:root:Hilaria Mortenson: The distance from 3238646132 to 3238646131 is 57.0483705215! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646131 to 3238646130 is 68.4447542983! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646130 to 3238646129 is 137.961664612! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646129 to 3238646128 is 50.1033693648! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646128 to 3238646127 is 53.1186211795! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646127 to 3238646126 is 77.5735536129! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646126 to 3238646125 is 72.0283682019! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646125 to 3238646124 is 26.4883188112! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646124 to 3510213842 is 20.1116376538! :P
+INFO:root:Hilaria Mortenson: The distance from 3510213842 to 3238646123 is 93.9175222453! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646123 to 3238646122 is 97.8071153326! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646122 to 3238646121 is 61.2476043736! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646121 to 3238646120 is 76.7088765579! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646120 to 3238646119 is 45.6387952358! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646119 to 3238646118 is 112.540632237! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646118 to 3238646117 is 94.6960479682! :P
+INFO:root:Hilaria Mortenson: The distance from 3238646117 to 4012070273 is 48.8523462829! :P
+INFO:root:Hilaria Mortenson: The distance from 4012070273 to 3170560311 is 48.4316843799! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560311 to 3170560310 is 79.6454218133! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560310 to 3170560309 is 86.7812007981! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560309 to 3170560308 is 64.6145810913! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560308 to 3170560307 is 39.730920378! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560307 to 3170560306 is 52.9693959543! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560306 to 3170560305 is 25.1273361777! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560305 to 3170560304 is 69.0676890944! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560304 to 3170560303 is 51.8297723597! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560303 to 3170560302 is 44.0391858521! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560302 to 3170560301 is 32.3649532434! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560301 to 3170560300 is 51.4744744492! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560300 to 3170560299 is 21.0961230091! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560299 to 3170560298 is 39.7360497803! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560298 to 3170560297 is 42.5432134164! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560297 to 3170560296 is 61.2975068591! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560296 to 3170560295 is 18.270921265! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560295 to 3170560294 is 24.8192760883! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560294 to 3170560293 is 19.3732041426! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560293 to 3170560292 is 51.7141378099! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560292 to 3170560291 is 41.3686222788! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560291 to 3170560290 is 60.1696984181! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560290 to 3170560289 is 37.0000820374! :P
+INFO:root:Hilaria Mortenson: The distance from 3170560289 to 2916514349 is 52.0334155037! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514349 to 2916514350 is 37.5366567193! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514350 to 2916514351 is 139.564979328! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514351 to 2916514352 is 31.1158123432! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514352 to 2916514353 is 162.447927385! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514353 to 2916514354 is 22.7276897202! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514354 to 2916514355 is 22.8683893207! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514355 to 2916514356 is 38.2409310681! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514356 to 2916514357 is 21.157586426! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514357 to 2916514358 is 21.8207317845! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514358 to 2916514359 is 45.0617682181! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514359 to 2916514360 is 38.8899643754! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514360 to 2916514361 is 121.489985456! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514361 to 2916514362 is 50.5102126562! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514362 to 2916514363 is 147.919722437! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514363 to 2916514364 is 82.4152149337! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514364 to 2916514365 is 35.3199997327! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514365 to 2916514366 is 37.3349027127! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514366 to 2916514367 is 107.883383811! :P
+INFO:root:Hilaria Mortenson: The distance from 2916514367 to 2916514368 is 198.638299704! :P
+INFO:root:Hilaria Mortenson: It is the last node of this street with id 2916514368 :)
+ERROR:root:Hilaria Mortenson: Agent die! x(
+CRITICAL:root:list index out of range
+INFO:root:Swarm: Hard work! I finish dude ;)
+DEBUG:root:Swarm: We are configure my settings...
+DEBUG:root:Swarm: Let starting agents...
+INFO:root:Dee Mercik: Hello! I'm ready! ;)
+INFO:root:Marlana Kotarski: Hello! I'm ready! ;)
+INFO:root:Erik Rasor: Hello! I'm ready! ;)
+INFO:root:Dee Mercik: Let start the job! =D
+INFO:root:Erik Rasor: Let start the job! =D
+INFO:root:Marlana Kotarski: Let start the job! =D
+INFO:root:Dee Mercik: find the street '203521274' and id Rua Doutor Geraldo Correa Azevedo to start! :D
+INFO:root:Marlana Kotarski: find the street '346336465' and id Rua Vereador Paulo Aci Teixeira to start! :D
+INFO:root:Erik Rasor: find the street '273616208' and id Avenida Nonô Centeno to start! :D
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): www.openstreetmap.org
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3528785486/ways HTTP/1.1" 200 463
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/321262013/ways HTTP/1.1" 200 1018
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135342046/ways HTTP/1.1" 200 439
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3957034575/ways HTTP/1.1" 200 449
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131328511/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135342048/ways HTTP/1.1" 200 435
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3722372314/ways HTTP/1.1" 200 460
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135342051/ways HTTP/1.1" 200 437
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/321262014/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3957034580/ways HTTP/1.1" 200 468
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135342059/ways HTTP/1.1" 200 468
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784533617/ways HTTP/1.1" 200 600
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3957034582/ways HTTP/1.1" 200 463
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135342064/ways HTTP/1.1" 200 438
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131328519/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3528785487/ways HTTP/1.1" 200 515
+INFO:root:Marlana Kotarski: The distance from 3528785486 to 3957034575 is 80.2178483629! :P
+INFO:root:Marlana Kotarski: It is the first node with id 3957034575 :T
+INFO:root:Marlana Kotarski: The distance from 3722372314 to 3957034580 is 71.5923705585! :P
+INFO:root:Marlana Kotarski: The distance from 3957034580 to 3957034582 is 230.722442235! :P
+INFO:root:Marlana Kotarski: It is the last node of this street with id 3957034582 :)
+ERROR:root:Marlana Kotarski: Agent die! x(
+CRITICAL:root:list index out of range
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2135342080/ways HTTP/1.1" 200 498
+INFO:root:Dee Mercik: The distance from 2135342046 to 2135342048 is 77.9069114905! :P
+INFO:root:Dee Mercik: It is the first node with id 2135342048 :T
+INFO:root:Dee Mercik: The distance from 2135342051 to 2135342059 is 76.0193928908! :P
+INFO:root:Dee Mercik: The distance from 2135342059 to 2135342064 is 83.3382943288! :P
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131328515/ways HTTP/1.1" 200 544
+INFO:root:Dee Mercik: It is the last node of this street with id 2135342064 :)
+ERROR:root:Dee Mercik: Agent die! x(
+CRITICAL:root:list index out of range
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784533614/ways HTTP/1.1" 200 607
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131575615/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/4590770834/ways HTTP/1.1" 200 611
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784533613/ways HTTP/1.1" 200 604
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131328518/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784533610/ways HTTP/1.1" 200 607
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784533607/ways HTTP/1.1" 200 608
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131328517/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131451866/ways HTTP/1.1" 200 675
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784533605/ways HTTP/1.1" 200 603
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131328516/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131328513/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784533604/ways HTTP/1.1" 200 608
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/321262021/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131328514/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784529328/ways HTTP/1.1" 200 607
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131328520/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131451109/ways HTTP/1.1" 200 653
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131328521/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784526820/ways HTTP/1.1" 200 602
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784524539/ways HTTP/1.1" 200 603
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784522757/ways HTTP/1.1" 200 608
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/321262024/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131445329/ways HTTP/1.1" 200 619
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784519068/ways HTTP/1.1" 200 602
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2131328512/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3042193419/ways HTTP/1.1" 200 606
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784518915/ways HTTP/1.1" 200 607
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/3042193401/ways HTTP/1.1" 200 615
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2784518639/ways HTTP/1.1" 200 601
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/2076103928/ways HTTP/1.1" 200 544
+DEBUG:requests.packages.urllib3.connectionpool:https://www.openstreetmap.org:443 "GET /api/0.6/node/321262025/ways HTTP/1.1" 200 880
+INFO:root:Erik Rasor: The distance from 321262013 to 2131328511 is 61.7429816782! :P
+INFO:root:Erik Rasor: It is the first node with id 2131328511 :T
+INFO:root:Erik Rasor: The distance from 321262014 to 2784533617 is 25.8832747722! :P
+INFO:root:Erik Rasor: The distance from 2784533617 to 2131328519 is 26.4536330257! :P
+INFO:root:Erik Rasor: The distance from 2131328519 to 2131328515 is 53.6360477077! :P
+INFO:root:Erik Rasor: The distance from 2131328515 to 2784533614 is 5.44079642359! :P
+INFO:root:Erik Rasor: The distance from 2784533614 to 2131575615 is 34.1094576253! :P
+INFO:root:Erik Rasor: The distance from 2131575615 to 4590770834 is 6.92063242576! :P
+INFO:root:Erik Rasor: The distance from 4590770834 to 2784533613 is 45.2911594044! :P
+INFO:root:Erik Rasor: The distance from 2784533613 to 2131328518 is 98.7112331999! :P
+INFO:root:Erik Rasor: The distance from 2131328518 to 2784533610 is 32.0982546303! :P
+INFO:root:Erik Rasor: The distance from 2784533610 to 2784533607 is 119.609086762! :P
+INFO:root:Erik Rasor: The distance from 2784533607 to 2131328517 is 34.0249295799! :P
+INFO:root:Erik Rasor: The distance from 2131328517 to 2131451866 is 55.856531582! :P
+INFO:root:Erik Rasor: The distance from 2131451866 to 2784533605 is 46.8402043904! :P
+INFO:root:Erik Rasor: The distance from 2784533605 to 2131328516 is 55.856750907! :P
+INFO:root:Erik Rasor: The distance from 2131328516 to 2131328513 is 27.6082048519! :P
+INFO:root:Erik Rasor: The distance from 2131328513 to 2784533604 is 2.69824756959! :P
+INFO:root:Erik Rasor: The distance from 2784533604 to 321262021 is 17.5016715936! :P
+INFO:root:Erik Rasor: The distance from 321262021 to 2131328514 is 65.9171366397! :P
+INFO:root:Erik Rasor: The distance from 2131328514 to 2784529328 is 29.2548085208! :P
+INFO:root:Erik Rasor: The distance from 2784529328 to 2131328520 is 16.7999976779! :P
+INFO:root:Erik Rasor: The distance from 2131328520 to 2131451109 is 24.210746887! :P
+INFO:root:Erik Rasor: The distance from 2131451109 to 2131328521 is 62.3495996759! :P
+INFO:root:Erik Rasor: The distance from 2131328521 to 2784526820 is 116.649799678! :P
+INFO:root:Erik Rasor: The distance from 2784526820 to 2784524539 is 117.992242898! :P
+INFO:root:Erik Rasor: The distance from 2784524539 to 2784522757 is 99.3837442154! :P
+INFO:root:Erik Rasor: The distance from 2784522757 to 321262024 is 12.0890517227! :P
+INFO:root:Erik Rasor: The distance from 321262024 to 2131445329 is 35.8791549296! :P
+INFO:root:Erik Rasor: The distance from 2131445329 to 2784519068 is 71.3475601104! :P
+INFO:root:Erik Rasor: The distance from 2784519068 to 2131328512 is 21.9236008482! :P
+INFO:root:Erik Rasor: The distance from 2131328512 to 3042193419 is 76.8553191978! :P
+INFO:root:Erik Rasor: The distance from 3042193419 to 2784518915 is 20.0231901331! :P
+INFO:root:Erik Rasor: The distance from 2784518915 to 3042193401 is 39.2922460057! :P
+INFO:root:Erik Rasor: The distance from 3042193401 to 2784518639 is 79.5356130494! :P
+INFO:root:Erik Rasor: The distance from 2784518639 to 2076103928 is 47.975894348! :P
+INFO:root:Erik Rasor: It is the last node of this street with id 2076103928 :)
+ERROR:root:Erik Rasor: Agent die! x(
+CRITICAL:root:list index out of range
+INFO:root:Swarm: Hard work! I finish dude ;)

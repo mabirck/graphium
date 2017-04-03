@@ -1,0 +1,189 @@
+
+
+<%= form_for(@graphium_configuration) do |f| %>
+  <% if @graphium_configuration.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@graphium_configuration.errors.count, "error") %> prohibited this graphium_configuration from being saved:</h2>
+
+      <ul>
+      <% @graphium_configuration.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class='row'>
+      <h4>Agent params</h4>
+  </div>
+  <div class="field">
+    <%= f.label :swarm_agent_number %><br>
+    <%= f.number_field :swarm_agent_number %>
+  </div>
+  <div class="field">
+    <%= f.label :swarm_agent_names_API %><br>
+    <%= f.text_field :swarm_agent_names_API %>
+  </div>
+  <div class='field'>
+      <label for="names">Agents' names</label>
+      <div id='names' class="chips chips-names"></div>
+  </div>
+  <div class="field"  style="display:none">
+    <%= f.label :swarm_agent_names %><br>
+    <%= f.text_field :swarm_agent_names %>
+  </div>
+  <div class='field'>
+      <label for="colors">Agents' colors</label>
+      <div id='colors' class="chips chips-colors"></div>
+  </div>
+  <div class="field" style="display:none">
+    <%= f.label :swarm_agent_colors %><br>
+    <%= f.text_field :swarm_agent_colors %>
+  </div>
+  <div class='row'>
+      <h4>MongoDB connection</h4>
+  </div>
+  <div class='row'>
+      <div class="field col s4">
+        <%= f.label :mongo_db %><br>
+        <%= f.text_field :mongo_db %>
+      </div>
+      <div class="field col s4">
+        <%= f.label :mongo_host %><br>
+        <%= f.text_field :mongo_host %>
+      </div>
+      <div class="field col s4">
+        <%= f.label :mongo_port %><br>
+        <%= f.number_field :mongo_port %>
+      </div>
+  </div>
+  <div class='row'>
+      <h4>Open Street Map API </h4>
+  </div>
+  <div class='row'>
+      <div class="field col s6">
+        <%= f.label :osmapi_password %><br>
+        <%= f.text_field :osmapi_password %>
+      </div>
+      <div class="field  col s6">
+        <%= f.label :osmapi_user %><br>
+        <%= f.text_field :osmapi_user %>
+      </div>
+  </div>
+  <div class='row'>
+      <h4>General</h4>
+  </div>
+  <div class='row'>
+      <div class="field col s6">
+        <%= f.label :inf_positive %><br>
+        <%= f.number_field :inf_positive %>
+      </div>
+      <div class="field col s6">
+        <%= f.label :inf_negative %><br>
+        <%= f.number_field :inf_negative %>
+      </div>
+  </div>
+  <div class="actions">
+    <%=form_save_btn f.submit %>
+  </div>
+<% end %>
+<script>
+    var data_names = [];
+    <%  
+        names = ""
+        @graphium_configuration.swarm_agent_names.each do |name|
+            %>
+                data_names.push({tag: '<%=name%>'})
+            <%
+            names += name+","
+        end
+        if names != ""
+            names = names[0...names.length-1]
+        end
+    %>
+    $('#graphium_configuration_swarm_agent_names').val('<%=names%>')
+    
+    $('.chips-names').material_chip({
+        data: data_names,
+        secondaryPlaceholder: '+Names',
+    });
+    
+    $('.chips-names').on('chip.add', function(e, chip){
+        $('#graphium_configuration_swarm_agent_names').val('');
+        console.log('adding',$('.chips-names').material_chip('data'))
+        names = ""
+        namesArray = $('.chips-names').material_chip('data')
+        for(var a=0; a < namesArray.length;a++){
+            names += namesArray[a].tag+","
+        }
+        if(names!=""){
+            names = names.substring(0,names.length-1)
+        }
+        $('#graphium_configuration_swarm_agent_names').val(names);
+    });
+
+    $('.chips-names').on('chip.delete', function(e, chip){
+        $('#graphium_configuration_swarm_agent_names').val('');
+        console.log('adding',$('.chips-names').material_chip('data'))
+        names = ""
+        namesArray = $('.chips-names').material_chip('data')
+        for(var a=0; a < namesArray.length;a++){
+            names += namesArray[a].tag+","
+        }
+        if(names!=""){
+            names = names.substring(0,names.length-1)
+        }
+        $('#graphium_configuration_swarm_agent_names').val(names);
+    });
+    
+    
+    var data_colors = [];
+    <%  
+        colors = ""
+        @graphium_configuration.swarm_agent_colors.each do |color|
+            %>
+                data_colors.push({tag: '<%=color%>'})
+            <%
+            colors += color+","
+        end
+        if colors != ""
+            colors = colors[0...colors.length-1]
+        end
+    %>
+    $('#graphium_configuration_swarm_agent_colors').val('<%=colors%>')
+    
+    $('.chips-colors').material_chip({
+        data: data_colors,
+        secondaryPlaceholder: '+Colors',
+    });
+    
+    $('.chips-colors').on('chip.add', function(e, chip){
+        $('#graphium_configuration_swarm_agent_colors').val('');
+        //console.log('adding',$('.chips-names').material_chip('data'))
+        colors = ""
+        colorsArray = $('.chips-names').material_chip('data')
+        for(var a=0; a < colorsArray.length;a++){
+            colors += colorsArray[a].tag+","
+        }
+        if(colors!=""){
+            colors = colors.substring(0,colors.length-1)
+        }
+        $('#graphium_configuration_swarm_agent_colors').val(colors);
+    });
+
+    $('.chips-names').on('chip.delete', function(e, chip){
+        $('#graphium_configuration_swarm_agent_colors').val('');
+        //console.log('adding',$('.chips-names').material_chip('data'))
+        colors = ""
+        colorsArray = $('.chips-names').material_chip('data')
+        for(var a=0; a < colorsArray.length;a++){
+            colors += colorsArray[a].tag+","
+        }
+        if(colors!=""){
+            colors = colors.substring(0,colors.length-1)
+        }
+        $('#graphium_configuration_swarm_agent_colors').val(colors);
+    });
+    
+    
+    
+</script>

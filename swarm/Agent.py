@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import urllib, json, random, time, datetime
-
+import urllib, json, random, time, traceback
 from threading import Thread
 from geopy.distance import great_circle
 
 from system.Configuration import *
-from system.Mongo import Mongo
+from system.Mongo import *
+from system.Logger import *
+from system.Helper import *
 from Swarm import *
 from API import *
 
@@ -16,6 +17,8 @@ class Agent(Thread):
     _swarm_config   = None
     _mongo          = None
     _api            = None
+    _logger         = None
+    _helper         = None
     
     _work           = None
     _cicles         = None
@@ -26,139 +29,107 @@ class Agent(Thread):
     _node_osm           = None
     _node_osm_position  = None
     
-    
-    
-    
-    def __init__(self):
+    def __init__(self,swarm_config):
         Thread.__init__(self)
+        
         self._config    = Configuration()  
         self._mongo     = Mongo()
         self._api       = API()
-        self._work      = True
-        self._cicles    = 0
+        self._logger    = Logger(swarm_config.identifier)
+        self._helper    = Helper()
         
-    def run(self):
+        self._work      = True
+        self._end_well  = True
+        self._cicles    = 0
+        self._swarm_config = swarm_config
         
         self.startAgent()
         
+        self._logger.info('%s: Hello! I\'m ready! ;)' % (self.getName()))
+        
+        
+    def run(self):
+        
         try:
-            while self._work and self._cicles < 100:
-                
-                if 'last_street_id_osm' not in self._agent_at_mongo.keys():
-                    self._agent_at_mongo['last_street_id_osm'] = None
-                    
+            self._logger.info('%s: Let start the job! =D' % (self.getName()))
+            while self._work and self._cicles < 1000:
+                        
+                # if not set the last street
+                #   this agent need choose one street to start
+                #   else need to get from chooseTheNextStreet
                 if self._agent_at_mongo['last_street_id_osm'] == None:
-                    
-                    # search all possible streets
-                    streets = self._mongo.getStreetQuery({'name_osm':{'$ne':""},'busy':{'$ne':True}})
-                    
-                    # rand a street between all
-                    self._street = random.randint(0, len(streets)-1)
-                    self._street = streets[self._street]
-                    self._agent_at_mongo['last_street']         = self._street['name_osm']
-                    self._agent_at_mongo['last_street_id_osm']  = self._street['id_osm']
-                    self._street['busy'] = True
-                    
-                    # update list of streets visited
-                    self.appendStreetVisited(self._street['name_osm'])
-                    
-                    # get the first node
-                    self._node_osm_position = 0
-                    self._node_osm = self._street['nodes'][self._node_osm_position]
+                    self._street = self.chooseTheFirstStret()
+                else:  
+                    self._street = self.chooseTheNextStreet()
+                
+                self._agent_at_mongo['last_street']         = self._street['name_osm']
+                self._agent_at_mongo['last_street_id_osm']  = self._street['id_osm']
+                self._street['busy'] = True
+
+                self.appendStreetVisited(self._street['name_osm'])
+
+                self._logger.info('%s: find the street \'%s\' and id %s to start! :D' % (self.getName(),self._street['id_osm'],self._agent_at_mongo['last_street']))
+                
+
+                # if this street never was visited need to
+                #   to calculate the cross street by him
+                if len(self._street['cross_streets_osm_id']) == 0:
+                    cross_streets_osm_id = []
+
+                    # from any node of this street we get all street crossed by him
+                    for node in self._street['nodes']:
+                        streets_returneds = self._api.getWaysByNode(node['id'])
+                        for street_returned in streets_returneds:
+                            cross_streets_osm_id.append(street_returned['id'])
+
+                    # remove all duplicate ids
+                    cross_streets_osm_id = list(set(cross_streets_osm_id))
+
+                    #remove this stret id because the street can't cross youself
+                    #   but the nodes will cross this street id (all of them)
+                    cross_streets_osm_id.remove(self._street['id_osm'])
+                    self._street['cross_streets_osm_id'] = cross_streets_osm_id
+                    self._mongo.updateStreetById(self._street.get('_id'),self._street)
                     
                     # update the last lat/lng of agent
-                    self.appendLatLng(self._node_osm['lat'],self._node_osm['lng'],True)
                     
-                    # update the street
-                    self.updateCounter()
-                    print('%s: find the street \'%s\' and id %s to start! :D' % (self.getName(),self._street['id_osm'],self._agent_at_mongo['last_street']))
-                else:  
-                    # if the node is the only on street
-                    #   change the street or restart the node no aleatory position
-                    #
-                    # elif the street have only two dots or if the node is the last of the street
-                    #   we need to change of street on the second node
-                    #
-                    # else
-                    #   
-                    if len(self._street['nodes']) == 1:
-                        print('%s: we need change the street :]' % (self.getName()))
+                
+                # if that street thas only one node
+                #   it is a problem! Cannot run inside him
+                if len(self._street['nodes']) == 1:
+                    
+                    self._node_osm = self._street['nodes'][self._node_osm_position]
+                    
+                    self.oneNode(self._node_osm)
+                    # update the street counter
+                    # read more at updateRule
+                    self.updateRule()
+                else:
+                    self._node_osm_position=-1 # on start of array of nodes
+                    for node in self._street['nodes']:
+                        self._node_osm_position+=1
+                        self._node_osm = self._street['nodes'][self._node_osm_position]
                         
-                        streets_returneds = self._api.getWaysByNode(self._street['nodes'][0]['id'])
+                        # update the street counter
+                        # read more at updateRule
+                        self.updateRule()
                         
-                        # this dot has a second street
-                        #   we choise with the street with less weight
-                        if len(streets_returneds) != 1:
-                            print('%s: choosing a new street... :)' % (self.getName()))
-                            self.choosingNewStreetToNavegate(streets_returneds)
+                        if self._node_osm_position != 1 and self._node_osm_position != len(self._street['nodes'])-2:
+
+                            # call the method that execute something node by node
+                            self.nodeByNode(self._node_osm,self._street['nodes'][self._node_osm_position+1])
+
                         else:
-                            #if number of nodes are diferent that 1 randint len
-                            #   to find a new streets
-                            if len(streets_returneds[0]['nodos']) != 1:
-                                print('%s: I can\'t go to any way! A need restart at somewere :O' % (self.getName()))
-                                streets_returneds = self._api.getWaysByNode(streets_returneds[0]['nodos'][randint(0,len(streets_returneds[0]['nodos'])-1)])
-                                if len(streets_returneds) != 1:
-                                    print('%s: choosing a new street... :)' % (self.getName()))
-                                    self.choosingNewStreetToNavegate(streets_returneds)
-                                else:
-                                    print('%s: I can\'t go to any way! A need restart at somewere :O' % (self.getName()))
-                                    self._agent_at_mongo['last_street_id_osm'] = None
+                            if self._node_osm_position == 1:
+                                # set the visit of this node
+                                self.firstNode(self._node_osm)
                             else:
-                                print('%s: II can\'t go to any way! A need restart at somewere :O' % (self.getName()))
-                                self._agent_at_mongo['last_street_id_osm'] = None
+                                self.lastNode(self._node_osm)
                         
-                    elif len(self._street['nodes']) == 2 or self._node_osm_position == len(self._street['nodes'])-2:
-                        print('%s: process, but we need change the street =S' % (self.getName()))
-                        # cal de distance between nodes
-                        
-                        self._node_osm = self._street['nodes'][self._node_osm_position]
-                        self.appendLatLng(self._node_osm['lat'],self._node_osm['lng'],False)
-                        
-                        lat1 = float(self._node_osm['lat'])
-                        lng1 = float(self._node_osm['lng'])
-                        lat2 = float(self._street['nodes'][self._node_osm_position+1]['lat'])
-                        lng2 = float(self._street['nodes'][self._node_osm_position+1]['lng'])
-                        self.calculateDistanceMeters(lat1,lng1,lat2,lng2)
-                        print('%s: Calculate the distance to %s and %s'%(self.getName(),self._street['nodes'][self._node_osm_position]['id'],self._street['nodes'][self._node_osm_position+1]['id']))
-                        
-                        
-                        self._node_osm_position+=1
-                        # update the value of this node
-                        self.updateCounter()
-                        
-                        
-                        # now we need change the street
-                        streets_returneds = self._api.getWaysByNode(self._street['nodes'][self._node_osm_position]['id'])
-                        the_last_weight = self._config.inf_positive
-                        # this dot has a second street
-                        #   we choise with the street with less weight
-                        if len(streets_returneds) != 1:
-                            print('%s: choosing a new street... :)' % (self.getName()))
-                            self.choosingNewStreetToNavegate(streets_returneds)
-                        else:
-                            print('%s: I can\'t go to any way! A need restart at somewere :O' % (self.getName()))
-                            self._agent_at_mongo['last_street_id_osm'] = None
-                        
-                    else:
-                        
-                        # cal de distance between nodes
-                        print('%s: Calculate the distance to %s and %s'%(self.getName(),self._street['nodes'][self._node_osm_position]['id'],self._street['nodes'][self._node_osm_position+1]['id']))
-                        
-                        self._node_osm = self._street['nodes'][self._node_osm_position]
-                        self.appendLatLng(self._node_osm['lat'],self._node_osm['lng'],False)
-                        
-                        distance = self.calculateDistanceMeters( float(self._node_osm['lat']), float(self._node_osm['lng']), float(self._street['nodes'][self._node_osm_position+1]['lat']), float(self._street['nodes'][self._node_osm_position+1]['lng']) )
-                        
-                        # update the set the next node of the street
-                        self._node_osm_position+=1
-                        self._node_osm = self._street['nodes'][self._node_osm_position]
-                        
-                        #update the visitation on this node
-                        self.updateCounter()
-                        
+                                
                         
                 self._cicles +=1
-                print('%s: cicle %s end' % (self.getName(),self._cicles))
+                self._logger.info('%s: cicle %s end' % (self.getName(),self._cicles))
                 
                 
             print('Agent %s' % (self.getName()))
@@ -166,13 +137,161 @@ class Agent(Thread):
             print('%s sleeping fo %d seconds...' % (self.getName(), secondsToSleep))
             time.sleep(secondsToSleep)
             
-        #except Exception, e:
-        #    print('Agent %s die! :/' % (self.getName())) 
-        #    print e
+        except Exception as error:
+            self._logger.error('%s: Agent die! x(' % (self.getName()))
+            print 'Error:'
+            print traceback.format_exc()
+            self._logger.critical(str(error))
+            self._end_well = False
         finally:
-            self.endAgent()
+            self.finish()
             
-            
+    #
+    # updateRule
+    #   the update rule is the way that way
+    #   set the value. This code use "Node Counting"
+    #   read more about other methods to update at "Terrain Coverage with UAVs: Real-time Search and Geometric Approaches Applied to an Abstract Model of Random Events"
+    #
+    def updateRule(self):
+        
+        # update the node count
+        if 'node_count' in self._node_osm.keys():
+            self._node_osm['node_count'] += 1
+        else:
+            self._node_osm['node_count'] = 1
+
+        # update the street count
+        if 'street_count' in self._street.keys():
+            self._street['street_count'] += 1
+        else:
+            self._street['street_count'] = 1
+        self._mongo.updateStreetById(self._street.get('_id'),self._street)
+        
+    #
+    # nodeByNode
+    #   calcule the distance between two dots in meters
+    #
+    def nodeByNode(self,this_node,next_node):
+        
+        self.appendPathBread(this_node['id'],this_node['lat'],this_node['lng'],False)
+    
+        lat1 = float(this_node['lat'])
+        lng1 = float(this_node['lng'])
+        lat2 = float(next_node['lat'])
+        lng2 = float(next_node['lng'])
+        
+        dot1 = (lat1,lng1)
+        dot2 = (lat2,lng2)
+        
+        result = great_circle(dot1, dot2).meters
+        
+        self._logger.info('%s: The distance from %s to %s is %s! :P'%(self.getName(),this_node['id'],next_node['id'],result))
+        
+        return result
+    
+    #
+    # firstNode
+    #   execute only on first node
+    #
+    def firstNode(self,first_node):
+        self.appendPathBread(first_node['id'],first_node['lat'],first_node['lng'],False)            
+        self._logger.info('%s: It is the first node with id %s :T' % (self.getName(),first_node['id']))
+    
+    #
+    # lastNode
+    #   execute only on last node
+    #
+    def lastNode(self,last_node):
+        self.appendPathBread(last_node['id'],last_node['lat'],last_node['lng'],True)
+        self._logger.info('%s: It is the last node of this street with id %s :)' % (self.getName(),last_node['id']))
+        self._street['busy'] = False
+     
+    #
+    # oneNode
+    #   call when we have only one node at street
+    #
+    def oneNode(self,the_node):
+        self.appendPathBread(the_node['id'],the_node['lat'],the_node['lng'],False)
+        self.appendPathBread(the_node['id'],the_node['lat'],the_node['lng'],True)
+        self._street['busy'] = False
+
+        self._logger.info('%s: I can\'t run on this street! Only one node :S' % (self.getName()))
+    #
+    # chooseTheFirstStret
+    #   Method to choose the first street
+    #   to try walk.
+    #
+    def chooseTheFirstStret(self):
+        
+        # search all possible streets that are not busy
+        streets = self._mongo.getStreetQuery({'name_osm':{'$ne':""},'busy':{'$ne':True}})
+
+        # rand a street between all
+        return streets[random.randint(0, len(streets)-1)] 
+    
+    #
+    # after walk one street new need choose de next
+    #   this method choose the way with less count
+    #   and return. If any way cross he then we need
+    #   get other way how? Go to other agent =]
+    #   algorithm
+    #       close the corrent street
+    #       find the street with less count
+    #       if not find any street
+    #       
+    def chooseTheNextStreet(self):
+        
+        the_street_chosen = None
+        self._mongo.updateStreetById(self._street.get('_id'),self._street)
+        
+        for street_id in self._street['cross_streets_osm_id']:
+            street = self._mongo.getStreetByIdOSM(int(street_id))
+            street_count = 0
+            if street == None:
+                self._logger.info('%s: I cannot find this way %s :((' % (self.getName(),street_returned['id']))
+            else:
+                if not street['busy']:
+                    street_count = street['street_count']
+                    if the_last_weight > street_count:
+                        the_last_weight = street_count
+                        the_street_chosen = street
+        if the_street_chosen != None:
+            return the_street_chosen
+        else:
+            # if any street was selected from current street 
+            #   we try to get the first street with the less value
+            #   at one of all agents of swarm.
+            #   then choose a random street
+            self._logger.info('%s: I cannot find any way. Let me help other agent :/' % (self.getName()))
+            agents = self._mongo.getAgentsBySwarmIdentifier(self._swarm_config.identifier)
+            agents = random.shuffle(agents)
+            agent_visited=0
+            the_agent_chosen = None
+            while the_street_chosen == None or agents_visited != len(agents):
+                agent = agents.get(agent_visited)
+                if agent['last_street_id_osm'] != None and agent['active']:
+                    street_id = agent['last_street_id_osm']
+                    street = self._mongo.getStreetByIdOSM(int(street_id))
+                    street_count = 0
+                    if street == None:
+                        self._logger.info('%s: I cannot find this way %s :((' % (self.getName(),street_returned['id']))
+                    else:
+                        if not street['busy']:
+                            street_count = street['street_count']
+                            if the_last_weight > street_count:
+                                the_last_weight = street_count
+                                the_street_chosen = street
+                                the_agent_chosen = agent['name']
+                                
+                agents_visited+=1
+                
+            if the_street_chosen != None:
+                self._logger.info('%s: I will help the %s agent *_*' % (self.getName(),the_agent_chosen))
+                return the_street_chosen
+            else:
+                self._logger.info('%s: Oh really? I will get a random way -.-' % (self.getName()))
+                return self.chooseTheFirstStret()
+                
     #
     # choosingNewStreetToNavegate
     #   choose the street with the less weight
@@ -186,7 +305,7 @@ class Agent(Thread):
             street = self._mongo.getStreetByIdOSM(int(street_returned['id']))
             street_count = 0
             if street == None:
-                print('%s: I NOT FIND THIS WAY %s :((' % (self.getName(),street_returned['id']))
+                self._logger.info('%s: I NOT FIND THIS WAY %s :((' % (self.getName(),street_returned['id']))
             else:
                 if 'street_count' in street.keys():
                     street_count = street['street_count']
@@ -212,56 +331,24 @@ class Agent(Thread):
         # get the first node
         self._node_osm_position = 0
         self._node_osm = self._street['nodes'][self._node_osm_position]
-        print('%s: the new street is \'%s\' and id %s ;)' % (self.getName(),self._street['name_osm'],self._street['id_osm']))
+        self._logger.info('%s: the new street is \'%s\' and id %s ;)' % (self.getName(),self._street['name_osm'],self._street['id_osm']))
         
         # update the last lat/lng of agent
-        self.appendLatLng(self._node_osm['lat'],self._node_osm['lng'],True)
+        self.appendPathBread(self._node_osm['id'],self._node_osm['lat'],self._node_osm['lng'],True)
 
         # update the street
-        self.updateCounter()
-        
-        
-    #
-    # calculateDistanceMeters
-    #   calcule the distance between two dots in meters
-    #
-    def calculateDistanceMeters(self,lat1,lng1,lat2,lng2):
-        dot1 = (lat1,lng1)
-        dot2 = (lat2,lng2)
-        result = great_circle(dot1, dot2).meters
-        print('%s the distance is %s =D' % (self.getName(),result))
-        return result
+        self.updateRule()
     
-    
-    #
-    # updateTheCounter
-    #   update the counter on node atual
-    #
-    def updateCounter(self):
-        
-        # update the node count
-        if 'node_count' in self._node_osm.keys():
-            self._node_osm['node_count'] += 1
-        else:
-            self._node_osm['node_count'] = 1
 
-        # update the street count
-        if 'street_count' in self._street.keys():
-            self._street['street_count'] += 1
-        else:
-            self._street['street_count'] = 1
-        self._mongo.updateStreetById(self._street.get('_id'),self._street)
-    
-    
     #
     # updateLatLng
     #   update the lat and lng of agent
     #   set at pathbread of agent
     #
-    def appendLatLng(self,lat,lng,jump=False):
+    def appendPathBread(self,node_id,lat,lng,jump=False):
         self._agent_at_mongo['last_lat'] = lat
         self._agent_at_mongo['last_lng'] = lng
-        self._agent_at_mongo['pathbread'].append({'lat':lat,'lng':lng,'jump':jump})
+        self._agent_at_mongo['pathbread'].append({'node_id':node_id,'lat':lat,'lng':lng,'jump':jump})
         self._mongo.updateAgentByIdentifier(self.identifier,self._agent_at_mongo)
     
     #
@@ -281,35 +368,31 @@ class Agent(Thread):
     #   information and others actions
     #
     def startAgent(self):
+        
         self.setAgentName()
         
-        identifier = self._mongo.insertAgent(self.getName(),self._swarm_config.host,self._swarm_config.identifier)
+        identifier = self._mongo.insertAgent(self.getName(),self._swarm_config.identifier)
         self.setIdentifier(identifier)
         self._agent_at_mongo = self._mongo.getAgentByIdentifier(self.identifier)
         
         
     #
-    # endAgent
+    # finish
     #   Set information about agent at db
     #   and close at db
     #
-    def endAgent(self):
-        now = datetime.datetime.now()
-        self._agent_at_mongo['end_at'] = now.strftime("%Y-%m-%d %H:%M:%S")
-        self._agent_at_mongo['active'] = False
+    def finish(self):
+        self._agent_at_mongo['end_at']      = self._helper.getTimeNow()
+        self._agent_at_mongo['active']      = False
+        self._agent_at_mongo['end_well']    = self._end_well
         self._mongo.updateAgentByIdentifier(self.identifier,self._agent_at_mongo)
         
+        if self._street != None:
+            self._street['busy'] = False
+            self._mongo.updateStreetById(self._street.get('_id'),self._street)
+        else:
+            self._logger.info('%s: I finish without update the street value :)' % (self.getName()))
         
-    #
-    # setSwarmConfig
-    #   set swarmconfig to get a lot
-    #   of information about the swarm
-    #   and the configuration
-    #
-    def setSwarmConfig(self,swarm_config):
-        self._swarm_config = swarm_config
-    
-    
     #
     # getIdentifier
     #

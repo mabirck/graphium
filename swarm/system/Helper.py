@@ -10,7 +10,7 @@ class Helper:
         return cls._instance
     
     def __init__(self):
-        something = None
+        None
     
     def getTimeNow(self):
         return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

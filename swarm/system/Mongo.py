@@ -2,16 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import pymongo, datetime,bson,time
-
+import system
 from random import randint
 from unidecode import unidecode
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from system.Configuration import *
 
-from Configuration import Configuration
 class Mongo:
-
-    config		= None
 
     __client	= None
     __db 		= None
@@ -19,10 +17,9 @@ class Mongo:
 
     def __init__(self,db='graphium',address='localhost',port=27017):
 
-        self.config 		= Configuration()
-        self.__client		= MongoClient(self.config.mongo_host, self.config.mongo_port)
-        self.__db			= self.__client[self.config.mongo_db]
-        self.__collection   = self.__db.agent_story
+        self.__client		= MongoClient(address, port)
+        self.__db			= self.__client[db]
+        self.__collection   = self.__db.agent
 
         
     ############ Agent ############
@@ -31,14 +28,14 @@ class Mongo:
     #   permit to update informatations at mongodb
     #
     def getAgentByIdentifier(self,identifier):
-        self.__collection   = self.__db.agent_story
+        self.__collection   = self.__db.agent
         return self.__collection.find_one({'identifier':identifier})
     
     # getAgent
     #   set the end information about the agent
     #   
     def getAgentByName(self,agent_name):
-        self.__collection   = sef.__db.agent_story
+        self.__collection   = sef.__db.agent
         return self.__collection.find_one({'agent_name':agent_name})
     
     
@@ -46,33 +43,34 @@ class Mongo:
     #   permit to update informatations at mongodb
     #
     def updateAgentByName(self,agent_name,data):
-        self.__collection = self.__db.agent_story
+        self.__collection = self.__db.agent
         self.__collection.update({'name':agent_name},{"$set":data},upsert=False)
         
     # updatePathAgentById
     #   permit to update informatations at mongodb
     #
     def updateAgentByIdentifier(self,identifier,data):
-        self.__collection = self.__db.agent_story
+        self.__collection = self.__db.agent
         self.__collection.update({'identifier':identifier},{"$set":data},upsert=False)
     
     # insertAgent
     #   insert the agent atMongoDB
     #
-    def insertAgent(self,name,host,swarm_identifier,color=None):
+    def insertAgent(self,name,swarm_identifier,color=None):
         now = datetime.datetime.now()
-    
+        
+        self.config = system.Configuration.Configuration()
         identifier = now.strftime("%Y%m%d%H%M%S%f")[:-3]
         if color == None:
-            colors = self.config.colors
+            colors = self.config.swarm_agent_colors
             active_agents = len(self.getAgentQuery({'active': True}))
             if len(colors) <= active_agents :
                 color = colors[active_agents-1]
             else:
                 color = colors[randint(0,len(colors)-1)]
         
-        dataToSend = { 'identifier':identifier, 'name':name, 'host':host, 'swarm_identifier':swarm_identifier,'color':color, 'active':True, 'end_at':None, 'last_lat':0.0, 'last_lng':0.0, 'last_street':None,'pathbread':[],'visited_streets':[],'busy':False}
-        self.__collection = self.__db.agent_story
+        dataToSend = { 'identifier':identifier, 'name':name, 'swarm_identifier':swarm_identifier,'color':color, 'active':True, 'end_at':None, 'last_lat':0.0, 'last_lng':0.0, 'last_street':None,'pathbread':[],'visited_streets':[],'last_street_id_osm':None}
+        self.__collection = self.__db.agent
         the_id = self.__collection.insert(dataToSend)
         return identifier
     
@@ -80,7 +78,7 @@ class Mongo:
     #   set the end information about the agent
     # 
     def endAgent(self,identifier,end_at):
-        self.__collection = self.__db.agent_story
+        self.__collection = self.__db.agent
         self.__collection.update({'identifier':identifier},{"$set":{'end_at':end_at,'active':False}},upsert=False)
     
     # getAgentsBySwarmIndentifier
@@ -88,14 +86,14 @@ class Mongo:
     #
     def getAgentsBySwarmIdentifier(self,swarm_identifier):
         returned = []
-        self.__collection   = self.__db.agent_story
+        self.__collection   = self.__db.agent
         return list(self.__collection.find({'swarm_identifier':swarm_identifier}).short("_id"))
         
     # getAgentQuery
     #   return the users basead on query passed
     #
     def getAgentQuery(self,query={}):
-        self.__collection = self.__db.agent_story
+        self.__collection = self.__db.agent
         return list(self.__collection.find(query))
     
 	############ User ############
@@ -142,7 +140,7 @@ class Mongo:
     #   set the end information about the street
     #   
     def getStreetByName(self,street_name):
-        self.__collection   = sef.__db.agent_story
+        self.__collection   = sef.__db.street
         return self.__collection.find({'name_osm':street_name})
     
     # updateStreetById
@@ -182,3 +180,64 @@ class Mongo:
     def getWishListById(self,wishListId):
         self.__collection = self.__db.wish_list
         return self.__collection.find_one({'_id':wishListId})
+    
+    
+    ############ Configuration ############
+    
+    # insertConfiguration
+    #   return ID
+    #
+    def insertConfiguration(self, swarm_agent_number=3, swarm_agent_names_API="http://namey.muffinlabs.com/name.json?with_surname=true&frequency=all", swarm_agent_names = ['Coralina Malaya','Abigail Johnson','Antonietta Marinese','Elisa Rogoff','Serafim Folkerts','Dulce Barrell'], mongo_db = "graphium", mongo_host = "localhost", mongo_port = 27017, swarm_agent_colors = ["#E91E63", "#9C27B0", "#F44336", "#673AB7", "#3F51B5", "#2196F3", "#00BCD4", "#009688", "#4CAF50", "#CDDC39", "#FF9800","#795548","#FF5722","#607D8B","#9E9E9E","#827717"], inf_positive = 99999, inf_negative = -99999, osmapi_user = "glaucomunsberg", osmapi_password = "30271255"):
+        dataToSend = {'swarm_agent_number':swarm_agent_number, 'swarm_agent_names_API':swarm_agent_names_API, 'swarm_agent_names':swarm_agent_names, 'mongo_db':mongo_db, 'mongo_host':mongo_host, 'mongo_port': mongo_port, 'swarm_agent_colors':swarm_agent_colors, 'inf_positive':inf_positive, 'inf_negative':inf_negative, 'osmapi_user':osmapi_user, 'osmapi_password': osmapi_password}
+        self.__collection = self.__db.configuration
+        return self.__collection.insert_one(dataToSend).inserted_id
+    
+    # insertConfiguration
+    #   return configuration | None
+    #
+    def getConfiguration(self):
+        self.__collection = self.__db.configuration
+        configuration = list(self.__collection)
+        if len(configuration) != 0:
+            return configuration[0]
+        else:
+            return None
+    
+    
+
+    ############ Session and Logger ############
+    
+    # insertSession
+    #   create a session of swarm and send the basic information
+    #   return session ID
+    #
+    def insertSession(self,identifier,num_agent,user_email="admin@graphium",name='default',host='0.0.0.0',active=True,logs=[]):
+        self.__collection = self.__db.swarm_session
+        dataToSend = {'identifier':identifier, 'name':name, 'num_agent':num_agent, 'user_email':user_email,'host':host,'active':active, 'logs':[]}
+        return self.__collection.insert_one(dataToSend).inserted_id
+    
+    # getSwarmByIdentifier
+    #   get the swarm session by identifier
+    #
+    def getSwarmByIdentifier(self,identifier):
+        self.__collection   = self.__db.swarm_session
+        return self.__collection.find_one({'identifier':identifier})
+    
+    # updateSwarmByIdentifier
+    #   permit to update informatations at mongodb
+    #
+    def updateSwarmByIdentifier(self,identifier,data):
+        self.__collection = self.__db.swarm_session
+        self.__collection.update({'identifier':identifier},{"$set":data},upsert=False)
+    
+    # addLog
+    #   adding on more log at one session
+    #
+    def addLog(self,message,level,swarm_session):
+        self.__collection = self.__db.swarm_session
+        swarm = self.__collection.find_one({'swarm_identifier':swarm_session})
+        if swarm != None:
+            swarm['logs'].append({'level':level,'message':message})
+            self.__collection.update({'swarm_identifier':swarm_session},{"$set":swarm},upsert=False)
+            
+        

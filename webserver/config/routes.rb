@@ -1,9 +1,16 @@
 Rails.application.routes.draw do
+  namespace :graphium do
+    resources :configurations
+  end
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
+    
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'dashboard#index'
+  root 'public/site#index'
   namespace :graphium do
        resources :history
        resources :agent
@@ -15,7 +22,11 @@ Rails.application.routes.draw do
               get 'history'
           end
        end
+      resources :configurations
   end
+  resources :dashboard
+    
+  #devise_for :users, controllers: { sessions: "users/sessions", registrations: "users/registrations", passwords: "users/passwords" }
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

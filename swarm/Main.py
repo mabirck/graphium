@@ -4,6 +4,7 @@ import sys
 
 from system.Configuration import *
 from system.Mongo import *
+from system.Helper import *
 from API import API
 from Swarm import *
 
@@ -11,6 +12,7 @@ if __name__ == "__main__":
     
     config  = Configuration()
     mongo   = Mongo()
+    helper  = Helper()
     api     = API()
     swarm   = None
     
@@ -19,25 +21,27 @@ if __name__ == "__main__":
     for i in range(len(commands)):
         commands[i] = commands[i].lower()
         
-    if '-a' in commands:
-        t_index = commands.index('-a')
-        agent_number = commands[t_index+1]
+    if '-s' in commands:
+        t_index = commands.index('-s')
+        session_identifier = commands[t_index+1]
     else:
-        agent_number = None
+        session_identifier = None
         
-    if '-r' in commands:
-        db_reset = True
+    if '-u' in commands:
+        t_index = commands.index('-u')
+        user_email = commands[t_index+1]
     else:
-        db_reset = False
+        user_email = "admin@graphium.com"
+        
+    if '-n' in commands:
+        t_index = commands.index('-n')
+        user_name = commands[t_index+1]
+    else:
+        user_name = helper.getTimeNow()
     
-    swarm = Swarm(agent_number,db_reset)
-    #try:
-        
-    #except Exception,e:
-    #    print 'Failed to upload to ftp: '+ str(e)
-    #    swarm.closeSwarm()
-        
-    swarm.closeSwarm()
+    swarm = Swarm(session_identifier,user_name,user_email)
+    swarm.start()
+    
     
     
      

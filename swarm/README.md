@@ -7,5 +7,5 @@ A simple swarm of agents crawling the map searching graffiti!
 
 Attribute  | Description
 ---------- | -----------
-`-a`       | Number of agents at same time search at map
-`-r`       | Reset database (users, wish list)
+`-s`       | session identifier
+`-u`       | user of this session

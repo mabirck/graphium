@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import socket, datetime, traceback
+
 from system.Configuration import *
 from system.Mongo import *
 from system.Helper import *
+from system.Logger import *
 from Agent import *
-import socket, datetime
 
 class Swarm:
     
@@ -14,76 +16,75 @@ class Swarm:
     _swarm_config   = None
     _mongo          = None
     _helper         = None
-    
-    def __init__(self,agent_number = None,db_reset=False):
-        
-        self._swarm_config  = SwarmConfig()
-        self._mongo         = Mongo()
-        self._helper        = Helper()
-        self.agentStoryDB()
-        self.populationDB(db_reset)
-        if agent_number != None:
-            self._swarm_config.agent_number = agent_number
+    _logger         = None
+    _name           = None
+    _end_well       = None
+    _swarm_at_mongo = None
+
+    def __init__(self, swarm_identifier=None, swarm_name=None, user_email=None):
         
         self._config        = Configuration()
+        self._mongo         = Mongo()
+        self._helper        = Helper()
+        self._logger        = Logger(swarm_identifier)
         
-        for i in range(self._swarm_config.agent_number):
-            None
-            agent = Agent()
-            agent.setSwarmConfig(self._swarm_config)
-            self._agents.append(agent)
-            
-        for agent in self._agents:
-            None
-            agent.start()
-        for agent in self._agents:
-            None
-            agent.join()
+        # start basic information about swarm session
+        self._logger.debug('Swarm: We are configure my settings...')
+        self.swarm_name         = swarm_name
+        self._swarm_config      = SwarmConfig(swarm_identifier,swarm_name)
+        self._swarm_config.agent_number = self._config.swarm_agent_number
         
-        print('Main Terminating...')
+        self._mongo.insertSession(swarm_identifier, self._config.swarm_agent_number, user_email, swarm_name, self._swarm_config.host)
+        self._swarm_at_mongo    = self._mongo.getSwarmByIdentifier(swarm_identifier)
         
-    def closeSwarm(self):
-        self.agentStoryDB()
-    
-    def agentStoryDB(self):
-        agents = self._mongo.getAgentQuery({'active': True})
-        now = datetime.datetime.now()
-        for agent in agents:
-            print 'agent name',agent['name']
-            self._mongo.endAgent(agent['name'], now.strftime("%Y-%m-%d %H:%M:%S"))
         
-    def populationDB(self,db_reset=False):
+    # Start the agents 
+    def start(self):
         
-        if db_reset == True:
-            self._mongo.removeUsers({})
-            self._mongo.removeWishList({})
+        self._logger.debug('Swarm: Let starting agents...')
+        try:
+            for i in range(self._swarm_config.agent_number):
+                agent = Agent(self._swarm_config)
+                self._agents.append(agent)
+
+            for agent in self._agents:
+                agent.start()
+
+            for agent in self._agents:
+                agent.join()
+        except Exception as error:
+            self._logger.error('Swarm: Swarm die! x(')
+            print 'Error:'
+            print traceback.format_exc()
+            self._logger.critical(str(error))
+            self._end_well = False
+        finally:
+            self.finish()
         
-        if len(self._mongo.getUsersQuery({})) == 0:
-            
-            # insert User
-            user_id = self._mongo.insertUser('glaucomunsberg@gmail.com', 'Glauco Roberto', True, '100000197237018', None, self._helper.getTimeNow() )
-            # insert examples into Wish List
-            self._mongo.insertWishList(-31.777381, -52.340547, self._helper.getTimeNow(), user_id, False, False, 0.8, 'R. Uruguai', 'pelotas', 'brazil')
-            self._mongo.insertWishList(-31.776393,-52.3424553, self._helper.getTimeNow(), user_id, False, False,0.2,'Gonçalves Chaves', 'pelotas', 'brazil')
-            self._mongo.insertWishList(-31.744377,-52.3309687, self._helper.getTimeNow(), user_id, False, False, 0.2, 'Av. Jucelino K. de Oliveira', 'pelotas', 'brazil')
-            self._mongo.insertWishList(-31.775344,-52.3445952, self._helper.getTimeNow(), user_id, False, False, 0.3, 'R. Gomes Carneiro', 'pelotas', 'brazil')
-            self._mongo.insertWishList(-31.743544, -52.391601, self._helper.getTimeNow(), user_id, False, False, 0.5, 'R. Major Francisco N de Souza', 'pelotas', 'brazil')
-            
+    def finish(self):
+        self._swarm_at_mongo['end_at']      = self._helper.getTimeNow()
+        self._swarm_at_mongo['active']      = False
+        self._swarm_at_mongo['end_well']    = self._end_well
+        
+        self._mongo.updateSwarmByIdentifier(self._swarm_config.identifier,self._swarm_at_mongo)
+        
+        self._logger.info('Swarm: Hard work! I finish dude ;)')
+
 #
-# This class help the swarm to understand
-#   the configuration of ambient and the
-#   agent information
+# This class help agents to understand
+#   the configuration of Swarm
+#
 class SwarmConfig:
     
     host            = None
     identifier      = None
-    agent_number    = 3
+    name            = None
     
-    def __init__(self):
-        now = datetime.datetime.now()
-        self.identifier = now.strftime("%Y%m%d%H%M%S")
-        self.host       = socket.gethostbyname(socket.gethostname())
+    def __init__(self,identifier=None,name=None):
         
+        self.name       = name
+        self.identifier = identifier
+        self.host       = socket.gethostbyname(socket.gethostname())
         print 'Swarm Configuration'
         print 'Identifier: ',self.identifier
         print 'Host      : ',self.host

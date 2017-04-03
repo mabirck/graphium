@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  swarm_agent_number: 1
+  swarm_agent_names_API: MyString
+  swarm_agent_names: 
+  mongo_db: MyString
+  mongo_host: MyString
+  mongo_port: 1
+  colors: 
+  inf_positive: 1
+  inf_negative: 1
+  osmapi_user: MyString
+  osmapi_password: MyString
+
+two:
+  swarm_agent_number: 1
+  swarm_agent_names_API: MyString
+  swarm_agent_names: 
+  mongo_db: MyString
+  mongo_host: MyString
+  mongo_port: 1
+  colors: 
+  inf_positive: 1
+  inf_negative: 1
+  osmapi_user: MyString
+  osmapi_password: MyString

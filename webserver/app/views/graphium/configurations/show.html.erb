@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Swarm agent number:</strong>
+  <%= @graphium_configuration.swarm_agent_number %>
+</p>
+
+<p>
+  <strong>Swarm agent names api:</strong>
+  <%= @graphium_configuration.swarm_agent_names_API %>
+</p>
+
+<p>
+  <strong>Swarm agent names:</strong>
+  <%= @graphium_configuration.swarm_agent_names %>
+</p>
+
+<p>
+  <strong>Mongo db:</strong>
+  <%= @graphium_configuration.mongo_db %>
+</p>
+
+<p>
+  <strong>Mongo host:</strong>
+  <%= @graphium_configuration.mongo_host %>
+</p>
+
+<p>
+  <strong>Mongo port:</strong>
+  <%= @graphium_configuration.mongo_port %>
+</p>
+
+<p>
+  <strong>Colors:</strong>
+  <%= @graphium_configuration.colors %>
+</p>
+
+<p>
+  <strong>Inf positive:</strong>
+  <%= @graphium_configuration.inf_positive %>
+</p>
+
+<p>
+  <strong>Inf negative:</strong>
+  <%= @graphium_configuration.inf_negative %>
+</p>
+
+<p>
+  <strong>Osmapi user:</strong>
+  <%= @graphium_configuration.osmapi_user %>
+</p>
+
+<p>
+  <strong>Osmapi password:</strong>
+  <%= @graphium_configuration.osmapi_password %>
+</p>
+
+<%= link_to 'Edit', edit_graphium_configuration_path(@graphium_configuration) %> |
+<%= link_to 'Back', graphium_configurations_path %>

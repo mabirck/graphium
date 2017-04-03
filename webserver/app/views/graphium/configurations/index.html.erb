@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Graphium Configurations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Swarm agent number</th>
+      <th>Swarm agent names api</th>
+      <th>Swarm agent names</th>
+      <th>Mongo db</th>
+      <th>Mongo host</th>
+      <th>Mongo port</th>
+      <th>Colors</th>
+      <th>Inf positive</th>
+      <th>Inf negative</th>
+      <th>Osmapi user</th>
+      <th>Osmapi password</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @graphium_configurations.each do |graphium_configuration| %>
+      <tr>
+        <td><%= graphium_configuration.swarm_agent_number %></td>
+        <td><%= graphium_configuration.swarm_agent_names_API %></td>
+        <td><%= graphium_configuration.swarm_agent_names %></td>
+        <td><%= graphium_configuration.mongo_db %></td>
+        <td><%= graphium_configuration.mongo_host %></td>
+        <td><%= graphium_configuration.mongo_port %></td>
+        <td><%= graphium_configuration.colors %></td>
+        <td><%= graphium_configuration.inf_positive %></td>
+        <td><%= graphium_configuration.inf_negative %></td>
+        <td><%= graphium_configuration.osmapi_user %></td>
+        <td><%= graphium_configuration.osmapi_password %></td>
+        <td><%= link_to 'Show', graphium_configuration %></td>
+        <td><%= link_to 'Edit', edit_graphium_configuration_path(graphium_configuration) %></td>
+        <td><%= link_to 'Destroy', graphium_configuration, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Configuration', new_graphium_configuration_path %>

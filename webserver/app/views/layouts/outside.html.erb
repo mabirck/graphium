@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Graphium</title>
+        <link rel="shortcut icon" href="assets/logo/favicon.ico" type="image/x-icon">
+        <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+        <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+        <%= csrf_meta_tags %>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
+    <body>
+        <nav style="background-color:white">
+            <div class="nav-wrapper container" >
+                <a href="/" class="brand-logo left"><img style='height: 63px;width:auto' src="/assets/logo/graphium_horizontal.png"></a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="#about"  style='color:#2D2338'>About</a></li>
+                    <li><a href="#news"  style='color:#2D2338'>News</a></li>
+                    <li><a href="/users/sign_in"  style='color:#2D2338'>Sign in</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <div>
+            <%if notice or alert%>
+                <div id="modal1" class="modal">
+                    <div class="modal-content">
+                      <h4>Atencion</h4>
+                      <p class="notice"><%= notice %></p>
+                      <p class="alert"><%= alert %></p>  
+                    </div>
+                    <div class="modal-footer">
+                      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function(){
+                        $('.modal').modal();
+                        $('#modal1').modal('open');
+                    })
+                </script>
+            <%end%>
+            <%= yield %>
+        </div>    
+        <script>
+            $(".brand-menu").sideNav();
+        </script>
+        <style>
+            .brand-menu{
+                margin-left:10px;
+            }
+        </style>
+    </body>
+</html>

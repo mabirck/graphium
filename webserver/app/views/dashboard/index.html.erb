@@ -1,3 +1,4 @@
+<%=breadcrumbs%>
 <div class='row'>
     <div class='col s4'>
         <div class="row">
@@ -5,11 +6,11 @@
               <div class="card">
                 <div class="card-image">
                   <img src="/assets/dashboard/agents_on_street.png">
-                  <span class="card-title">Análise em tempo real</span>
-                  <a href='/graphium/analytics' class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">open_in_new</i></a>
+                  <span class="card-title">Real-time analysis</span>
+                  <a href='/graphium/analytics' class="btn-floating btn-large halfway-fab waves-effect waves-light"><i class="material-icons">open_in_new</i></a>
                 </div>
                 <div class="card-content">
-                  <p>Analise os agentes que estão em tempo real analisando as ruas.</p>
+                  <p>Analyze agents that are in real time by analyzing</p>
                 </div>
               </div>
             </div>
@@ -21,11 +22,11 @@
               <div class="card">
                 <div class="card-image">
                   <img src="/assets/dashboard/agents.png">
-                  <span class="card-title">Histórico dos Agentes</span>
-                  <a href='/graphium/agent' class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">open_in_new</i></a>
+                  <span class="card-title">Agent History</span>
+                  <a href='/graphium/agent' class="btn-floating btn-large halfway-fab waves-effect waves-light"><i class="material-icons">open_in_new</i></a>
                 </div>
                 <div class="card-content">
-                  <p>Veja o histórico dos agentes que já realizaram ações.</p>
+                  <p>See the history of agents who have taken walks</p>
                 </div>
               </div>
             </div>
@@ -37,11 +38,11 @@
               <div class="card">
                 <div class="card-image">
                   <img src="/assets/dashboard/streets.png">
-                  <span class="card-title">Ruas</span>
-                  <a href='/graphium/street' class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">open_in_new</i></a>
+                  <span class="card-title">Streets</span>
+                  <a href='/graphium/street' class="btn-floating btn-large halfway-fab waves-effect waves-light"><i class="material-icons">open_in_new</i></a>
                 </div>
                 <div class="card-content">
-                  <p>Veja as ruas que estão cadastradas no nosso sistema.</p>
+                  <p>See the streets that are registered in the graphium</p>
                 </div>
               </div>
             </div>
@@ -49,34 +50,74 @@
     </div>
 </div>
 <div class='row'>
-    <div class="col s6">
+    <div class='col s4'>
+        <div class="card">
+            <div class="card-image waves-effect waves-block waves-light">
+              <img class="activator" src="/assets/dashboard/profile_background.jpg">
+            </div>
+            <div class="card-content">
+              <span class="card-title activator grey-text text-darken-4">Profile<i class="material-icons right">more_vert</i></span>
+              <p><a href="#" onclick="location.href='users/edit'"><%=current_user.first_name+" "+current_user.last_name%></a></p>
+            </div>
+            <div class="card-reveal">
+              <span class="card-title grey-text text-darken-4"><%=current_user.first_name+" "+current_user.last_name%><i class="material-icons right">close</i></span>
+              <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">account_circle</i>
+                      <input id="icon_prefix"disabled type="text" class="validate" value='<%=current_user.first_name+" "+current_user.last_name%>'>
+                      <label for="icon_prefix" disabled>First Name</label>
+                    </div>
+                  </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                          <i class="material-icons prefix">email</i>
+                          <input disabled id="icon_prefix" type="text" class="validate" value='<%=current_user.email%>'>
+                          <label for="icon_prefix" disabled>Email Name</label>
+                        </div>
+                   </div>
+                   <div class="row">
+                        <div class="input-field col s12">
+                          <i class="material-icons prefix">directions_walk</i>
+                          <input disabled id="icon_prefix" type="text" class="validate" value='<%=current_user.last_sign_in_at%>'>
+                          <label for="icon_prefix" disabled>Last sign in</label>
+                        </div>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+    </div>
+    <div class="col s4">
         <div class="card horizontal">
           <div class="card-image">
             <img src="http://lorempixel.com/100/190/technics/6">
           </div>
           <div class="card-stacked">
             <div class="card-content">
-              <h4>Histórico de análises</h4>
-              <p>Veja as análises mais antigas realizadas pelo sistema</p>
+              <h4>Analysis history</h4>
+              <p>See the oldest analyzes performed by the system</p>
             </div>
             <div class="card-action">
-              <a href="#">Acesse aqui</a>
+              <a href="#">Access here</a>
             </div>
           </div>
         </div>
     </div>
-    <div class="col s6">
+    <div class="col s4">
         <div class="card horizontal">
           <div class="card-image">
             <img src="http://lorempixel.com/100/190/technics/4">
           </div>
           <div class="card-stacked">
             <div class="card-content">
-              <h4>Configuração e Outros</h4>
-              <p>Veja as configurações do sistema entre outras coisas</p>
+              <h4>Configuration and Others</h4>
+              <p>See system settings among other things</p>
             </div>
             <div class="card-action">
-              <a href="#">Acesse aqui</a>
+              <a href="#">Access here</a>
             </div>
           </div>
         </div>

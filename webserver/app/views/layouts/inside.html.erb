@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Graphium</title>
+        <link rel="shortcut icon" href="assets/logo/favicon.ico" type="image/x-icon">
+        <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+        <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+        <%= csrf_meta_tags %>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
+    <body>
+        <nav style='background-color:white'>
+            <div class="nav-wrapper">
+              <a href="#!" class='brand-logo right'><img src='/assets/logo/graphium_color.png' style="height:40px;width:285px;margin-top: 12px"></a>
+              <ul class="left hide-on-med-and-down">
+                <li><a href="#!" style='color:#2D2338' data-activates="slide-out" class="brand-menu"><i class="material-icons">menu</i></a></li>
+                <li ></li>
+              </ul>
+              <div id='controllers'></div>
+            </div>
+        </nav>
+        <ul id="slide-out" class="side-nav">
+            <li><div class="userView">
+              <div class="background">
+                <img src="/assets/dashboard/background.jpg">
+              </div>
+              <a href="#!user"><img class="circle" src="/assets/system/profile.png" style="width:64px;height:64px"></a>
+              <a href="#!name"><span class="white-text name"><%=current_user.first_name+" "+current_user.last_name%></span></a>
+              <a href="#!email"><span class="white-text email"><%=current_user.email%></span></a>
+            </div></li>
+            <li><a href="/"><i class="material-icons">dashboard</i>Dashboard</a></li>
+            <li><a href="/graphium/analytics"><i class="material-icons">timeline</i>Análises</a></li>
+            <li><a href="/graphium/agent"><i class="material-icons">places</i>Agents</a></li>
+            <li><a href="/graphium/street"><i class="material-icons">directions</i>Streets</a></li>
+            <li><a href="/graphium/configurations/1/edit"><i class="material-icons">settings</i>Configuration</a></li>
+            <li><div class="divider"></div></li>
+            <li><a href="/graphium/analytics/history"><i class="material-icons">navigation</i>History of Analysis</a></li>
+            <li><a href="/graphium/history"><i class="material-icons">history</i>Agent history</a></li>
+            <li><a class="subheader">Outros</a></li>
+            <li><a class="waves-effect" href="#!"><i class="material-icons">info_outline</i>About</a></li>
+            <li><a class="waves-effect" href="/users/sign_out"><i class="material-icons">exit_to_app</i>Exit</a></li>
+          </ul>
+      
+        <div class="container">
+            <p class="notice"><%= notice %></p>
+            <p class="alert"><%= alert %></p>
+            <%= yield %>
+        </div>    
+        <script>
+            $(".brand-menu").sideNav();
+        </script>
+        <style>
+            .brand-menu{
+                margin-left:10px;
+            }
+        </style>
+    </body>
+</html>
