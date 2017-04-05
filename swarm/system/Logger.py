@@ -19,6 +19,7 @@ class Logger:
         self._mongo             = Mongo()
         self.logging            = logging
         self.logging.basicConfig(filename='log/graphium_swarm.log',level=logging.DEBUG)
+        self.logging.Formatter(fmt='%(asctime)s %(message)s',datefmt='%Y-%m-%d %H:%M:%S')
         self.level              = level
         self.swarm_session      = swarm_session
             

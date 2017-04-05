@@ -212,30 +212,30 @@ class Mongo:
     #   return session ID
     #
     def insertSession(self,identifier,num_agent,user_email="admin@graphium",name='default',host='0.0.0.0',active=True,logs=[]):
-        self.__collection = self.__db.swarm_session
-        dataToSend = {'identifier':identifier, 'name':name, 'num_agent':num_agent, 'user_email':user_email,'host':host,'active':active, 'logs':[]}
+        self.__collection = self.__db.swarm
+        dataToSend = {'identifier':identifier, 'name':name, 'num_agent':num_agent, 'user_email':user_email,'host':host,'active':active, 'logs':[],'end_at':None,'end_well':True}
         return self.__collection.insert_one(dataToSend).inserted_id
     
     # getSwarmByIdentifier
     #   get the swarm session by identifier
     #
     def getSwarmByIdentifier(self,identifier):
-        self.__collection   = self.__db.swarm_session
+        self.__collection   = self.__db.swarm
         return self.__collection.find_one({'identifier':identifier})
     
     # updateSwarmByIdentifier
     #   permit to update informatations at mongodb
     #
     def updateSwarmByIdentifier(self,identifier,data):
-        self.__collection = self.__db.swarm_session
+        self.__collection = self.__db.swarm
         self.__collection.update({'identifier':identifier},{"$set":data},upsert=False)
     
     # addLog
     #   adding on more log at one session
     #
     def addLog(self,message,level,swarm_session):
-        self.__collection = self.__db.swarm_session
-        swarm = self.__collection.find_one({'swarm_identifier':swarm_session})
+        self.__collection = self.__db.swarm
+        swarm = self.__collection.find_one({'identifier':swarm_session})
         if swarm != None:
             swarm['logs'].append({'level':level,'message':message})
             self.__collection.update({'swarm_identifier':swarm_session},{"$set":swarm},upsert=False)

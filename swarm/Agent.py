@@ -52,7 +52,7 @@ class Agent(Thread):
         
         try:
             self._logger.info('%s: Let start the job! =D' % (self.getName()))
-            while self._work and self._cicles < 1000:
+            while self._work and self._cicles < 100:
                         
                 # if not set the last street
                 #   this agent need choose one street to start
@@ -114,13 +114,13 @@ class Agent(Thread):
                         # read more at updateRule
                         self.updateRule()
                         
-                        if self._node_osm_position != 1 and self._node_osm_position != len(self._street['nodes'])-2:
+                        if self._node_osm_position != 0 and self._node_osm_position <= len(self._street['nodes'])-2:
 
                             # call the method that execute something node by node
                             self.nodeByNode(self._node_osm,self._street['nodes'][self._node_osm_position+1])
 
                         else:
-                            if self._node_osm_position == 1:
+                            if self._node_osm_position == 0:
                                 # set the visit of this node
                                 self.firstNode(self._node_osm)
                             else:
@@ -242,13 +242,14 @@ class Agent(Thread):
     def chooseTheNextStreet(self):
         
         the_street_chosen = None
+        the_last_weight = self._config.inf_positive
         self._mongo.updateStreetById(self._street.get('_id'),self._street)
         
         for street_id in self._street['cross_streets_osm_id']:
             street = self._mongo.getStreetByIdOSM(int(street_id))
             street_count = 0
             if street == None:
-                self._logger.info('%s: I cannot find this way %s :((' % (self.getName(),street_returned['id']))
+                self._logger.info('%s: I cannot find this way %s :((' % (self.getName(),street_id))
             else:
                 if not street['busy']:
                     street_count = street['street_count']
@@ -270,11 +271,12 @@ class Agent(Thread):
             while the_street_chosen == None or agents_visited != len(agents):
                 agent = agents.get(agent_visited)
                 if agent['last_street_id_osm'] != None and agent['active']:
+                    the_last_weight = self._config.inf_positive
                     street_id = agent['last_street_id_osm']
                     street = self._mongo.getStreetByIdOSM(int(street_id))
                     street_count = 0
                     if street == None:
-                        self._logger.info('%s: I cannot find this way %s :((' % (self.getName(),street_returned['id']))
+                        self._logger.info('%s: I cannot find this way %s :((' % (self.getName(),street_id))
                     else:
                         if not street['busy']:
                             street_count = street['street_count']

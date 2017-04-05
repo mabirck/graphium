@@ -34,8 +34,8 @@ class Swarm:
         self._swarm_config      = SwarmConfig(swarm_identifier,swarm_name)
         self._swarm_config.agent_number = self._config.swarm_agent_number
         
-        self._mongo.insertSession(swarm_identifier, self._config.swarm_agent_number, user_email, swarm_name, self._swarm_config.host)
-        self._swarm_at_mongo    = self._mongo.getSwarmByIdentifier(swarm_identifier)
+        self._mongo.insertSession(self._swarm_config.identifier, self._config.swarm_agent_number, user_email, swarm_name, self._swarm_config.host)
+        self._swarm_at_mongo    = self._mongo.getSwarmByIdentifier(self._swarm_config.identifier)
         
         
     # Start the agents 
@@ -79,11 +79,16 @@ class SwarmConfig:
     host            = None
     identifier      = None
     name            = None
+    _helper         = None
     
     def __init__(self,identifier=None,name=None):
         
         self.name       = name
-        self.identifier = identifier
+        if identifier == None:
+            self._helper = Helper()
+            self.identifier = self._helper.getSerialSwarmNow()
+        else:
+            self.identifier = identifier
         self.host       = socket.gethostbyname(socket.gethostname())
         print 'Swarm Configuration'
         print 'Identifier: ',self.identifier

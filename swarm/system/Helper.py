@@ -12,5 +12,8 @@ class Helper:
     def __init__(self):
         None
     
+    def getSerialSwarmNow(self):
+        return datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    
     def getTimeNow(self):
         return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

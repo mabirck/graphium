@@ -60,9 +60,11 @@ class Reader:
                         is_to_insert = True
                         
                 if is_to_insert:
+                    self.num_total_ways+=1
                     way = {}
                     way['cross_streets_osm_id'] = []
                     way['street_count'] = 0
+                    way['busy'] = False
                     try:
                         way['name_osm'] = entity.tags['name']
                     except:

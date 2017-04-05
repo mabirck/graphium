@@ -5,16 +5,12 @@
         <div style="margin-top: 10px;">
             <div class="z-depth-1">
                 <div class='row' style='padding: 15px 15px 10px 15px;'>
-                    <a id='delete' onClick="clean()" class="col s2" style='cursor:pointer' ><i class="material-icons">delete_sweep</i>
+                    <a id='play_and_stop' onClick="play_agent()" class="col s2" style='cursor:pointer' ><i class="material-icons">play_circle_outline</i>
+                    </a>  
+                    <a onClick="update()" class="col s2 offset-s7" style='cursor:pointer'><i class="material-icons">replay</i></a>
+                    <a id='delete' onClick="clean()" class="col s1" style='cursor:pointer' ><i class="material-icons">delete_sweep</i>
                     </a>
-                    <a id='play_and_stop' onClick="play_agent()" class="col s2 offset-s6" style='cursor:pointer' ><i class="material-icons">play_circle_outline</i>
-                    </a>
-                    <!-- <div class="col s8">
-                        <p class="range-field">
-                          <input type="range" id="time_out" min="1" max="10" />
-                        </p>
-                    </div>-->
-                    <a onClick="update()" class="col s2 " style='cursor:pointer'><i class="material-icons">replay</i></a>
+                                      
                 </div>
             </div>
         </div>
@@ -23,8 +19,12 @@
     </div>
     <div class="col s5">
         <ul class="collapsible" data-collapsible="accordion">
+            <li>
+                  <div class="collapsible-header"><i class="material-icons">info_outline</i>Swarm Information</div>
+                  <div id='informations' class="collapsible-body"><span>Try play to see informations about swarm</span></div>
+            </li>
             <li class='open'>
-                <div class="collapsible-header"><i class="material-icons">place</i>Agentes Ativo</div>
+                <div class="collapsible-header"><i class="material-icons">place</i>Active Agents</div>
                 <div class="collapsible-body">
                     <div id='agent_sleeping' style='display:none'>
                         <div class="row valign-wrapper">
@@ -47,13 +47,14 @@
                 </div>
             </li>
             <li>
-                  <div class="collapsible-header"><i class="material-icons">directions</i>Ruas analisadas</div>
-                  <div id='street_names' class="collapsible-body"><span>Nenhuma</span></div>
+                  <div class="collapsible-header"><i class="material-icons">directions</i>Streets</div>
+                  <div id='street_names' class="collapsible-body"><span>None</span></div>
             </li>
             <li>
-                  <div class="collapsible-header"><i class="material-icons">info_outline</i>Informações</div>
-                  <div id='informations' class="collapsible-body"><span>Nenhuma.</span></div>
+                  <div class="collapsible-header"><i class="material-icons">notifications_none</i>Notifications</div>
+                  <div id='street_names' class="collapsible-body"><span>None</span></div>
             </li>
+            
         </ul>
     </div>
 </div>
@@ -64,14 +65,15 @@
     var lines = []
     var infoWindow = "";
     var play = false;
-    var time_out = 3000;
+    var time_out = 4000;
     var lineSymbol = {
-        path: 'M 0,-1 0,1',
-        strokeOpacity: 1,
+        path: 'M 0,1 0,1',
+        strokeOpacity: 0.4,
         scale: 4
       };
     var visited_streets = []
     var agents = []
+    var swarm_active = false; 
     
     function clean(){
         for(var a=0; a < markers.length;a++){
@@ -87,6 +89,7 @@
         $('#street_names').html('<span>Nenhuma</span>');
         console.log('clean')
     }
+    
     function initTheMap() {
         // Start map
         map = new google.maps.Map(document.getElementById('map'), {
@@ -125,12 +128,15 @@
                             'Error: Seu navegador não tem suporte de geolocalização.');
     }
     
-    
-    function addMarker(name,lat,lng){
+    function addMarker(position,name,lat,lng){
+        agent_num = position.toString()
+        agent_num = agent_num.substring(0,1)
+        url_icon = "/assets/analytics/agent_"+agent_num+".png";
         
         latLng = new google.maps.LatLng(lat, lng);
         
         marker = new google.maps.Marker({
+              icon: url_icon,
               position: latLng,
               title:name,
               visible: true
@@ -161,8 +167,8 @@
             line_finish = new google.maps.Polyline({
                 path: latLngCoordenates,
                 geodesic: true,
-                strokeColor: color,
-                strokeOpacity: 1.0,
+                strokeColor: "#757575",
+                strokeOpacity: 0.4,
                 strokeWeight: 2,
                 icons: [{
                   icon: lineSymbol,
@@ -177,16 +183,20 @@
         
     }
     
-    function addNameToHtml(name,color,lat,lng){
-        the_html= "<li class='collection-item avatar' onclick=\"location.href='/graphium/agent'\"><i class='material-icons circle red' style='background-color:"+color+"!important;padding-left: 12px;'>places</i><span class='title'>"+name+"</span><p>"+lat+"<br>"+lng+"</p><a href='#!' class='secondary-content'></a></li>"
+    function addNameToHtml(position,name,color,lat,lng){
+        
+        agent_num = position.toString()
+        agent_num = agent_num.substring(0,1)
+        url_icon = "/assets/analytics/agent_"+agent_num+".png";
+        
+        the_html= "<li class='collection-item avatar' onclick=\"location.href='/graphium/agent'\"><img src='"+url_icon+"' alt='' style='width: auto !important;' class='circle'><span class='title'>"+name+"</span><p>"+lat+"<br>"+lng+"</p><a href='#!' class='secondary-content'></a></li>"
         return the_html;
     }
     
     function update(){
         console.log('update!');
-        
         $.ajax({
-            url: "analytics/getAgentsActives",
+            url: "analytics/getSwarmActive",
             dataType: "json",
             data: {
               "locate": ''
@@ -197,31 +207,53 @@
                   
               }  
               for(var a=0; a <lines.length;a++){
-                  //lines[a].setMap(null);
+                  ///lines[a].setMap(null);
               }
               //markers = [];
               //lines = [];
             },
             success: function($data) {
-                if($data.length > 0){
+                console.log('update!',$data);
+                if($data.swarm == null){
+                    $('#agent_sleeping').show();
+                    $('#agent_showing').hide();
+                    $('#agent_disconnected').hide();
+                    $('#street_names').html('<span>None</span>');
+                    $('#informations').html('<span>None swarm are playing. Try start a swarm</span>');
+                    if(swarm_active == true){
+                        swarm_active = false;
+                        $('.collapsible').collapsible('open', 0);
+                    }
+                    
+                }else{
+                    // Swarm information
+                    swarm_active = true
+                    swarm_info  = ""
+                    swarm_info += "<p>Name     :"+$data.swarm.name+"</p>"
+                    swarm_info += "<p>Nº Agents:"+$data.swarm.num_agent+"</p>"
+                    swarm_info += "<p>Host     :"+$data.swarm.host+"</p>"
+                    $('#informations').html(swarm_info);
+                    
+                    
+                    // Agent Informations
                     the_html_to_show = "<ul class='collection'>"
-                    for(var a=0;a < $data.length;a++){
+                    for(var a=0;a < $data.agents.length;a++){
                         
-                        the_html_to_show += addNameToHtml($data[a].name,$data[a].color,$data[a].last_street,$data[a].last_lat+", "+$data[a].last_lng);
-                        addMarker($data[a].name,$data[a].last_lat, $data[a].last_lng);
+                        the_html_to_show += addNameToHtml(a,$data.agents[a].name,$data.agents[a].color,$data.agents[a].last_street,$data.agents[a].last_lat+", "+$data.agents[a].last_lng);
+                        addMarker(a,$data.agents[a].name,$data.agents[a].last_lat, $data.agents[a].last_lng);
                         
-                        for(var b=0; b < $data[a].pathbread.length;b++){
+                        for(var b=0; b < $data.agents[a].pathbread.length;b++){
                             
-                           if(b!=0 && b < $data[a].pathbread.length-2){
-                              addLine($data[a].color, $data[a].pathbread[b].lat, $data[a].pathbread[b].lng,
-                                      $data[a].pathbread[b+1].lat, $data[a].pathbread[b+1].lng,$data[a].pathbread[b].jump) 
+                           if(b!=0 && b < $data.agents[a].pathbread.length-2){
+                              addLine($data.agents[a].color, $data.agents[a].pathbread[b].lat, $data.agents[a].pathbread[b].lng,
+                                      $data.agents[a].pathbread[b+1].lat, $data.agents[a].pathbread[b+1].lng,$data.agents[a].pathbread[b].jump) 
                            }
                            
                         }
                         
-                        for(var b=0; b < $data[a].visited_streets.length;b++){
-                            if($data[a].visited_streets[b]!=""){
-                                visited_streets.push($data[a].visited_streets[b])
+                        for(var b=0; b < $data.agents[a].visited_streets.length;b++){
+                            if($data.agents[a].visited_streets[b]!=""){
+                                visited_streets.push($data.agents[a].visited_streets[b])
                             }
                             
                         }
@@ -246,20 +278,22 @@
                     $('#agent_disconnected').hide();
                     $('#agent_showing').html(the_html_to_show);
                     $('#agent_showing').show();
-                }else{
-                    $('#agent_sleeping').show();
-                    $('#agent_showing').hide();
-                    $('#agent_disconnected').hide();
+                    
                 }
-                Materialize.toast('Atualizado!', 1000,'rounded')
-                console.log('success',$data);
+                Materialize.toast('atualizado', 1000,'rounded')
+                
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 console.log('error',thrownError);
                 $('#agent_sleeping').hide();
                 $('#agent_showing').hide();
                 $('#agent_disconnected').show();
-                $('#street_names').html('<span>Nenhuma</span>');
+                $('#street_names').html('<span>None</span>');
+                $('#informations').html('<span>Some erro on server. Try again </span>');
+                if(swarm_active == true){
+                    swarm_active = false;
+                    $('.collapsible').collapsible('open', 0);
+                }
             }
         });
     }
@@ -274,8 +308,12 @@
     }
     
     $(document).ready(function(){
+        
+        document.querySelector("div[class='container']").style.padding = '0px 10px';
+        $("div[class='container']").removeClass('container')
+        
         $('#map').width($('#column_left').width()+"px");
-        $('#map').css('min-height',$('#column_left').width()+"px");
+        $('#map').css('min-height',$(window).height()-174+"px");
         $('.collapsible').collapsible('open', 0);
     });
     

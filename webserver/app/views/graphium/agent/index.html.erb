@@ -2,10 +2,11 @@
     <thead>
       <tr>
           <th>Name</th>
-          <th>Identificador</th>
-          <th>Ativo</th>
-          <th>Última Lat.</th>
-          <th>Última Lng.</th>
+          <th>Swarm Identifier</th>
+          <th>Active</th>
+          <th>Last Lat.</th>
+          <th>Last Lng.</th>
+          <th>Nº Streets Visited</th>
       </tr>
     </thead>
 
@@ -15,13 +16,14 @@
                 <td><%=agent.name%></td>
                 <td><%=agent.swarm_identifier%></td>
                 <%if agent.active%>
-                    <td><i class="material-icons">location_off</i></td>
-                <%else%>
                     <td><i class="material-icons">location_on</i></td>
+                <%else%>
+                    <td><i class="material-icons">location_off</i></td>
                 <%end%>
                 
                 <td><%=agent.last_lat%></td>
                 <td><%=agent.last_lng%></td>
+                <td><%=agent['visited_streets'].length%></td>
               </tr>
         <%end%>
         <%if @agents.length == 0%>

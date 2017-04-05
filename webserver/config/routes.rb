@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   namespace :graphium do
-    resources :configurations
+    
   end
   devise_for :users, controllers: {
     sessions: 'users/sessions'
@@ -11,18 +11,20 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'public/site#index'
-  namespace :graphium do
+  
+    namespace :graphium do
        resources :history
        resources :agent
        resources :street
        resources :analytics do
            collection do
-              get 'getAgentsActives'
+              get 'getSwarmActive'
               get 'getAgentsBySwarm'
               get 'history'
           end
        end
       resources :configurations
+      resources :swarm
   end
   resources :dashboard
     

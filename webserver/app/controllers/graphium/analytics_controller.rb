@@ -5,11 +5,17 @@ class Graphium::AnalyticsController < ApplicationController
         
     end
     
-    def getAgentsActives
-        @analytics_agent = Graphium::AgentStory.where(:active => true).all
+    def getSwarmActive
+        @analytics = {}
+        @analytics['swarm'] = nil
+        @analytics['agents'] = []
+        @analytics['swarm'] = Graphium::Swarm.where(:active => true, :user_email => current_user.email).first
+        if @analytics['swarm'] != nil
+            @analytics['agents'] = Graphium::Agent.where(:swarm_identifier => @analytics['swarm'].identifier )
+        end
         #@analytics_agent = Graphium::AgentStory.all
         respond_to do |format|
-          format.json { render :json => @analytics_agent }
+          format.json { render :json => @analytics }
         end
     end
     
