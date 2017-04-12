@@ -12,7 +12,7 @@
     <body>
         <nav style='background-color:white'>
             <div class="nav-wrapper">
-              <a href="#!" class='brand-logo right'><img src='/assets/logo/graphium_color.png' style="height:40px;width:285px;margin-top: 12px"></a>
+              <a href="#!" class='brand-logo right' style="margin-right: 20px;"><img src='/assets/logo/graphium_color.png' style="height:40px;width:285px;margin-top: 12px"></a>
               <ul class="left hide-on-med-and-down">
                 <li><a href="#!" style='color:#2D2338' data-activates="slide-out" class="brand-menu"><i class="material-icons">menu</i></a></li>
                 <li ></li>
@@ -31,21 +31,46 @@
             </div></li>
             <li><a href="/"><i class="material-icons">dashboard</i>Dashboard</a></li>
             <li><a href="/graphium/analytics"><i class="material-icons">timeline</i>Real Time</a></li>
+            <li><a href="/graphium/analytics/history"><i class="material-icons">navigation</i>History of Swarms</a></li>
             <li><a href="/graphium/swarm"><i class="material-icons">group_work</i>Swarms</a></li>
             <li><a href="/graphium/agent"><i class="material-icons">places</i>Agents</a></li>
-            <li><a href="/graphium/street"><i class="material-icons">directions</i>Streets</a></li>
-            <li><a href="/graphium/configurations/1/edit"><i class="material-icons">settings</i>Configuration</a></li>
             <li><div class="divider"></div></li>
-            <li><a href="/graphium/analytics/history"><i class="material-icons">navigation</i>History of Analysis</a></li>
-            <li><a href="/graphium/history"><i class="material-icons">history</i>Agent history</a></li>
+            <li><a href="/graphium/street"><i class="material-icons">directions</i>Streets</a></li>
+            <li><a href="/graphium/cities"><i class="material-icons">location_city</i>Cities</a></li>
             <li><a class="subheader">Outros</a></li>
+            <li><a href="/graphium/configurations/1/edit"><i class="material-icons">settings</i>Configuration</a></li>
             <li><a class="waves-effect" href="#!"><i class="material-icons">info_outline</i>About</a></li>
             <li><a class="waves-effect" href="/users/sign_out"><i class="material-icons">exit_to_app</i>Exit</a></li>
           </ul>
       
         <div class="container">
-            <p class="notice"><%= notice %></p>
-            <p class="alert"><%= alert %></p>
+            <%if notice != nil%>
+                <div id="modal1" class="modal modal-fixed-footer">
+                    <div class="modal-content">
+                      <h4>Attention</h4>
+                      <p class="notice"><%= notice %></p>
+                    </div>
+                    <div class="modal-footer">
+                      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Ok</a>
+                    </div>
+                </div>
+                <script>
+                    $('#modal1').modal('open');
+                </script>
+            <%end%>
+            <%if alert != nil%>
+                <div id="modal1" class="modal modal-fixed-footer">
+                    <div class="modal-content">
+                      <h4>Attention</h4>
+                      <p class="alert"><%= alert %></p>
+                    </div>
+                    <div class="modal-footer">
+                      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Ok</a>
+                    </div>
+                </div>
+                <script>
+                </script>
+            <%end%>
             <%= yield %>
         </div>    
         <script>

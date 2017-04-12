@@ -69,7 +69,7 @@ class Mongo:
             else:
                 color = colors[randint(0,len(colors)-1)]
         
-        dataToSend = { 'identifier':identifier, 'name':name, 'swarm_identifier':swarm_identifier,'color':color, 'active':True, 'end_at':None, 'last_lat':0.0, 'last_lng':0.0, 'last_street':None,'pathbread':[],'visited_streets':[],'last_street_id_osm':None}
+        dataToSend = { 'identifier':identifier, 'name':name, 'swarm_identifier':swarm_identifier,'color':color, 'active':True, 'end_at':None, 'last_lat':0.0, 'last_lng':0.0, 'last_street':None,'pathbread':[],'visited_streets':[],'last_street_id_osm':None,'cicles':0}
         self.__collection = self.__db.agent
         the_id = self.__collection.insert(dataToSend)
         return identifier
@@ -95,6 +95,17 @@ class Mongo:
     def getAgentQuery(self,query={}):
         self.__collection = self.__db.agent
         return list(self.__collection.find(query))
+    
+    
+    def getAgentsActiveBySwarm(self,swarm_identifier):
+        returned = []
+        self.__collection   = self.__db.agent
+        return list(self.__collection.find({'swarm_identifier':swarm_identifier,'active':True}))
+    
+    def getAgentsEndWellBySwarm(self,swarm_identifier):
+        returned = []
+        self.__collection   = self.__db.agent
+        return list(self.__collection.find({'swarm_identifier':swarm_identifier,'end_well':True}))
     
 	############ User ############
 
@@ -187,8 +198,8 @@ class Mongo:
     # insertConfiguration
     #   return ID
     #
-    def insertConfiguration(self, swarm_agent_number=3, swarm_agent_names_API="http://namey.muffinlabs.com/name.json?with_surname=true&frequency=all", swarm_agent_names = ['Coralina Malaya','Abigail Johnson','Antonietta Marinese','Elisa Rogoff','Serafim Folkerts','Dulce Barrell'], mongo_db = "graphium", mongo_host = "localhost", mongo_port = 27017, swarm_agent_colors = ["#E91E63", "#9C27B0", "#F44336", "#673AB7", "#3F51B5", "#2196F3", "#00BCD4", "#009688", "#4CAF50", "#CDDC39", "#FF9800","#795548","#FF5722","#607D8B","#9E9E9E","#827717"], inf_positive = 99999, inf_negative = -99999, osmapi_user = "glaucomunsberg", osmapi_password = "30271255"):
-        dataToSend = {'swarm_agent_number':swarm_agent_number, 'swarm_agent_names_API':swarm_agent_names_API, 'swarm_agent_names':swarm_agent_names, 'mongo_db':mongo_db, 'mongo_host':mongo_host, 'mongo_port': mongo_port, 'swarm_agent_colors':swarm_agent_colors, 'inf_positive':inf_positive, 'inf_negative':inf_negative, 'osmapi_user':osmapi_user, 'osmapi_password': osmapi_password}
+    def insertConfiguration(self, swarm_agent_number=3, swarm_agent_names_API="http://namey.muffinlabs.com/name.json?with_surname=true&frequency=all", swarm_agent_names = ['Coralina Malaya','Abigail Johnson','Antonietta Marinese','Elisa Rogoff','Serafim Folkerts','Dulce Barrell'], mongo_db = "graphium", mongo_host = "localhost", mongo_port = 27017, swarm_agent_colors = ["#E91E63", "#9C27B0", "#F44336", "#673AB7", "#3F51B5", "#2196F3", "#00BCD4", "#009688", "#4CAF50", "#CDDC39", "#FF9800","#795548","#FF5722","#607D8B","#9E9E9E","#827717"], inf_positive = 99999, inf_negative = -99999, osmapi_user = "glaucomunsberg", osmapi_password = "30271255",swarm_seconds_to_check_agents  = 3):
+        dataToSend = {'swarm_agent_number':swarm_agent_number, 'swarm_agent_names_API':swarm_agent_names_API, 'swarm_agent_names':swarm_agent_names, 'mongo_db':mongo_db, 'mongo_host':mongo_host, 'mongo_port': mongo_port, 'swarm_agent_colors':swarm_agent_colors, 'inf_positive':inf_positive, 'inf_negative':inf_negative, 'osmapi_user':osmapi_user, 'osmapi_password': osmapi_password, 'swarm_seconds_to_check_agents': swarm_seconds_to_check_agents}
         self.__collection = self.__db.configuration
         return self.__collection.insert_one(dataToSend).inserted_id
     
@@ -207,13 +218,13 @@ class Mongo:
 
     ############ Session and Logger ############
     
-    # insertSession
+    # insertSwarm
     #   create a session of swarm and send the basic information
     #   return session ID
     #
-    def insertSession(self,identifier,num_agent,user_email="admin@graphium",name='default',host='0.0.0.0',active=True,logs=[]):
+    def insertSwarm(self,identifier,num_agent,user_email="admin@graphium",name='default',host='0.0.0.0',active=True,seconds_to_check_agents=3,logs=[]):
         self.__collection = self.__db.swarm
-        dataToSend = {'identifier':identifier, 'name':name, 'num_agent':num_agent, 'user_email':user_email,'host':host,'active':active, 'logs':[],'end_at':None,'end_well':True}
+        dataToSend = {'identifier':identifier, 'name':name, 'num_agent':num_agent, 'user_email':user_email, 'host':host, 'active':active, 'logs':[], 'end_at':None, 'end_well':True, 'qmi':0.0, 'seconds_to_check_agents': seconds_to_check_agents}
         return self.__collection.insert_one(dataToSend).inserted_id
     
     # getSwarmByIdentifier

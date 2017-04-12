@@ -1,14 +1,28 @@
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfw7x1Y5XXJXcGwQAFGG_069ZKEgpGEBE&callback=initTheMap" defer></script>
+<%=breadcrumbs [{:name => 'Home',:path => '/'},{:name => 'Analytics', :path => '/graphium/analytics'}]%>
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfw7x1Y5XXJXcGwQAFGG_069ZKEgpGEBE&callback=initTheMap" defer></script>
+<div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Attention</h4>
+      <p>Are you sure about the end of the execution? This will end all agents from this swarm and you not can put the agents back on road.</p>
+    </div>
+    <div id='' class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-green btn-flat">No, Do not stop</a>
+        <a onclick="finishSwarm()" style='color:red' class="modal-action modal-close waves-effect waves-green btn-flat">Yes, I want end the executation</a>
+    </div>
+</div>
 <div class='row'>
     <div id='column_left' class="col s7">
         <div style="margin-top: 10px;">
             <div class="z-depth-1">
                 <div class='row' style='padding: 15px 15px 10px 15px;'>
-                    <a id='play_and_stop' onClick="play_agent()" class="col s2" style='cursor:pointer' ><i class="material-icons">play_circle_outline</i>
+                    <a id='play_and_stop' onClick="hearing_swarm()" class="col s2 tooltipped" style='cursor:pointer' data-position="bottom" data-delay="50" data-tooltip="Start or stop to hearing the swarm" ><i class="material-icons">sync</i>
                     </a>  
-                    <a onClick="update()" class="col s2 offset-s7" style='cursor:pointer'><i class="material-icons">replay</i></a>
-                    <a id='delete' onClick="clean()" class="col s1" style='cursor:pointer' ><i class="material-icons">delete_sweep</i>
+                    <a onClick="update()" class="col s1 offset-s6 tooltipped" style='cursor:pointer' data-position="bottom" data-delay="50" data-tooltip="Read the last stage from swarm"><i class="material-icons" >rotate_left</i></a>
+                    <a id='delete' onClick="clean()" class="col s1 tooltipped" style='cursor:pointer' data-position="bottom" data-delay="50" data-tooltip="clear the map"><i class="material-icons" >delete_sweep</i>
+                    </a>
+                    <a id='end_start' onClick='endExecutation()' class="col s1 offset-s1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="End the executation from swarm">
+                        <i class="material-icons" style='cursor:no-drop;color:gray'>pause_circle_filled</i>
                     </a>
                                       
                 </div>
@@ -74,7 +88,7 @@
     var visited_streets = []
     var agents = []
     var swarm_active = false; 
-    
+    var swarm_identifier = 0;
     function clean(){
         for(var a=0; a < markers.length;a++){
           markers[a].setMap(null);
@@ -193,6 +207,29 @@
         return the_html;
     }
     
+    function finishSwarm(){
+        $.ajax({
+            url: "analytics/finishSwarm",
+            dataType: "json",
+            data: {
+              swarm_identifier: swarm_identifier
+            },
+            complete: function(){
+              
+            },
+            success: function($data) {
+                if($data === true){
+                    Materialize.toast('The swarm was stoped! ', 2000,'rounded')
+                }else{
+                    Materialize.toast('Not was possible to stop the swarm. Try again later ', 2000,'rounded')
+                }                
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                Materialize.toast('Not was possible to stop the swarm. Try again later ', 2000,'rounded')
+            }
+        });
+    }
+    
     function update(){
         console.log('update!');
         $.ajax({
@@ -224,16 +261,23 @@
                         swarm_active = false;
                         $('.collapsible').collapsible('open', 0);
                     }
+                    document.querySelector('#end_start i').style.color='gray';
+                    document.querySelector('#end_start i').style.cursor='no-drop';
+                    swarm_identifier = 0;
+                    Materialize.toast('No active swarm', 2000,'rounded');
+                    hearing_swarm();
                     
                 }else{
                     // Swarm information
                     swarm_active = true
+                    swarm_identifier = $data.swarm.identifier;
                     swarm_info  = ""
                     swarm_info += "<p>Name     :"+$data.swarm.name+"</p>"
                     swarm_info += "<p>Nº Agents:"+$data.swarm.num_agent+"</p>"
                     swarm_info += "<p>Host     :"+$data.swarm.host+"</p>"
                     $('#informations').html(swarm_info);
-                    
+                    document.querySelector('#end_start i').style.color= '';
+                    document.querySelector('#end_start i').style.cursor= 'pointer';
                     
                     // Agent Informations
                     the_html_to_show = "<ul class='collection'>"
@@ -290,6 +334,8 @@
                 $('#agent_disconnected').show();
                 $('#street_names').html('<span>None</span>');
                 $('#informations').html('<span>Some erro on server. Try again </span>');
+                document.querySelector('#end_start i').style.color='gray';
+                document.querySelector('#end_start i').style.cursor='no-drop';
                 if(swarm_active == true){
                     swarm_active = false;
                     $('.collapsible').collapsible('open', 0);
@@ -298,13 +344,19 @@
         });
     }
     
-    function play_agent(){
+    function hearing_swarm(){
         if(play != true){
-            $("#play_and_stop").html('<i class="material-icons">pause_circle_outline</i>'); 
+            $("#play_and_stop").html('<i class="material-icons">sync_disabled</i>'); 
         }else{
-            $("#play_and_stop").html('<i class="material-icons">play_circle_outline</i>'); 
+            $("#play_and_stop").html('<i class="material-icons">sync</i>'); 
         }
         play = !play;
+    }
+    
+    function endExecutation(){
+        if(document.querySelector('#end_start i').style.color == ""){
+            $('#modal1').modal('open');
+        }
     }
     
     $(document).ready(function(){
@@ -315,6 +367,10 @@
         $('#map').width($('#column_left').width()+"px");
         $('#map').css('min-height',$(window).height()-174+"px");
         $('.collapsible').collapsible('open', 0);
+        
+        $('.tooltipped').tooltip({delay: 50});
+        
+        $('.modal').modal();
     });
     
     setInterval(function(){
@@ -323,6 +379,13 @@
             update();
         }
     }, time_out)
+    
+    <% if params[:swarmId] != nil%>
+        // play from param swarmId
+        swarm_identifier = <%=params[:swarmId]%>;
+        hearing_swarm();
+        Materialize.toast('Play from param', 1000)
+    <%end%>
     
 </script>
 <style>

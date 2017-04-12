@@ -14,7 +14,7 @@ from API import *
 class Agent(Thread):
     
     _config         = None
-    _swarm_config   = None
+    
     _mongo          = None
     _api            = None
     _logger         = None
@@ -26,22 +26,24 @@ class Agent(Thread):
     _agent_at_mongo = None
     _street         = None
     
+    _swarm_identifier   = None
     _node_osm           = None
     _node_osm_position  = None
+      
     
-    def __init__(self,swarm_config):
+    def __init__(self,swarm_identifier):
         Thread.__init__(self)
         
         self._config    = Configuration()  
         self._mongo     = Mongo()
         self._api       = API()
-        self._logger    = Logger(swarm_config.identifier)
+        self._logger    = Logger(swarm_identifier)
         self._helper    = Helper()
         
-        self._work      = True
-        self._end_well  = True
-        self._cicles    = 0
-        self._swarm_config = swarm_config
+        self._swarm_identifier  = swarm_identifier
+        self._continue_the_job  = True
+        self._end_well          = True
+        self._cicles            = 0
         
         self.startAgent()
         
@@ -52,7 +54,7 @@ class Agent(Thread):
         
         try:
             self._logger.info('%s: Let start the job! =D' % (self.getName()))
-            while self._work and self._cicles < 100:
+            while self._continue_the_job and self._cicles < 5:
                         
                 # if not set the last street
                 #   this agent need choose one street to start
@@ -126,10 +128,16 @@ class Agent(Thread):
                             else:
                                 self.lastNode(self._node_osm)
                         
-                                
+                
+                # check if number of threads is upper than necessary
+                num_active_agent = len(self._mongo.getAgentsActiveBySwarm(self._swarm_identifier))
+                num_agent_by_swarm = self._mongo.getSwarmByIdentifier(self._swarm_identifier)['num_agent']
+                if num_active_agent > num_agent_by_swarm:
+                    self._logger.info('%s: I need stop my job!' % (self.getName()))
+                    self._continue_the_job = False
                         
                 self._cicles +=1
-                self._logger.info('%s: cicle %s end' % (self.getName(),self._cicles))
+                self._logger.info('%s: the cicle %s end' % (self.getName(),self._cicles))
                 
                 
             print('Agent %s' % (self.getName()))
@@ -264,7 +272,7 @@ class Agent(Thread):
             #   at one of all agents of swarm.
             #   then choose a random street
             self._logger.info('%s: I cannot find any way. Let me help other agent :/' % (self.getName()))
-            agents = self._mongo.getAgentsBySwarmIdentifier(self._swarm_config.identifier)
+            agents = self._mongo.getAgentsBySwarmIdentifier(self._swarm_identifier)
             agents = random.shuffle(agents)
             agent_visited=0
             the_agent_chosen = None
@@ -373,7 +381,7 @@ class Agent(Thread):
         
         self.setAgentName()
         
-        identifier = self._mongo.insertAgent(self.getName(),self._swarm_config.identifier)
+        identifier = self._mongo.insertAgent(self.getName(),self._swarm_identifier)
         self.setIdentifier(identifier)
         self._agent_at_mongo = self._mongo.getAgentByIdentifier(self.identifier)
         
@@ -387,6 +395,7 @@ class Agent(Thread):
         self._agent_at_mongo['end_at']      = self._helper.getTimeNow()
         self._agent_at_mongo['active']      = False
         self._agent_at_mongo['end_well']    = self._end_well
+        self._agent_at_mongo['cicles']      = self._cicles
         self._mongo.updateAgentByIdentifier(self.identifier,self._agent_at_mongo)
         
         if self._street != None:

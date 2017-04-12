@@ -1,6 +1,8 @@
 class Graphium::Configuration
   include Mongoid::Document
+    
   field :swarm_agent_number, type: Integer
+  field :swarm_seconds_to_check_agents, type: Integer
   field :swarm_agent_names_API, type: String
   field :swarm_agent_names, type: Array
   field :swarm_agent_colors, type: Array

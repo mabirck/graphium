@@ -1,10 +1,7 @@
-
-
 <%= form_for(@graphium_configuration) do |f| %>
   <% if @graphium_configuration.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@graphium_configuration.errors.count, "error") %> prohibited this graphium_configuration from being saved:</h2>
-
       <ul>
       <% @graphium_configuration.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -15,10 +12,17 @@
   <div class='row'>
       <h4>Agent params</h4>
   </div>
-  <div class="field">
-    <%= f.label :swarm_agent_number %><br>
-    <%= f.number_field :swarm_agent_number %>
+  <div class="row">
+      <div class="field col s6">
+        <%= f.label :swarm_agent_number %><br>
+        <%= f.number_field :swarm_agent_number %>
+      </div>
+      <div class="field col s6">
+        <%= f.label :swarm_seconds_to_check_agents %><br>
+        <%= f.number_field :swarm_seconds_to_check_agents %>
+      </div>
   </div>
+  
   <div class="field">
     <%= f.label :swarm_agent_names_API %><br>
     <%= f.text_field :swarm_agent_names_API %>

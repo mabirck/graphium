@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @graphium_city.name %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @graphium_city.state %>
+</p>
+
+<p>
+  <strong>State code:</strong>
+  <%= @graphium_city.state_code %>
+</p>
+
+<p>
+  <strong>Country:</strong>
+  <%= @graphium_city.country %>
+</p>
+
+<p>
+  <strong>Country code:</strong>
+  <%= @graphium_city.country_code %>
+</p>
+
+<p>
+  <strong>Population:</strong>
+  <%= @graphium_city.population %>
+</p>
+
+<p>
+  <strong>Osm node:</strong>
+  <%= @graphium_city.osm_node_id %>
+</p>
+
+<%= link_to 'Edit', edit_graphium_city_path(@graphium_city) %> |
+<%= link_to 'Back', graphium_cities_path %>

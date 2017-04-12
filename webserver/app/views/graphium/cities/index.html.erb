@@ -1,0 +1,30 @@
+<%=breadcrumbs [{:name => 'Home',:path => '/'},{:name => 'Cities', :path => '/graphium/cities'}]%>
+
+<table class="highlight">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Country</th>
+      <th>State</th>
+      <th>Population</th>
+      <th>Osm node</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @graphium_cities.each do |graphium_city| %>
+      <tr>
+        <td><%= graphium_city.name %></td>
+        <td><%= graphium_city.country %></td>
+        <td><%= graphium_city.state %></td>
+        <td><%= graphium_city.population %></td>
+        <td><%= graphium_city.osm_node_id %></td>
+      </tr>
+    <% end %>
+    <%if @graphium_cities.length == 0%>
+        <tr>
+            <td style="text-align: center;" colspan='5'>No city in graphium</td>
+        </tr>
+    <%end%>
+  </tbody>
+</table>

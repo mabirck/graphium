@@ -16,4 +16,11 @@ class Public::SiteController < ApplicationController
 			respond_with(@resource)
 		end
     end
+    
+    def about
+    end
+    
+    def version
+        
+    end
 end

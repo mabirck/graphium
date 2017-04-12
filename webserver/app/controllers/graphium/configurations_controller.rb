@@ -1,6 +1,7 @@
 class Graphium::ConfigurationsController < ApplicationController
 
   layout "inside"
+  before_filter :authenticate_user!
   before_action :set_graphium_configuration, only: [:show, :edit, :update, :destroy]
 
   # GET /graphium/configurations
@@ -76,6 +77,7 @@ class Graphium::ConfigurationsController < ApplicationController
       @graphium_configuration.inf_negative = graphium_configuration_params[:inf_negative]
       @graphium_configuration.osmapi_user = graphium_configuration_params[:osmapi_user]
       @graphium_configuration.osmapi_password = graphium_configuration_params[:osmapi_password]
+      @graphium_configuration.swarm_seconds_to_check_agents = graphium_configuration_params[:swarm_seconds_to_check_agents]
         
       if @graphium_configuration.save
         
@@ -103,7 +105,7 @@ class Graphium::ConfigurationsController < ApplicationController
     def set_graphium_configuration
         
       if Graphium::Configuration.all.length == 0
-          Graphium::Configuration.create( :swarm_agent_number => 3, :swarm_agent_names_API => "http://namey.muffinlabs.com/name.json?with_surname=true&frequency=all", :swarm_agent_names =>['Coralina Malaya','Abigail Johnson','Antonietta Marinese','Elisa Rogoff','Serafim Folkerts','Dulce Barrell'], :mongo_db => "graphium",:mongo_host =>"localhost",:mongo_port =>27017, :swarm_agent_colors => ["#E91E63", "#9C27B0", "#F44336", "#673AB7", "#3F51B5", "#2196F3", "#00BCD4", "#009688", "#4CAF50", "#CDDC39", "#FF9800","#795548","#FF5722","#607D8B","#9E9E9E","#827717"],:inf_positive => 99999, :inf_negative => -99999, :osmapi_user => "glaucomunsberg",:osmapi_password =>"30271255")
+          Graphium::Configuration.create( :swarm_agent_number => 3, :swarm_agent_names_API => "http://namey.muffinlabs.com/name.json?with_surname=true&frequency=all", :swarm_agent_names =>['Coralina Malaya','Abigail Johnson','Antonietta Marinese','Elisa Rogoff','Serafim Folkerts','Dulce Barrell'], :mongo_db => "graphium",:mongo_host =>"localhost",:mongo_port =>27017, :swarm_agent_colors => ["#E91E63", "#9C27B0", "#F44336", "#673AB7", "#3F51B5", "#2196F3", "#00BCD4", "#009688", "#4CAF50", "#CDDC39", "#FF9800","#795548","#FF5722","#607D8B","#9E9E9E","#827717"],:inf_positive => 99999, :inf_negative => -99999, :osmapi_user => "glaucomunsberg",:osmapi_password =>"30271255",:swarm_seconds_to_check_agents => 3)
       end
       params[:id] = Graphium::Configuration.all.first.id
       @graphium_configuration = Graphium::Configuration.find(params[:id])
@@ -111,6 +113,6 @@ class Graphium::ConfigurationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def graphium_configuration_params
-      params.require(:graphium_configuration).permit(:swarm_agent_number, :swarm_agent_names_API, :swarm_agent_names, :mongo_db, :mongo_host, :mongo_port, :swarm_agent_colors, :inf_positive, :inf_negative, :osmapi_user, :osmapi_password)
+      params.require(:graphium_configuration).permit(:swarm_agent_number, :swarm_seconds_to_check_agents, :swarm_agent_names_API, :swarm_agent_names, :mongo_db, :mongo_host, :mongo_port, :swarm_agent_colors, :inf_positive, :inf_negative, :osmapi_user, :osmapi_password)
     end
 end

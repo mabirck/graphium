@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
+import sys, socket
 
 from system.Configuration import *
 from system.Mongo import *
@@ -23,9 +23,9 @@ if __name__ == "__main__":
         
     if '-s' in commands:
         t_index = commands.index('-s')
-        session_identifier = commands[t_index+1]
+        swarm_identifier = commands[t_index+1]
     else:
-        session_identifier = None
+        swarm_identifier = helper.getSerialSwarmNow()
         
     if '-u' in commands:
         t_index = commands.index('-u')
@@ -35,11 +35,16 @@ if __name__ == "__main__":
         
     if '-n' in commands:
         t_index = commands.index('-n')
-        user_name = commands[t_index+1]
+        swarm_name = commands[t_index+1]
     else:
-        user_name = helper.getTimeNow()
+        swarm_name = helper.getTimeNow()
+        
+    host = socket.gethostbyname(socket.gethostname())
     
-    swarm = Swarm(session_identifier,user_name,user_email)
+    if mongo.getSwarmByIdentifier(swarm_identifier) == None:
+        mongo.insertSwarm(swarm_identifier, config.swarm_agent_number, user_email, swarm_name, host)
+    
+    swarm = Swarm(swarm_identifier)
     swarm.start()
     
     
