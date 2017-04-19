@@ -141,7 +141,7 @@
     </div>
 </div>
 <%if @swarms_actives.length == 0 %>
-    <div style="position: fixed; bottom: 20px; z-index: 9999; right: 10%;">
-        <a onclick="location.href='/graphium/swarm/createSession'" class="btn btn-floating btn-large pulse"><i class="material-icons">add</i></a>
+    <div style="position: fixed; bottom: 20px; z-index: 9999; right: 10%;"  class='tooltipped' data-position="top" data-delay="50" data-tooltip="Launch a swarm">
+        <a onclick="location.href='/graphium/swarm/launcher'" class="btn btn-floating btn-large pulse"><i class="material-icons">add</i></a>
     </div>
 <%end%>

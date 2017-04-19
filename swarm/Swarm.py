@@ -46,12 +46,13 @@ class Swarm:
         self._logger.debug('Swarm: Let starting agents...')
         try:
             while self._swarm_at_mongo['active']:
-            
-                print 'While is While!'
+                
+                self._logger.info('%s: I\'m checking the agents status!' % ("Swarm"))
+                #print 'Swarm are checking the agents'
                 num_active_and_end_well = len(self._mongo.getAgentsActiveBySwarm(self._identifier))
                 num_active_and_end_well += len(self._mongo.getAgentsEndWellBySwarm(self._identifier))
                 self.syncFromDB()
-                if num_active < self._swarm_at_mongo['num_agent']:
+                if num_active_and_end_well < self._swarm_at_mongo['num_agent']:
 
                     create_agents_number = self._swarm_at_mongo['num_agent'] - num_active_and_end_well
                     print 'Creating', create_agents_number, 'agents'
@@ -62,8 +63,7 @@ class Swarm:
                             agent.start()
                             
                     # Sleep x seconds to check again 
-                    #   if number of agents is the number hight
-                    seconds_to_check
+                    #   
                     sleep(self._swarm_at_mongo['seconds_to_check_agents'])
                     self.syncFromDB()
                     

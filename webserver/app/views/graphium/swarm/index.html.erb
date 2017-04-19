@@ -1,3 +1,20 @@
+<%
+    @swarm_actives.each do | swarm |
+        %>
+            <div loader class="row valign-wrapper z-depth-1" style='background-color: #4DB6AC; color:white; border-radius: 2px; margin: 20px 0px 10px 0px; padding: 0px 10px; cursor:pointer; height: 40px;' >
+                <div class='col' onclick="location.href='/graphium/analytics?swarmId=<%=swarm['identifier']%>'">
+                    <i class="material-icons loading_spinner" style="margin-top: 5px;">sync</i>
+                </div>
+                <div class="col s12" onclick="location.href='/graphium/analytics?swarmId=<%=swarm['identifier']%>'"> 
+                    Swarm '<%=swarm['name']%>' is running. Go to.
+                </div>
+                <div clear class='col' onclick="$(document.querySelector('div[clear]').parentElement).hide()">
+                    <i class="material-icons" style="margin-top: 5px;">clear</i>
+                </div>
+            </div>
+        <%
+    end
+%>
 <table class="highlight">
     <thead>
       <tr>
@@ -24,3 +41,8 @@
         <%end%>
     </tbody>
 </table>
+<%if @swarm_actives.length == 0 %>
+    <div style="position: fixed; bottom: 20px; z-index: 9999; right: 10%;">
+        <a onclick="location.href='/graphium/swarm/launcher'" class="btn btn-floating btn-large pulse tooltipped" data-position="top" data-delay="50" data-tooltip="Launch a swarm"><i class="material-icons">add</i></a>
+    </div>
+<%end%>

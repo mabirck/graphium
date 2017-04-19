@@ -3,8 +3,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfw7x1Y5XXJXcGwQAFGG_069ZKEgpGEBE&callback=initTheMap" defer></script>
 <div id="modal1" class="modal">
     <div class="modal-content">
-      <h4>Attention</h4>
-      <p>Are you sure about the end of the execution? This will end all agents from this swarm and you not can put the agents back on road.</p>
+      <object style='width:100%;heigth:auto' data='/assets/swarm/swarm_abort.svg'></object>
     </div>
     <div id='' class="modal-footer">
         <a class="modal-action modal-close waves-effect waves-green btn-flat">No, Do not stop</a>
@@ -233,7 +232,7 @@
     function update(){
         console.log('update!');
         $.ajax({
-            url: "analytics/getSwarmActive",
+            url: "/graphium/analytics/getSwarmActive",
             dataType: "json",
             data: {
               "locate": ''
@@ -382,7 +381,7 @@
     
     <% if params[:swarmId] != nil%>
         // play from param swarmId
-        swarm_identifier = <%=params[:swarmId]%>;
+        swarm_identifier = "<%=params[:swarmId]%>";
         hearing_swarm();
         Materialize.toast('Play from param', 1000)
     <%end%>

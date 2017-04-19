@@ -36,7 +36,8 @@ Rails.application.routes.draw do
       resources :configurations
       resources :swarm do
           collection do
-              get 'createSession'
+              get 'launcher'
+              get 'startSwarm'
           end
       end
   end

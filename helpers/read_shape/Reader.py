@@ -32,8 +32,8 @@ class Reader:
         
     def osmToMongoDB(self,osm_file=None):
         
-        if osm_file != None:
-            self.file_name = osm_file
+        if osm_file == None:
+            self.file_name = "data/city_buenos_aires/buenos-aires_argentina.osm"
         else:
             self.file_name = self._config.osm_city_url
             
@@ -48,62 +48,124 @@ class Reader:
            
         print 'types',self.ways_types
         # first is necessary map all nodes to fast acess on dict
-                
-        for entity in parse_file('data/ex_B5u65rYvSdtoSZj5oZqdqReaVrdsc.osm'):
+        
+        city = None
+        for entity in parse_file(self.file_name):
             if isinstance(entity,Node):
                 self.nodes[str(entity.id)] = entity
                 
+            
             if isinstance(entity,Node) and 'place' in entity.tags and entity.tags['place'] == "city":
-                city = {}
                 
-                try:
-                    city['name'] = entity.tags['name']
-                except:
-                    city['name'] = ""
+                if city == None:
+                    city = {}
+                    print 'node', entity
+
+                    try:
+                        city['name'] = entity.tags['name']
+                    except:
+                        city['name'] = ""
+
+                    try:
+                        city['state'] = entity.tags['is_in:state']
+                    except:
+                        city['state'] = entity.tags['is_in']
+
+                    try:
+                        city['country'] = entity.tags['is_in:country']
+                    except:
+                        city['country'] = ""
+
+                    try:
+                        city['population'] = int(entity.tags['population'])
+                    except:
+                        city['population'] = -1
+
+                    try:
+                        city['country_code'] = entity.tags['is_in:country_code']
+                    except:
+                        city['country_code'] = ""
+
+                    try:
+                        city['state_code'] = entity.tags['is_in:state_code']
+                    except:
+                        city['state_code'] = ""
+
+                    try:
+                        city['lat'] = entity.lat
+                    except:
+                        city['lat'] = ""
+
+                    try:
+                        city['lng'] = entity.lon
+                    except:
+                        city['lng'] = ""
+
+                    try:
+                        city['osm_node_id'] = int(entity.id)
+                    except:
+                        city['osm_node_id'] = 0
                 
-                try:
-                    city['state'] = entity.tags['is_in:state']
-                except:
-                    city['state'] = entity.tags['is_in']
+                elif city['population'] < int(entity.tags['population']):
                     
-                try:
-                    city['country'] = entity.tags['is_in:country']
-                except:
-                    city['country'] = ""
-                    
-                try:
-                    city['population'] = int(entity.tags['population'])
-                except:
-                    city['population'] = -1
-                    
-                try:
-                    city['country_code'] = entity.tags['is_in:country_code']
-                except:
-                    city['country_code'] = ""
+                    print 'node', entity
+
+
+                    try:
+                        city['name'] = entity.tags['name']
+                    except:
+                        city['name'] = ""
+
+                    try:
+                        city['state'] = entity.tags['is_in:state']
+                    except:
+                        city['state'] = entity.tags['is_in']
+
+                    try:
+                        city['country'] = entity.tags['is_in:country']
+                    except:
+                        city['country'] = ""
+
+                    try:
+                        city['population'] = int(entity.tags['population'])
+                    except:
+                        city['population'] = -1
+
+                    try:
+                        city['country_code'] = entity.tags['is_in:country_code']
+                    except:
+                        city['country_code'] = ""
+
+                    try:
+                        city['state_code'] = entity.tags['is_in:state_code']
+                    except:
+                        city['state_code'] = ""
+
+                    try:
+                        city['lat'] = entity.lat
+                    except:
+                        city['lat'] = ""
+
+                    try:
+                        city['lng'] = entity.lon
+                    except:
+                        city['lng'] = ""
+
+                    try:
+                        city['osm_node_id'] = int(entity.id)
+                    except:
+                        city['osm_node_id'] = 0
                 
-                try:
-                    city['state_code'] = entity.tags['is_in:state_code']
-                except:
-                    city['state_code'] = ""
-                
-                try:
-                    city['osm_node_id'] = int(entity.id)
-                except:
-                    city['osm_node_id'] = 0
-                
-                self.city = self.getCityAndCoutry(city['name'],city['country_code'])
-                if self.city == None:
-                    self.insertCityInformationOSM(city)
-                    self.city = self.getCityAndCoutry(city['name'],city['country_code'])
-                else:
-                    print 'City realy exist on system'
-                    city_exits = True
-                    break
-                
-        if not city_exits:  
-            # for all way we create a dict with way's nodes
+        self.city = self.getCityAndCoutry(city['name'],city['country_code'])
+        if self.city == None:
+            print 'Creating the city  on system'
+            self.insertCityInformationOSM(city)
+            self.city = self.getCityAndCoutry(city['name'],city['country_code'])
+        else:
+            print 'City realy exist on system'
+            
             city_id = str(self.city.get('_id'))
-            for entity in parse_file('data/ex_B5u65rYvSdtoSZj5oZqdqReaVrdsc.osm'):    
+            for entity in parse_file(self.file_name):    
                 if isinstance(entity, Way) and 'highway' in entity.tags:
                     is_to_insert = False
                     for type_way in self.ways_types:
@@ -150,8 +212,6 @@ class Reader:
                             #if 'junction' in node.tags or 'highway' in node.tags:
                             #    print 'Junction!', node
                         self.insertStreetInformationOSM(way)
-        else:
-            print 'None information was inserted or updated'
             
         print 'Total ',self.num_total_ways
     

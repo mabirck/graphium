@@ -10,9 +10,10 @@ class Configuration:
     swarm_agent_number      = 3
     swarm_agent_names_API   = "http://namey.muffinlabs.com/name.json?with_surname=true&frequency=all"
     swarm_agent_names       = ['Coralina Malaya','Abigail Johnson','Antonietta Marinese','Elisa Rogoff','Serafim Folkerts','Dulce Barrell']
-    swarm_agent_colors  = ["#E91E63", "#9C27B0", "#F44336", "#673AB7", "#3F51B5", "#2196F3", "#00BCD4", "#009688", "#4CAF50", "#CDDC39", "#FF9800","#795548","#FF5722","#607D8B","#9E9E9E","#827717"]
-    
-    swarm_seconds_to_check_agents  = 3
+    swarm_agent_colors      = ["#E91E63", "#9C27B0", "#F44336", "#673AB7", "#3F51B5", "#2196F3", "#00BCD4", "#009688", "#4CAF50", "#CDDC39", "#FF9800","#795548","#FF5722","#607D8B","#9E9E9E","#827717"]
+    swarm_agent_cycles_number       = -1
+    swarm_seconds_to_check_agents   = 3
+    city_id             = None
     
     mongo_db            = "graphium"  
     mongo_host          = "localhost"

@@ -7,5 +7,7 @@ A simple swarm of agents crawling the map searching graffiti!
 
 Attribute  | Description
 ---------- | -----------
-`-s`       | session identifier
-`-u`       | user of this session
+`-i`       | swarm identifier
+`-n`       | swarm name
+`-u`       | user email of this session
+

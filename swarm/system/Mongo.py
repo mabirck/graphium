@@ -222,9 +222,9 @@ class Mongo:
     #   create a session of swarm and send the basic information
     #   return session ID
     #
-    def insertSwarm(self,identifier,num_agent,user_email="admin@graphium",name='default',host='0.0.0.0',active=True,seconds_to_check_agents=3,logs=[]):
+    def insertSwarm(self, identifier, num_agent,user_email="admin@graphium", name='default', host='0.0.0.0',  seconds_to_check_agents=3, cycles_number=-1, city_id=None, active=True, logs=[]):
         self.__collection = self.__db.swarm
-        dataToSend = {'identifier':identifier, 'name':name, 'num_agent':num_agent, 'user_email':user_email, 'host':host, 'active':active, 'logs':[], 'end_at':None, 'end_well':True, 'qmi':0.0, 'seconds_to_check_agents': seconds_to_check_agents}
+        dataToSend = {'identifier':identifier, 'name':name, 'num_agent':num_agent, 'user_email':user_email, 'host':host, 'active':active, 'logs':[], 'end_at':None, 'end_well':True, 'qmi':0.0, 'seconds_to_check_agents': seconds_to_check_agents,'city_id':city_id,'cycles_number':cycles_number}
         return self.__collection.insert_one(dataToSend).inserted_id
     
     # getSwarmByIdentifier
@@ -251,4 +251,28 @@ class Mongo:
             swarm['logs'].append({'level':level,'message':message})
             self.__collection.update({'swarm_identifier':swarm_session},{"$set":swarm},upsert=False)
             
-        
+    
+    
+    ############ Wish List ############
+    
+    # updateWishById
+    #   update a document from wish list by id
+    #
+    def updateWishById(self,mongo_id,data):
+        self.__collection = self.__db.wish_list
+        self.__collection.update({'_id':mongo_id},{"$set":data},upsert=False)
+    
+    # getWishListByIdentifier
+    #   return the list of wishs by swarm
+    #   short from priority
+    #
+    def getWishListByIdentifier(self,swarm_session):
+        self.__collection = self.__db.wish_list
+        return list(self.__collection.find({'swarm_identifier':swarm_session}).short("priority"))
+    
+    # getWishListByIdentifier
+    #   return the list of wishs by swarm
+    #
+    def getWishListNoProccessedByIdentifier(self,swarm_session):
+        self.__collection = self.__db.wish_list
+        return list(self.__collection.find({'swarm_identifier':swarm_session,'processed':False}))

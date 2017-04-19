@@ -24,6 +24,7 @@ class Agent(Thread):
     _cicles         = None
     
     _agent_at_mongo = None
+    _swarm_at_mongo = None
     _street         = None
     
     _swarm_identifier   = None
@@ -41,6 +42,7 @@ class Agent(Thread):
         self._helper    = Helper()
         
         self._swarm_identifier  = swarm_identifier
+        self._swarm_at_mongo    = self._mongo.getSwarmByIdentifier(swarm_identifier)
         self._continue_the_job  = True
         self._end_well          = True
         self._cicles            = 0
@@ -54,7 +56,7 @@ class Agent(Thread):
         
         try:
             self._logger.info('%s: Let start the job! =D' % (self.getName()))
-            while self._continue_the_job and self._cicles < 5:
+            while self._continue_the_job:
                         
                 # if not set the last street
                 #   this agent need choose one street to start
@@ -131,19 +133,31 @@ class Agent(Thread):
                 
                 # check if number of threads is upper than necessary
                 num_active_agent = len(self._mongo.getAgentsActiveBySwarm(self._swarm_identifier))
-                num_agent_by_swarm = self._mongo.getSwarmByIdentifier(self._swarm_identifier)['num_agent']
+                self._swarm_at_mongo = self._mongo.getSwarmByIdentifier(self._swarm_identifier)
+                
+                num_agent_by_swarm = self._swarm_at_mongo['num_agent']
+                swarm_active = self._swarm_at_mongo['active']
+                swarm_cicles = self._swarm_at_mongo['cycles_number']
                 if num_active_agent > num_agent_by_swarm:
                     self._logger.info('%s: I need stop my job!' % (self.getName()))
+                    self._continue_the_job = False
+                    
+                if swarm_cicles > 0 and swarm_cicles <= self.cicles:
+                    self._logger.info('%s: I need stop my job! Cicles end' % (self.getName()))
+                    self._continue_the_job = False
+                    
+                if swarm_active == False:
+                    self._logger.info('%s: I need stop my job! The swarm end' % (self.getName()))
                     self._continue_the_job = False
                         
                 self._cicles +=1
                 self._logger.info('%s: the cicle %s end' % (self.getName(),self._cicles))
                 
                 
-            print('Agent %s' % (self.getName()))
-            secondsToSleep = random.randint(1, 5)
-            print('%s sleeping fo %d seconds...' % (self.getName(), secondsToSleep))
-            time.sleep(secondsToSleep)
+            print('Agent %s ending' % (self.getName()))
+            #secondsToSleep = random.randint(1, 5)
+            #print('%s sleeping fo %d seconds...' % (self.getName(), secondsToSleep))
+            #time.sleep(secondsToSleep)
             
         except Exception as error:
             self._logger.error('%s: Agent die! x(' % (self.getName()))
@@ -227,16 +241,25 @@ class Agent(Thread):
     #
     # chooseTheFirstStret
     #   Method to choose the first street
-    #   to try walk.
+    #   to try walk. First choose a way from 
+    #   wishlist else a aleatory way
     #
     def chooseTheFirstStret(self):
         
         # search all possible streets that are not busy
-        streets = self._mongo.getStreetQuery({'name_osm':{'$ne':""},'busy':{'$ne':True}})
+        wishlist = self._mongo.getWishListNoProccessedByIdentifier(self._swarm_identifier)
+        if len(wishlist) == 0:
+            self._logger.info('%s: Wishlist is processed I will get a random street :]' % (self.getName()))
+            streets = self._mongo.getStreetQuery({'name_osm': {'$ne':""}, 'busy':{'$ne':True}, 'city_id': self._swarm_at_mongo['city_id']})
 
-        # rand a street between all
-        return streets[random.randint(0, len(streets)-1)] 
-    
+            # rand a street between all
+            return streets[random.randint(0, len(streets)-1)] 
+        else:
+            self._logger.info('%s: Wishlist has a street OSM ID %s to by processed ;)' % (self.getName(),wishlist[0]['osm_way_id']))
+            street = self._mongo.getStreetByIdOSM(int(wishlist[0]['osm_way_id']))
+            print 'street returned'
+            print street
+            return street
     #
     # after walk one street new need choose de next
     #   this method choose the way with less count
@@ -299,10 +322,10 @@ class Agent(Thread):
                 self._logger.info('%s: I will help the %s agent *_*' % (self.getName(),the_agent_chosen))
                 return the_street_chosen
             else:
-                self._logger.info('%s: Oh really? I will get a random way -.-' % (self.getName()))
+                self._logger.info('%s: Oh really? I will check wishlist or get a random way -.-' % (self.getName()))
                 return self.chooseTheFirstStret()
                 
-    #
+                
     # choosingNewStreetToNavegate
     #   choose the street with the less weight
     #   to navegate

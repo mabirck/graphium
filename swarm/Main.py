@@ -21,8 +21,8 @@ if __name__ == "__main__":
     for i in range(len(commands)):
         commands[i] = commands[i].lower()
         
-    if '-s' in commands:
-        t_index = commands.index('-s')
+    if '-i' in commands:
+        t_index = commands.index('-i')
         swarm_identifier = commands[t_index+1]
     else:
         swarm_identifier = helper.getSerialSwarmNow()
@@ -39,10 +39,34 @@ if __name__ == "__main__":
     else:
         swarm_name = helper.getTimeNow()
         
+    if '-a' in commands:
+        t_index = int(commands.index('-a'))
+        swarm_num_agent = int(commands[t_index+1])
+    else:
+        swarm_num_agent = config.swarm_agent_number
+        
+    if '-c' in commands:
+        t_index = commands.index('-c')
+        swarm_city = commands[t_index+1]
+    else:
+        swarm_city = config.city_id
+        
+    if '-t' in commands:
+        t_index = commands.index('-t')
+        swarm_turns = int(commands[t_index+1])
+    else:
+        swarm_turns = config.swarm_seconds_to_check_agents
+        
+    if '-y' in commands:
+        t_index = commands.index('-y')
+        swarm_cycles = int(commands[t_index+1])
+    else:
+        swarm_cycles = config.swarm_agent_cycles_number
+        
     host = socket.gethostbyname(socket.gethostname())
     
     if mongo.getSwarmByIdentifier(swarm_identifier) == None:
-        mongo.insertSwarm(swarm_identifier, config.swarm_agent_number, user_email, swarm_name, host)
+        mongo.insertSwarm(swarm_identifier, swarm_num_agent, user_email, swarm_name, host, swarm_turns, swarm_cycles, swarm_city)
     
     swarm = Swarm(swarm_identifier)
     swarm.start()

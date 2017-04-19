@@ -1,0 +1,418 @@
+<%=breadcrumbs [{:name => 'Home',:path => '/'},{:name => 'Swarm', :path => '/graphium/swarm'}], 'Launcher', false%>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfw7x1Y5XXJXcGwQAFGG_069ZKEgpGEBE&callback=initTheMap" defer></script>
+<div class='row valign-wrapper'>
+      <h4 class='col s11 valign'>Swarm Launcher</h4><i class="col s1 material-icons valign" onclick="$('#dialog_help').modal('open');" style="cursor:pointer">help</i>
+  </div>
+<div class="row">
+    <div class="input-field col s6">
+          <input placeholder="type the name" id="swarm_name" type="text" class="validate">
+          <label for="name">Swarm name</label>
+    </div>
+    <div class="input-field col s4">
+        <select id='swarm_num_agent'>
+            <option value="" disabled selected></option>
+            <option value="2">2 agents</option>
+            <option value="3">3 agents</option>
+            <option value="4">4 agents</option>
+            <option value="5">5 agents</option>
+            <option value="10">10 agents</option>
+            <option value="15">15 agents</option>
+            <option value="20">20 agents</option>
+        </select>
+        <label>Number of agents on Swarm</label>
+    </div>
+    <div class="input-field col s2">
+          <input disabled placeholder="identifier" id="swarm_identifier" type="text" class="validate" value='<%= Time.now.strftime("%Y%m%d%H%M%S") %>'>
+          <label for="identifier">Identifier</label>
+    </div>
+</div>
+<div class="row">
+    <div class="input-field col s6">
+        <select id='swarm_city' onchange="changeCenter()">
+            <option value="" disabled selected>Cities available</option>
+            <%Graphium::City.all.each do |city|%>
+                <option value="<%=city.id%>" lat="<%=city.lat%>" lng="<%=city.lng%>"><%=city.name%></option>
+            <%end%>
+        </select>
+        <label>Choose the city</label>
+    </div>
+    <div class="input-field col s4">
+        <select id='swarm_turns'>
+            <option value="" disabled selected></option>
+            <option value="2">at 3 seconds</option>
+            <option value="5">at 5 seconds</option>
+            <option value="10">at 10 seconds</option>
+            <option value="15">at 15 seconds</option>
+            <option value="20">at 20 seconds</option>
+        </select>
+        <label>Swarm turns</label>
+    </div>
+    <div class="input-field col s2">
+          <input placeholder="Cycles number" id="swarm_agent_cycles" type="number" class="validate">
+          <label for="swarm_cycles">Cycles by Agent</label>
+    </div>
+</div>
+<div style='position:absolute;bottom:10px;right:14%;'>
+    <a class="waves-effect waves-light btn-large" onclick="launch()"><i class="material-icons left">transfer_within_a_station</i>launch swarm</a>
+</div>
+<div class="row">
+    <div class="col s12">
+        <i class="material-icons">info_outline</i> Optionally you can create the wish list of points in city to start
+    </div>
+</div>
+<div class='row'>
+    <div id='div_map' class='col s6'>
+    </div>
+    <div style='padding:0px 5px' class="col s6">
+        <ul id='list' style="" class="collection with-header">
+            <li class="collection-item"><div>Add wish pin<a style="cursor:pointer" class="secondary-content"><i class="material-icons" onClick='addPin()'>add_location</i></a></div></li>
+        </ul>
+    </div>
+</div>
+<div id="dialog_help" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4>Params description</h4>
+        <table class="highlight">
+            <thead>
+              <tr>
+                  <th>Param</th>
+                  <th>Description</th>
+                  <th>Default</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Name</td>
+                <td>The name of swarm</td>
+                <td>Current Date and hour</td>
+              </tr>
+              <tr>
+                <td>Num. of Agents</td>
+                <td>Number of simultanie agents walking at streets at same time. The number of agents no necessary will be the sum of all agents through all the time.</td>
+                <td>2</td>
+              </tr>
+              <tr>
+                <td>Identifier</td>
+                <td>Number unique set of each executation</td>
+                <td>%Y%m%D%h%m%s.f4</td>
+              </tr>
+              <tr>
+                <td>City</td>
+                <td>City define the space to run the swarm. City is defined has the political area</td>
+                <td>Empty</td>
+              </tr>
+              <tr>
+                <td>Swarm Turns</td>
+                <td>Interval at the swarm check, among other things, if the number of agents is the set number</td>
+                <td>3 seconds</td>
+              </tr>
+              <tr>
+                <td>Cycles by Agent</td>
+                <td>Each cycle is a way, not necessary first or unique time pass through the street. The cycles are the maximum number of visitation wanted to be runned by each agent. Value -1 run infinite time and you need stop manually</td>
+                <td>-1</td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+    </div>
+</div>
+<div id="modal_alert" class="modal bottom-sheet">
+    <div class="modal-content">
+        <h4>Attention</h4>
+        <p id='alert'>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+    </div>
+</div>
+<div id="dialog_create" class="modal">
+    <div class="modal-content">
+        <object data='/assets/swarm/swarm_information.svg'></object>
+    </div>
+    <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+    </div>
+</div>
+<div id="dialog_swarm_executing" class="modal">
+    <div class="modal-content">
+        <object data='/assets/swarm/swarm_executing.svg'></object>
+    </div>
+    <div class="modal-footer">
+        <a href='/graphium/analytics' class="modal-action modal-close waves-effect waves-green btn-flat">Analise now</a>
+    </div>
+</div>
+<script>
+    swarm_name          = "";
+    swarm_num_agent     = 0;
+    swarm_identifier    = 0;
+    swarm_city_id       = 0;
+    swarm_turns         = 0;
+    swarm_cycles        = -2;
+    var map             = null;
+    var markers         = [];
+    
+    $(document).ready(function(){
+        //$('.modal').modal({
+            //dismissible: false,
+        //});
+        $('.modal').modal()
+        <%if @swarms.length > 0%>
+            $('#dialog_swarm_executing').modal({
+                dismissible: false,
+            });
+            $(document.querySelector('#dialog_swarm_executing a')).attr('href','/graphium/analytics/?swarmId=<%=@swarms[0].id%>');
+            $('#dialog_swarm_executing').modal('open')
+        <%else%>
+            $('#dialog_create').modal('open');
+        <%end%>
+        
+        $('select').material_select();
+        
+    });
+    
+    function validate(){
+        
+        //get the elements
+        swarm_identifier = document.querySelector('#swarm_identifier').value;
+        swarm_name = document.querySelector('#swarm_name').value;
+        swarm_num_agent = document.querySelector('#swarm_num_agent');
+        swarm_num_agent = swarm_num_agent.options[swarm_num_agent.selectedIndex].value;
+        swarm_city = document.querySelector('#swarm_city');
+        swarm_city = swarm_city.options[swarm_city.selectedIndex].value;
+        swarm_turns = document.querySelector('#swarm_turns');
+        swarm_turns = swarm_turns.options[swarm_turns.selectedIndex].value;
+        swarm_agent_cycles = document.querySelector('#swarm_agent_cycles').value;
+        
+        //log values
+        
+        console.log('swarm_identifier',swarm_identifier)
+        console.log('swarm_name',swarm_name)
+        console.log('swarm_num_agent',swarm_num_agent)
+        console.log('swarm_city',swarm_city)
+        console.log('swarm_turns',swarm_turns)
+        console.log('swarm_agent_cycles',swarm_agent_cycles)
+        
+        pinMarkers = []
+        
+        if(swarm_identifier == ""){
+            $('#alert').html('Check if the identifier is not empty');
+            $('#modal_alert').modal('open');
+            console.log('Check if the identifier is not empty');
+            return false;
+        }
+        
+        if(swarm_name == ""){
+            $('#alert').html('Check if the name is not empty');
+            $('#modal_alert').modal('open');
+            console.log('Check if the name is not empty');
+            return false;
+        }
+        
+        
+        if(swarm_num_agent == ""){
+            $('#alert').html('Choose a number of agent');
+            $('#modal_alert').modal('open');
+            console.log('Choose a number of agent');
+            return false;
+        }
+        
+        if(swarm_city == ""){
+            $('#alert').html('Choose a city');
+            $('#modal_alert').modal('open');
+            console.log('Choose a city');
+            return false;
+        }
+        
+        
+        if(swarm_turns == ""){
+            $('#alert').html('Choose a turn first');
+            $('#modal_alert').modal('open');
+            console.log('Choose a turn first');
+            return false;
+        }
+        
+        if(swarm_agent_cycles == ""){
+            $('#alert').html('Set the number of cycles');
+            $('#modal_alert').modal('open');
+            console.log('Set the number of cycles');
+            return false;
+        }
+        
+        return true;
+        
+    }
+    
+    function launch(){
+        if(validate()){
+            
+            swarm_identifier = document.querySelector('#swarm_identifier').value;
+            swarm_name = document.querySelector('#swarm_name').value;
+            swarm_num_agent = document.querySelector('#swarm_num_agent');
+            swarm_num_agent = swarm_num_agent.options[swarm_num_agent.selectedIndex].value;
+            swarm_city = document.querySelector('#swarm_city');
+            swarm_city = swarm_city.options[swarm_city.selectedIndex].value;
+            swarm_turns = document.querySelector('#swarm_turns');
+            swarm_turns = swarm_turns.options[swarm_turns.selectedIndex].value;
+            swarm_agent_cycles = document.querySelector('#swarm_agent_cycles').value;
+            swarm_wish_list = "";
+            
+            for(var a=0; a < markers.length; a++){
+                swarm_wish_list += markers[a].position.lat()+","+markers[a].position.lng()+":"
+            }
+            
+            $.ajax({
+                url: "/graphium/swarm/startSwarm",
+                dataType: "json",
+                data: {
+                    "swarm_identifier": swarm_identifier,
+                    "swarm_name": swarm_name,
+                    "swarm_num_agent": swarm_num_agent,
+                    "swarm_city": swarm_city,
+                    "swarm_turns": swarm_turns,
+                    "swarm_agent_cycles": swarm_agent_cycles,
+                    "swarm_wish_list": swarm_wish_list
+                },
+                complete: function(){
+                  
+                },
+                success: function($data) {
+                    console.log('success',$data);
+                    $('#dialog_swarm_executing').modal({
+                        dismissible: false,
+                    });
+                    $('#dialog_swarm_executing').modal('open');
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    console.log('error',thrownError);
+                    $('#alert').html('For some reason we can launch your swarm. Please try again later');
+                    $('#modal_alert').modal('open');
+
+                }
+            })
+        }
+    }
+    
+    function initTheMap() {
+        // Start map
+        map = new google.maps.Map(document.getElementById('div_map'), {
+            center: {lat: -31.769016, lng: -52.3347313},
+            zoom: 13
+        });
+        // show infowindow location
+        infoWindow = new google.maps.InfoWindow({map: map});
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+              var pos = {
+                //lat: position.coords.latitude,
+                //lng: position.coords.longitude
+                lat: -31.769016,
+                lng: -52.3347313
+              };
+
+              infoWindow.setPosition(pos);
+              infoWindow.setContent('Sua localização');
+              map.setCenter(pos);
+            }, function() {
+              handleLocationError(true, infoWindow, map.getCenter());
+            });
+          } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+          }
+        console.log('iniciou o mapa');
+    }
+    
+    function changeCenter(){
+        
+        swarm_city = document.querySelector('#swarm_city');
+        swarm_city = swarm_city.options[swarm_city.selectedIndex];
+        console.log('lat',$(swarm_city).attr('lat'));
+        console.log('lng',$(swarm_city).attr('lng'));
+        map.setCenter(new google.maps.LatLng(parseFloat($(swarm_city).attr('lat')) ,parseFloat($(swarm_city).attr('lng'))));
+    }
+    
+    function addPin(){
+        
+        swarm_city = document.querySelector('#swarm_city');
+        swarm_city = swarm_city.options[swarm_city.selectedIndex];
+        console.log('lat',$(swarm_city).attr('lat'));
+        console.log('lng',$(swarm_city).attr('lng'));
+        
+        if($(swarm_city).attr('lat') == undefined){
+            Materialize.toast('First select a city', 1000,'rounded')
+            return;
+        }
+        
+        var myLatlng = {lat: parseFloat($(swarm_city).attr('lat')), lng: parseFloat($(swarm_city).attr('lng'))};
+        
+        var date = new Date();
+        year = date.getFullYear();
+        month = date.getMonth() + 1;
+        day = date.getDate();
+        hours = date.getHours();
+        minutes = date.getMinutes();
+        seconds = date.getSeconds();
+        
+        agent_num = markers.length.toString()
+        agent_num = agent_num.substring(0,1)
+        url_icon = "/assets/analytics/agent_"+agent_num+".png";
+        
+        var marker_name = year+""+month+""+day+""+hours+""+minutes+""+seconds+"";
+        
+        var marker = new google.maps.Marker({
+            icon: url_icon,
+            position: myLatlng,
+            map: map,
+            title: marker_name,
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+        });
+        
+        google.maps.event.addListener(marker, 'dragend', function(){
+            console.log('mudou o centro do',marker.title) 
+        })
+        
+        marker.addListener('click', function() {
+          map.setZoom(15);
+          map.setCenter(marker.getPosition());
+        });
+        
+        markers.push(marker);
+        
+        $('#list').append("<li id='"+marker_name+"' style='cursor:pointer' onclick=\"setCenterFromMarker('"+marker_name+"')\" class='collection-item'><div>Marker "+(markers.length)+"<a class='secondary-content'><i onclick=\"removeMarker('"+marker_name+"')\" class='material-icons'>highlight_off</i></a></div></li>");
+    }
+    
+    function setCenterFromMarker(name){
+        console.log('setCenterFromMarker')
+        for(var a=0; a < markers.length; a++){
+            console.log(markers[a].title,name)
+            if(markers[a].title == name){
+                map.setCenter(markers[a].getPosition());
+            }
+        }
+    }
+    
+    function removeMarker(name){
+        console.log('removeMarker');
+        for(var a=0; a < markers.length; a++){
+            console.log(markers[a].title,name)
+            if(markers[a].title == name){
+                markers[a].setMap(null);
+                $('#'+markers[a].title).remove();
+                markers.splice(markers.indexOf(markers[a]), 1);
+                
+            }
+        }
+    }
+</script>
+<style>
+    #div_map {
+        min-height: 300px;
+        padding: 10px
+      }
+</style>
