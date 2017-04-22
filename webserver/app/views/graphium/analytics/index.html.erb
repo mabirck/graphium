@@ -78,7 +78,7 @@
     var lines = []
     var infoWindow = "";
     var play = false;
-    var time_out = 4000;
+    var time_out = 5000;
     var lineSymbol = {
         path: 'M 0,1 0,1',
         strokeOpacity: 0.4,
@@ -208,7 +208,7 @@
     
     function finishSwarm(){
         $.ajax({
-            url: "analytics/finishSwarm",
+            url: "/graphium/analytics/finishSwarm",
             dataType: "json",
             data: {
               swarm_identifier: swarm_identifier
@@ -270,10 +270,15 @@
                     // Swarm information
                     swarm_active = true
                     swarm_identifier = $data.swarm.identifier;
-                    swarm_info  = ""
-                    swarm_info += "<p>Name     :"+$data.swarm.name+"</p>"
-                    swarm_info += "<p>Nº Agents:"+$data.swarm.num_agent+"</p>"
-                    swarm_info += "<p>Host     :"+$data.swarm.host+"</p>"
+                    swarm_info  = "<table class='highlight'>"
+                    swarm_info += "<tr><td>Name</td><td>"+$data.swarm.name+"</td></tr>"
+                    swarm_info += "<tr><td>Nº Competing Agents</td><td>"+$data.swarm.num_agent+"</td></tr>"
+                    swarm_info += "<tr><td>Total Agents</td><td>"+$data.agents.length+"</td></tr>"
+                    swarm_info += "<tr><td>Start at</td><td>"+$data.swarm.start_at+"</td></tr>"
+                    swarm_info += "<tr><td>End at</td><td>"+$data.swarm.end_at+"</td></tr>"
+                    swarm_info += "<tr><td>QMI</td><td>"+$data.swarm.qmi+"</td></tr>"
+                    swarm_info += "<tr><td>Host</td><td>"+$data.swarm.host+"</td></tr>"
+                    swarm_info += "</table>"
                     $('#informations').html(swarm_info);
                     document.querySelector('#end_start i').style.color= '';
                     document.querySelector('#end_start i').style.cursor= 'pointer';
@@ -282,7 +287,13 @@
                     the_html_to_show = "<ul class='collection'>"
                     for(var a=0;a < $data.agents.length;a++){
                         
-                        the_html_to_show += addNameToHtml(a,$data.agents[a].name,$data.agents[a].color,$data.agents[a].last_street,$data.agents[a].last_lat+", "+$data.agents[a].last_lng);
+                        if(!$data.agents[a].active){
+                            name = $data.agents[a].name + " (inative)"
+                        }else{
+                            name = $data.agents[a].name
+                        }
+                        
+                        the_html_to_show += addNameToHtml(a,name,$data.agents[a].color,$data.agents[a].last_street,$data.agents[a].last_lat+", "+$data.agents[a].last_lng);
                         addMarker(a,$data.agents[a].name,$data.agents[a].last_lat, $data.agents[a].last_lng);
                         
                         for(var b=0; b < $data.agents[a].pathbread.length;b++){
@@ -323,7 +334,7 @@
                     $('#agent_showing').show();
                     
                 }
-                Materialize.toast('atualizado', 1000,'rounded')
+                Materialize.toast('atualizado', 500,'rounded')
                 
             },
             error: function(xhr, ajaxOptions, thrownError) {

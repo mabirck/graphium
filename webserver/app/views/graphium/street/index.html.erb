@@ -6,6 +6,7 @@
           <th>Type</th>
           <th>Superfice</th>
           <th>Nº of nodes</th>
+          <th>See on OSM</th>
       </tr>
     </thead>
 
@@ -16,11 +17,16 @@
                 <td><%=street.type_osm%></td>
                 <td><%=street.surface_osm%></td>
                 <td><%=street.nodes.length%></td>
+                <td><i class="material-icons" style='cursor:pointer' onclick="window.open( 'http://www.openstreetmap.org/way/<%=street.id_osm%>', '_blank')">open_in_new</i></td>
               </tr>
         <%end%>
         <%if @streets.length == 0%>
             <tr>
                 <td style="text-align: center;" colspan='5'>No street in graphium</td>
+            </tr>
+        <%else%>
+            <tr>
+                <td style="text-align: left;" colspan='5'><b>Total <%=@streets.length%></b></td>
             </tr>
         <%end%>
     </tbody>

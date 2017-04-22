@@ -30,8 +30,9 @@ class Graphium::SwarmController < ApplicationController
         swarm.seconds_to_check_agents   = params[:swarm_turns].to_i
         swarm.city_id                   = params[:swarm_city]
         swarm.num_agent                 = params[:swarm_num_agent].to_i
-        swarm.cicles                    = params[:swarm_agent_cycles].to_i
+        swarm.cycles                    = params[:swarm_agent_cycles].to_i
         swarm.logs                      = []
+        swarm.start_at                  = Time.now.strftime('%Y-%m-%d %H:%M:%S')
         swarm.save
         
         locations = []
@@ -73,7 +74,12 @@ class Graphium::SwarmController < ApplicationController
                 end
             end
         end
-        @output = %x( python ../swarm/Main.py -i #{params[:swarm_identifier]} )
+        logger.info 'Inicialize the swarm'
+        Thread.new do
+            logger.info 'Start thread'
+            logger.info system( "python ../swarm/Main.py -i #{params[:swarm_identifier]}" )
+        end
+        @output = true
         respond_to do |format|
           format.json { render :json => {"output" => @output} }
         end

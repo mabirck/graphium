@@ -15,7 +15,7 @@ class API:
         #print self._my_api.NodeGet(123)
         
     def getWaysByNode(self,NodeId):
-        print 'getWaysByNode... ',NodeId
+        #print 'getWaysByNode... ',NodeId
         results = self._my_api.NodeWays(int(NodeId))
         to_return = []
         

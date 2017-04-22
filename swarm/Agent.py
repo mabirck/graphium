@@ -21,7 +21,7 @@ class Agent(Thread):
     _helper         = None
     
     _work           = None
-    _cicles         = None
+    _cycles         = None
     
     _agent_at_mongo = None
     _swarm_at_mongo = None
@@ -45,7 +45,7 @@ class Agent(Thread):
         self._swarm_at_mongo    = self._mongo.getSwarmByIdentifier(swarm_identifier)
         self._continue_the_job  = True
         self._end_well          = True
-        self._cicles            = 0
+        self._cycles            = 0
         
         self.startAgent()
         
@@ -137,21 +137,21 @@ class Agent(Thread):
                 
                 num_agent_by_swarm = self._swarm_at_mongo['num_agent']
                 swarm_active = self._swarm_at_mongo['active']
-                swarm_cicles = self._swarm_at_mongo['cycles_number']
+                swarm_cycles = self._swarm_at_mongo['cycles']
                 if num_active_agent > num_agent_by_swarm:
                     self._logger.info('%s: I need stop my job!' % (self.getName()))
                     self._continue_the_job = False
                     
-                if swarm_cicles > 0 and swarm_cicles <= self.cicles:
-                    self._logger.info('%s: I need stop my job! Cicles end' % (self.getName()))
+                if swarm_cycles > 0 and swarm_cycles <= self.cycles:
+                    self._logger.info('%s: I need stop my job! Cycles end' % (self.getName()))
                     self._continue_the_job = False
                     
                 if swarm_active == False:
                     self._logger.info('%s: I need stop my job! The swarm end' % (self.getName()))
                     self._continue_the_job = False
                         
-                self._cicles +=1
-                self._logger.info('%s: the cicle %s end' % (self.getName(),self._cicles))
+                self._cycles +=1
+                self._logger.info('%s: the cicle %s end' % (self.getName(),self._cycles))
                 
                 
             print('Agent %s ending' % (self.getName()))
@@ -248,18 +248,34 @@ class Agent(Thread):
         
         # search all possible streets that are not busy
         wishlist = self._mongo.getWishListNoProccessedByIdentifier(self._swarm_identifier)
-        if len(wishlist) == 0:
-            self._logger.info('%s: Wishlist is processed I will get a random street :]' % (self.getName()))
-            streets = self._mongo.getStreetQuery({'name_osm': {'$ne':""}, 'busy':{'$ne':True}, 'city_id': self._swarm_at_mongo['city_id']})
-
-            # rand a street between all
-            return streets[random.randint(0, len(streets)-1)] 
-        else:
+        if len(wishlist) != 0:
+            
             self._logger.info('%s: Wishlist has a street OSM ID %s to by processed ;)' % (self.getName(),wishlist[0]['osm_way_id']))
-            street = self._mongo.getStreetByIdOSM(int(wishlist[0]['osm_way_id']))
-            print 'street returned'
-            print street
-            return street
+            
+            # try to get one of each wish street 
+            #   from the id and name
+            street = None
+            size = len(wishlist)
+            count = 0
+            while street == None or count < size:
+                street = self._mongo.getStreetByIdOSM(int(wishlist[count]['osm_way_id']))
+                if street == None:
+                    street = self._mongo.getStreetByName(wishlist[count]['address'])
+                count += 1
+                
+            if street != None:
+                wishlist[count-1]['processed'] = True
+                wishlist[count-1]['dt_processed'] = self._helper.getTimeNow()
+                
+                self._mongo.updateWishListById(wishlist[count-1].get('_id'),wishlist[count-1])
+           
+            return street 
+        
+        self._logger.info('%s: Wishlist is processed or empty. I will get a random street :]' % (self.getName()))
+        streets = self._mongo.getStreetQuery({'name_osm': {'$ne':""}, 'busy':{'$ne':True}, 'city_id': self._swarm_at_mongo['city_id']})
+
+        # rand a street between all
+        return streets[random.randint(0, len(streets)-1)]
     #
     # after walk one street new need choose de next
     #   this method choose the way with less count
@@ -418,7 +434,7 @@ class Agent(Thread):
         self._agent_at_mongo['end_at']      = self._helper.getTimeNow()
         self._agent_at_mongo['active']      = False
         self._agent_at_mongo['end_well']    = self._end_well
-        self._agent_at_mongo['cicles']      = self._cicles
+        self._agent_at_mongo['cycles']      = self._cycles
         self._mongo.updateAgentByIdentifier(self.identifier,self._agent_at_mongo)
         
         if self._street != None:

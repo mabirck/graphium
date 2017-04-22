@@ -8,7 +8,7 @@ class Graphium::Swarm
     field :active, type: Boolean
     field :host, type: String
     field :logs, type: Array
-    field :cicles, type: Integer
+    field :cycles, type: Integer
     field :start_at, type: String
     field :end_at, type: String
     field :qmi, type: Float

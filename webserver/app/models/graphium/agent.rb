@@ -9,6 +9,7 @@ class Graphium::Agent
     field :swarm_identifier, type: String
     field :end_at, type: String
     field :active, type: Boolean
+    field :cycles, type: Integer
     field :pathbread, type: Array
     field :color, type: String
     field :last_street_id_osm, type: Integer

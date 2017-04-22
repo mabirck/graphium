@@ -14,9 +14,7 @@
         <div id='map' class="map"  >
         </div>
     </div>
-    <div class="col s5">
-    
-        
+    <div class="col s5">        
         <ul class="collapsible" data-collapsible="accordion">
             <li>
                   <div class="collapsible-header"><i class="material-icons">info_outline</i>Swarm Information</div>
@@ -220,10 +218,15 @@
                     $('#informations').html('<span>None swarm are playing. Try start a swarm</span>');                    
                 }else{
                     // Swarm information
-                    swarm_info  = ""
-                    swarm_info += "<p>Name     :"+$data.swarm.name+"</p>"
-                    swarm_info += "<p>Nº Agents:"+$data.swarm.num_agent+"</p>"
-                    swarm_info += "<p>Host     :"+$data.swarm.host+"</p>"
+                    swarm_info  = "<table class='highlight'>"
+                    swarm_info += "<tr><td>Name</td><td>"+$data.swarm.name+"</td></tr>"
+                    swarm_info += "<tr><td>Nº Competing Agents</td><td>"+$data.swarm.num_agent+"</td></tr>"
+                    swarm_info += "<tr><td>Total Agents</td><td>"+$data.agents.length+"</td></tr>"
+                    swarm_info += "<tr><td>Start at</td><td>"+$data.swarm.start_at+"</td></tr>"
+                    swarm_info += "<tr><td>End at</td><td>"+$data.swarm.end_at+"</td></tr>"
+                    swarm_info += "<tr><td>QMI</td><td>"+$data.swarm.qmi+"</td></tr>"
+                    swarm_info += "<tr><td>Host</td><td>"+$data.swarm.host+"</td></tr>"
+                    swarm_info += "</table>"
                     $('#informations').html(swarm_info);
                     
                     
@@ -231,7 +234,13 @@
                     the_html_to_show = "<ul class='collection'>"
                     for(var a=0;a < $data.agents.length;a++){
                         
-                        the_html_to_show += addNameToHtml(a,$data.agents[a].name,$data.agents[a].color,$data.agents[a].last_street,$data.agents[a].last_lat+", "+$data.agents[a].last_lng);
+                        if(!$data.agents[a].active){
+                            name = $data.agents[a].name + " (inative)"
+                        }else{
+                            name = $data.agents[a].name
+                        }
+                        
+                        the_html_to_show += addNameToHtml(a,name,$data.agents[a].color,$data.agents[a].last_street,$data.agents[a].last_lat+", "+$data.agents[a].last_lng);
                         addMarker(a,$data.agents[a].name,$data.agents[a].last_lat, $data.agents[a].last_lng);
                         
                         for(var b=0; b < $data.agents[a].pathbread.length;b++){
@@ -303,7 +312,20 @@
             swarm_identifier = this.value;
             update();
         });
+        
+        <% if params[:swarmId] != nil%>
+            // play from param swarmId
+            setTimeout(function(){
+                $("#swarm_select").val("<%=params[:swarmId]%>");
+                $('#swarm_select').material_select();
+                swarm_identifier = "<%=params[:swarmId]%>";
+                update();
+            },1500)
+        <%end%>
+        
     });
+    
+    
     
 </script>
 <style>

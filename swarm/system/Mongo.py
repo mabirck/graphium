@@ -15,11 +15,16 @@ class Mongo:
     __db 		= None
     __collection= None
 
+    
     def __init__(self,db='graphium',address='localhost',port=27017):
 
         self.__client		= MongoClient(address, port)
         self.__db			= self.__client[db]
         self.__collection   = self.__db.agent
+        
+        
+    def disconnect(self):
+        self.__client.close()
 
         
     ############ Agent ############
@@ -69,7 +74,7 @@ class Mongo:
             else:
                 color = colors[randint(0,len(colors)-1)]
         
-        dataToSend = { 'identifier':identifier, 'name':name, 'swarm_identifier':swarm_identifier,'color':color, 'active':True, 'end_at':None, 'last_lat':0.0, 'last_lng':0.0, 'last_street':None,'pathbread':[],'visited_streets':[],'last_street_id_osm':None,'cicles':0}
+        dataToSend = { 'identifier':identifier, 'name':name, 'swarm_identifier':swarm_identifier,'color':color, 'active':True, 'end_at':None, 'last_lat':0.0, 'last_lng':0.0, 'last_street':None,'pathbread':[],'visited_streets':[],'last_street_id_osm':None,'cycles':0}
         self.__collection = self.__db.agent
         the_id = self.__collection.insert(dataToSend)
         return identifier
@@ -151,8 +156,8 @@ class Mongo:
     #   set the end information about the street
     #   
     def getStreetByName(self,street_name):
-        self.__collection   = sef.__db.street
-        return self.__collection.find({'name_osm':street_name})
+        self.__collection   = self.__db.street
+        return self.__collection.find_one({'name_osm':street_name})
     
     # updateStreetById
     #   permit to update informatations at mongodb
@@ -276,3 +281,10 @@ class Mongo:
     def getWishListNoProccessedByIdentifier(self,swarm_session):
         self.__collection = self.__db.wish_list
         return list(self.__collection.find({'swarm_identifier':swarm_session,'processed':False}))
+    
+    # updateStreetById
+    #   permit to update informatations at mongodb
+    #
+    def updateWishListById(self,identifier,data):
+        self.__collection = self.__db.wish_list
+        self.__collection.update({'_id':identifier},{"$set":data},upsert=False)

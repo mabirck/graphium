@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import socket, datetime, traceback
+import socket, datetime, traceback, math
 from time import sleep
 
 from system.Configuration import *
@@ -50,6 +50,7 @@ class Swarm:
                 self._logger.info('%s: I\'m checking the agents status!' % ("Swarm"))
                 #print 'Swarm are checking the agents'
                 num_active_and_end_well = len(self._mongo.getAgentsActiveBySwarm(self._identifier))
+                num_active = num_active_and_end_well
                 num_active_and_end_well += len(self._mongo.getAgentsEndWellBySwarm(self._identifier))
                 self.syncFromDB()
                 if num_active_and_end_well < self._swarm_at_mongo['num_agent']:
@@ -62,10 +63,11 @@ class Swarm:
                             self._agents.append(agent)
                             agent.start()
                             
-                    # Sleep x seconds to check again 
-                    #   
-                    sleep(self._swarm_at_mongo['seconds_to_check_agents'])
-                    self.syncFromDB()
+                # Sleep x seconds to check again 
+                #   
+                sleep(int(self._swarm_at_mongo['seconds_to_check_agents']))
+                self.syncFromDB()
+                    
                     
         except Exception as error:
             self._logger.error('Swarm: Swarm die! x(')
@@ -81,10 +83,26 @@ class Swarm:
         for agent in self._agents:
             agent.join()
             
+        streets = self._mongo.getStreetQuery({"city_id": self._swarm_at_mongo['city_id']})
+        
+        count = 0
+        for street in streets:
+            count += street['street_count']*street['street_count']
+            street['street_count'] = 0
+            street['busy'] = False
+            self._mongo.updateStreetById(street.get('_id'),street)
+        
+        if len(streets) != 0:
+            self._logger.info('%s: I\'m calculating the QMI!' % ("Swarm"))
+            self._swarm_at_mongo['qmi'] = math.sqrt(count/float(len(streets)))
+        else:
+            self._swarm_at_mongo['qmi'] = 0.0
+            
         self._swarm_at_mongo['end_at']      = self._helper.getTimeNow()
         self._swarm_at_mongo['active']      = False
         
         self._mongo.updateSwarmByIdentifier(self._identifier,self._swarm_at_mongo)
+        self._mongo.disconnect()
         
         self._logger.info('Swarm: Hard work! I finish dude ;)')
 
