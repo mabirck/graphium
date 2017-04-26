@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import pymongo, datetime,bson,time
+import pymongo, datetime, bson, time
 import system
 from random import randint
 from unidecode import unidecode
