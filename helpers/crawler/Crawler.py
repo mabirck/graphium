@@ -6,9 +6,10 @@ import  urllib, json, datetime, sys, traceback, time, os
 from time import sleep
 from threading import Thread
 
-from Helper import Helper
-from Configuration import Configuration
-from Mongo import Mongo
+from system.Helper import Helper
+from system.Configuration import Configuration
+from system.Mongo import Mongo
+from system.Logger import Logger
 
 class Crawler:
     
@@ -17,16 +18,21 @@ class Crawler:
     _session_at_mongo   = None
     _identifier         = None
     _helper             = None
+    _logger             = None
     
     def __init__(self,type_crawler='flickr'):
         self._config    = Configuration()
         self._mongo     = Mongo()
         self._helper    = Helper()
+        self._logger    = Logger()
         
         self._identifier= self._helper.getSerialNow()
         last_not_runnning = True
         
         if len(self._mongo.getCrawlerSessions({'active':True}))>0:
+            
+            self._logger.info('Crawler: You have sessions runing dude :]')
+            
             print '=== Warning ==='
             print ''
             print 'Attention:'
@@ -46,23 +52,25 @@ class Crawler:
             input_var = raw_input("Are you sure? After start a session you can't stop under finish. Y/n").lower()
 
             if input_var == str("y"):
-
+                
+                self._logger.info('Flicker: Starting a Flickr Session '+self._identifier+' =D')
+                
                 self._mongo.insertCrawlerSession(self._identifier,self._config.flickr_tags,self._helper.getTimeNow())
                 self._session_at_mongo  = self._mongo.getCrawlerById(self._identifier)
                 try:
                     flickr = Flickr(self._identifier)
-                    print 'running...'
                     flickr.run()
                     self._session_at_mongo['end_well'] = True
                 except Exception as error:
-                    print '\nError at crawler'
+                    self._logger.error('Flicker: Something was wrong :/ I need stop the job!')
+                    print 'Error!'
                     print traceback.format_exc()
                     self._session_at_mongo['end_well'] = False
                 finally:
                     self.finish()
 
             else:
-                print 'Bye!'
+                self._logger.info('Crawler: Ok. Not start this session =]')
     
     def finish(self):
             
@@ -72,7 +80,8 @@ class Crawler:
         self._mongo.updateCrawlerByIdentifier(self._identifier,self._session_at_mongo)
         self._mongo.disconnect()
         
-        print 'Crawler: Hard work! I finish dude ;)'
+        self._logger.info('Crawler: Hard work! I finish dude ;)')
+
             
 class Flickr(Thread):
     
@@ -81,11 +90,13 @@ class Flickr(Thread):
     _mongo              = None
     _config             = None
     _helper             = None
+    _logger             = None
     
     _session_at_mongo   = None
     _start_time         = None
     _end_time           = None
     _elapsed_time       = None
+    _current_photo      = None
     _current_page       = None
     
     url                 = None
@@ -98,7 +109,9 @@ class Flickr(Thread):
         self._mongo         = Mongo()
         self._config        = Configuration()
         self._helper        = Helper()
+        self._logger        = Logger()
         
+        self._current_photo = 0
         self._current_page  = 0
         self._session_at_mongo   = self._mongo.getCrawlerById(self._identifier)
         
@@ -141,29 +154,36 @@ class Flickr(Thread):
             data = self.flickrGetPage(self._session_at_mongo['current_page'])
             
             if 'photos' in data:
-                print 'OK'
-                if self._current_page == 1:
-                    print 'total'
-                    print data['photos']['total']
-                    print 'Pages'
-                    print data['photos']['pages']
-                    print 'Page'
-                    print data['photos']['page']
-                    print 'Photos'
+                self._current_page += 1
+                if self._session_at_mongo['current_page'] == 1:
+                    #print 'total'
+                    #print data['photos']['total']
+                    #print 'Pages'
+                    #print data['photos']['pages']
+                    #print 'Page'
+                    #print data['photos']['page']
+                    #print 'Photos'
                     #print data['photos']['photo']
                     self._session_at_mongo['total_imagens'] = int(data['photos']['total'])
                     self._session_at_mongo['total_pages'] = int(data['photos']['pages'])
                 for photo in data['photos']['photo']:
                     
+                    self._current_photo += 1
+                    
+                    print str(self._current_photo)+' from '+str(self._session_at_mongo['total_imagens'])+' photos'
+                    self._logger.info(str(self._current_photo)+' from '+str(self._session_at_mongo['total_imagens'])+' photos')
+                    
                     image_on_mongo = self._mongo.getFlickrImageById(photo['id'])
                     if image_on_mongo == None:
-                        print 'The image is new on crawler'
-                               
+                        
+                        self._logger.info('Flicker: The image id '+photo['id']+' is new on our repository! ;)')
+                        
                         dataPhoto = self.flickrGetPhotoInfo(photo['id'])
                         dataSizes = self.flickrGetPhotoSizes(photo['id'])
-                        
+                        height = 0
+                        width = 0
                         if 'sizes' in dataSizes:
-                            print 'creating images'
+                            #print 'creating images'
                             for size in dataSizes['sizes']['size']:
                                 if size['label'] == "Original":
                                     
@@ -175,14 +195,16 @@ class Flickr(Thread):
                                         visible = True
                                     else:
                                         visible = False
+                                    height  = size['height']
+                                    width   = size['width']
                                     self._mongo.insertFlickrImage(self._helper.getSerialNow(), photo['id'],[self._identifier], self._helper.getTimeNow(), size['width'],size['height'], size['source'], self._config.flickr_folder+name,visible)
-                                    
-                                    
+                            self._logger.info('Flicker: Creating the image '+photo['id']+' with '+str(width)+'x'+str(height))
+                                        
                         else:
-                            print 'erro at download sizes of images'
+                            self._logger.error('Flicker: Oh no! erro at download sizes of images =O')
                         
                     else:
-                        print 'The image has crawled after'
+                        self._logger.info('Flicker: The image id '+photo['id']+' has crawled after :)')
                         image_on_mongo['sessions'].append(self._identifier)
                         self._mongo.updateImageByIdentifier(image_on_mongo['identifier'],image_on_mongo)
                         
@@ -191,18 +213,21 @@ class Flickr(Thread):
                     self.url = None
                 else:
                     self._session_at_mongo['current_page'] += 1
+                self._mongo.updateCrawlerByIdentifier(self._identifier,self._session_at_mongo)
+                
+                print str(self._current_photo)+' from '+str(self._session_at_mongo['total_imagens'])+' pages'
+                self._logger.info(str(self._current_photo)+' from '+str(self._session_at_mongo['total_imagens'])+' pages')
                 
             else:
-                print 'ERROR on data'
+                self._logger.critical('Flicker: Dammit! The information block not return what we want :S')
+                print 'Error on data'
                 print data
                 self.url = None
             
             
     def flickrGetPage(self,page):
         self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&tags="+self._config.flickr_tags+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?&page"+str(page)
-        
-        print 'URL on flickrGetPage'
-        print self.url
+        self._logger.info('Flicker: flickrGetPage page '+str(page)+' :D')
         self._start_time = time.time()
         response = urllib.urlopen(self.url)
         data = json.loads(response.read())
@@ -213,18 +238,16 @@ class Flickr(Thread):
         #   ocourred in 1 second. Less that 1 second the thread slepp
         #   the rest
         self._elapsed_time = self._end_time - self._start_time
-        print 'Executation at'
-        print self._elapsed_time
         if self._elapsed_time < 1.0 and self._config.safe_mode:
-            print 'sleeping page... Zzz'
             sleep_for = 1.0 - self._elapsed_time
+            self._logger.info('Flicker: flickrGetPage need Zzz for '+str(sleep_for))
             sleep(sleep_for)
+            
         return data
     
     def flickrGetPhotoInfo(self,photo_id):  
         self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&photo_id="+photo_id+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?"
-        print 'URL on flickrGetPhotoInfo'
-        print self.url
+        self._logger.info('Flicker: flickrGetPhotoInfo to '+photo_id+' :D')
         self._start_time = time.time()
         response = urllib.urlopen(self.url)
         data = json.loads(response.read())
@@ -235,18 +258,17 @@ class Flickr(Thread):
         #   ocourred in 1 second. Less that 1 second the thread slepp
         #   the rest
         self._elapsed_time = self._end_time - self._start_time
-        print 'Executation at'
-        print self._elapsed_time
+        #print 'Executation at'
+        #print self._elapsed_time
         if self._elapsed_time < 1.0 and self._config.safe_mode:
-            print 'sleeping page... Zzz'
             sleep_for = 1.0 - self._elapsed_time
+            self._logger.info('Flicker: flickrGetPhotoInfo need Zzz for '+str(sleep_for))
             sleep(sleep_for)
         return data
     
     def flickrGetPhotoSizes(self,photo_id): 
         self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&photo_id="+photo_id+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?"
-        print 'URL on flickrGetPhotoSizes'
-        print self.url
+        self._logger.error('Flicker: flickrGetPhotoSizes to '+photo_id+' :D')
         self._start_time = time.time()
         response = urllib.urlopen(self.url)
         data = json.loads(response.read())
@@ -257,15 +279,14 @@ class Flickr(Thread):
         #   ocourred in 1 second. Less that 1 second the thread slepp
         #   the rest
         self._elapsed_time = self._end_time - self._start_time
-        print 'Executation at'
-        print self._elapsed_time
         if self._elapsed_time < 1.0 and self._config.safe_mode:
-            print 'sleeping page... Zzz'
+            self._logger.info('Flicker: flickrGetPhotoSizes need Zzz for '+str(sleep_for))
             sleep_for = 1.0 - self._elapsed_time
             sleep(sleep_for)
         return data
     
     def createFileOnRepository(self,directory,file_name,url):
+        self._logger.error('Flicker: createFileOnRepository file '+file_name+' :)')
         file_photo = urllib.urlopen(url)
         with open(directory+file_name,'wb') as output:
             output.write(file_photo.read())

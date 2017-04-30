@@ -7,7 +7,8 @@ from pymongo import MongoClient
 from osgeo import ogr, osr
 from osmread import parse_file, Way, Node,Relation
 
-from Configuration import Configuration
+from system.Configuration import Configuration
+
 class Reader:
     
     
