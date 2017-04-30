@@ -8,7 +8,7 @@ class Configuration:
     flickr_public_key       = "a6550e66205320e583d9bfb13a4b8634"
     flickr_private_key      = "3df7fce568942ae1"
     
-    flickr_tags             = "aaaaaaaaa"#"floco"#"graffiti"
+    flickr_tags             = "graffiti"#"floco"#"graffiti"
     flickr_folder           = "data/flickr/"
     
     safe_mode               = True          # Protect to require only 3600 per hour

@@ -176,29 +176,31 @@ class Flickr(Thread):
                     image_on_mongo = self._mongo.getFlickrImageById(photo['id'])
                     if image_on_mongo == None:
                         
-                        self._logger.info('Flicker: The image id '+photo['id']+' is new on our repository! ;)')
+                        self._logger.info('Flicker: The image id '+photo['id']+' is new on repository! ;)')
                         
-                        dataPhoto = self.flickrGetPhotoInfo(photo['id'])
+                        #dataPhoto = self.flickrGetPhotoInfo(photo['id'])
                         dataSizes = self.flickrGetPhotoSizes(photo['id'])
-                        height = 0
-                        width = 0
+                        
+                        max_width = 0
+                        the_best_size = None
                         if 'sizes' in dataSizes:
                             #print 'creating images'
                             for size in dataSizes['sizes']['size']:
-                                if size['label'] == "Original":
-                                    
-                                    name = size['source'].split('/')
-                                    name = name[len(name)-1]
-                                    
-                                    self.createFileOnRepository(self._config.flickr_folder,name,size['source'])
-                                    if photo['ispublic'] == 1:
-                                        visible = True
-                                    else:
-                                        visible = False
-                                    height  = size['height']
-                                    width   = size['width']
-                                    self._mongo.insertFlickrImage(self._helper.getSerialNow(), photo['id'],[self._identifier], self._helper.getTimeNow(), size['width'],size['height'], size['source'], self._config.flickr_folder+name,visible)
-                            self._logger.info('Flicker: Creating the image '+photo['id']+' with '+str(width)+'x'+str(height))
+                                if max_width <= size['width']:
+                                    the_best_size = size
+                            
+                            name = the_best_size['source'].split('/')
+                            name = name[len(name)-1]
+
+                            self.createFileOnRepository(self._config.flickr_folder,name,the_best_size['source'])
+                            
+                            if photo['ispublic'] == 1:
+                                visible = True
+                            else:
+                                visible = False
+                                
+                            self._mongo.insertFlickrImage(self._helper.getSerialNow(), photo['id'],[self._identifier], self._helper.getTimeNow(), the_best_size['width'],the_best_size['height'], the_best_size['source'], self._config.flickr_folder+name,visible)
+                            self._logger.info('Flicker: Creating the image '+photo['id']+' with '+str(the_best_size['width'])+'x'+str(the_best_size['height']))
                                         
                         else:
                             self._logger.error('Flicker: Oh no! erro at download sizes of images =O')
@@ -226,7 +228,7 @@ class Flickr(Thread):
             
             
     def flickrGetPage(self,page):
-        self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&tags="+self._config.flickr_tags+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?&page"+str(page)
+        self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&tags="+self._config.flickr_tags+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?&page="+str(page)
         self._logger.info('Flicker: flickrGetPage page '+str(page)+' :D')
         self._start_time = time.time()
         response = urllib.urlopen(self.url)
@@ -268,7 +270,7 @@ class Flickr(Thread):
     
     def flickrGetPhotoSizes(self,photo_id): 
         self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&photo_id="+photo_id+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?"
-        self._logger.error('Flicker: flickrGetPhotoSizes to '+photo_id+' :D')
+        self._logger.info('Flicker: flickrGetPhotoSizes to '+photo_id+' :D')
         self._start_time = time.time()
         response = urllib.urlopen(self.url)
         data = json.loads(response.read())
@@ -280,13 +282,13 @@ class Flickr(Thread):
         #   the rest
         self._elapsed_time = self._end_time - self._start_time
         if self._elapsed_time < 1.0 and self._config.safe_mode:
-            self._logger.info('Flicker: flickrGetPhotoSizes need Zzz for '+str(sleep_for))
             sleep_for = 1.0 - self._elapsed_time
+            self._logger.info('Flicker: flickrGetPhotoSizes need Zzz for '+str(sleep_for))
             sleep(sleep_for)
         return data
     
     def createFileOnRepository(self,directory,file_name,url):
-        self._logger.error('Flicker: createFileOnRepository file '+file_name+' :)')
+        self._logger.info('Flicker: createFileOnRepository file '+file_name+' :)')
         file_photo = urllib.urlopen(url)
         with open(directory+file_name,'wb') as output:
             output.write(file_photo.read())

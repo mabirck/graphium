@@ -73,14 +73,14 @@ class Mongo:
     #
     def getFlickrImageById(self,image_id):
         self.__collection = self.__db.crawler_image
-        return self.__collection.find_one({'image_ficker_id':image_id})
+        return self.__collection.find_one({'image_flicker_id':image_id})
      
     # insertFlickrImage
     #   create a session of swarm and send the basic information
     #   return session ID
     #
     def insertFlickrImage(self, identifier, flickr_image_id, sessions=[], created_at="", width="", height="", data_url="", photopage="", repository_url="",visibility_public=True):
-        dataToSend = {'identifier':identifier, 'flickr_image_id':flickr_image_id, 'sessions':sessions, 'created_at':created_at, 'width':width, 'height':height, 'repository_url':repository_url, 'data_url':data_url, 'visibility_public':visibility_public}
+        dataToSend = {'identifier':identifier, 'image_flicker_id':flickr_image_id, 'sessions':sessions, 'created_at':created_at, 'width':width, 'height':height, 'repository_url':repository_url, 'data_url':data_url, 'visibility_public':visibility_public}
         self.__collection = self.__db.crawler_image
         return self.__collection.insert_one(dataToSend).inserted_id
     
