@@ -8,11 +8,14 @@ from osgeo import ogr, osr
 from osmread import parse_file, Way, Node,Relation
 
 from system.Configuration import Configuration
-
+from system.Logger import Logger
+from system.Helper import Helper
 class Reader:
     
     
     _config     = None
+    _logger     = None
+    _helper     = None
     file_name   = None
     nodes       = None
     city        = None
@@ -20,6 +23,8 @@ class Reader:
     def __init__(self):
         
         self._config    = Configuration()
+        self._logger    = Logger()
+        self._helper    = Helper()
         
         self.__client		= MongoClient(self._config.mongo_host, self._config.mongo_port)
         self.__db			= self.__client[self._config.mongo_db]
@@ -29,6 +34,7 @@ class Reader:
         self.nodes      = {}
         self.ways_types = []
         self.num_total_ways = 0
+        self._logger.info("Session start at "+self._helper.getTimeNow())
         
         
     def osmToMongoDB(self,osm_file=None):
@@ -38,6 +44,7 @@ class Reader:
         else:
             self.file_name = self._config.osm_city_url
             
+        
         city_exits = False
         # select the subtypes of streets to filter on osm file
         if self._config.use_urban_ways == True:
@@ -159,7 +166,8 @@ class Reader:
                 
         self.city = self.getCityAndCoutry(city['name'],city['country_code'])
         if self.city == None:
-            print 'Creating the city  on system'
+            self._logger.info("Creating '"+self.city['name']+"' on system")
+            print 'Creating the city on system'
             self.insertCityInformationOSM(city)
             self.city = self.getCityAndCoutry(city['name'],city['country_code'])
             city_id = str(self.city.get('_id'))
@@ -209,9 +217,10 @@ class Reader:
                         self.insertStreetInformationOSM(way)
                 
         else:
+            self._logger.info("OSM: City '"+self.city['name']+"' realy exist on system")
             print 'City realy exist on system'
             
-            
+        self._logger.info("Total '"+str(self.num_total_ways)+" in "+self.city['name']+"'")
         print 'Total ',self.num_total_ways
     
     

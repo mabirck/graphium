@@ -2,26 +2,19 @@
 # -*- coding: utf-8 -*-
 
 import pymongo, logging
-
-from Mongo import Mongo
-
+from Helper import Helper
 class Logger:
         
     _instance   = None
+    _helper     = Helper()
     
-    _mongo      = None
-    _level      = None
-    _session    = None
     logging     = None
-
+    
     def __init__(self,level='INFO'):
-        
-        self._mongo             = Mongo()
         self.logging            = logging
         self.logging.basicConfig(filename='log/crawler.log',level=logging.DEBUG)
         self.logging.Formatter(fmt='%(asctime)s %(message)s',datefmt='%Y-%m-%d %H:%M:%S')
         self.level              = level
-            
     
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
@@ -29,26 +22,16 @@ class Logger:
         return cls._instance
         
     def error(self,message):
-        self.__message(message,"ERROR");
-        self.logging.error(message)
+        self.logging.error(self._helper.getTimeNow()+" "+message)
         
     def critical(self,message):
-        self.__message(message,"CRITICAL");
-        self.logging.critical(message)
+        self.logging.critical(self._helper.getTimeNow()+" "+message)
         
     def warning(self,message):
-        self.__message(message,"WARNING");
-        self.logging.warning(message)
+        self.logging.warning(self._helper.getTimeNow()+" "+message)
         
     def info(self,message):
-        self.__message(message,"INFO");
-        self.logging.info(message)
+        self.logging.info(self._helper.getTimeNow()+" "+message)
 
     def debug(self,message):
-        self.__message(message,"DEBUG");
-        self.logging.debug(message)
-        
-    def __message(self,message="",level=None):
-        if level == None:
-            level = self.level
-        
+        self.logging.debug(self._helper.getTimeNow()+" "+message)
