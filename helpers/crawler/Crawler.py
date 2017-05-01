@@ -133,12 +133,12 @@ class Flickr(Thread):
         #           set the information about total images and pages
         #       for photo in photos:
         #           if photo not exist on mongod:
-        #               get data_photo from photo
         #               get sizes_photo from photo
+        #               get the best resolution form list
         #               set information on db
         #               --- download files
         #            else:
-        #               set to image the this session
+        #               set to image on the current session
         #       set the current page
         #       if current page is the last page:
         #           set url has empty
@@ -170,11 +170,19 @@ class Flickr(Thread):
                     
                     self._current_photo += 1
                     
-                    print str(self._current_photo)+' from '+str(self._session_at_mongo['total_imagens'])+' photos'
                     self._logger.info(str(self._current_photo)+' from '+str(self._session_at_mongo['total_imagens'])+' photos')
                     
                     image_on_mongo = self._mongo.getFlickrImageById(photo['id'])
                     if image_on_mongo == None:
+                        
+                        print str(self._current_photo)+' from '+ str(self._session_at_mongo['total_imagens'])+ ' photos'
+                        
+                        if photo['ispublic'] == 1:
+                            visible = True
+                        else:
+                            visible = False
+
+                        image_on_mongo_id = self._mongo.insertFlickrImage(self._helper.getSerialNow(), photo['id'],[self._identifier], self._helper.getTimeNow(), 0, 0, "", "", visible)
                         
                         self._logger.info('Flicker: The image id '+photo['id']+' is new on repository! ;)')
                         
@@ -185,30 +193,50 @@ class Flickr(Thread):
                         the_best_size = None
                         if 'sizes' in dataSizes:
                             #print 'creating images'
-                            for size in dataSizes['sizes']['size']:
-                                if max_width <= size['width']:
-                                    the_best_size = size
+                            
+                            if self._config.flickr_size.lower() == "small":
+                                for size in dataSizes['sizes']['size']:
+                                    if size['label'] == "Small":
+                                        the_best_size = size
+                                if the_best_size == None:
+                                    max_width = 99999
+                                    for size in dataSizes['sizes']['size']:
+                                        if max_width >= size['width'] and size >= self._config.flickr_size_minimum:
+                                            max_width = size['width']
+                                            the_best_size = size
+                                        
+                            elif self._config.flickr_size.lower() == "medium":
+                                list_of_sizes = []
+                                for size in dataSizes['sizes']['size']:
+                                    list_of_sizes.append(size['width'])
+                                    list_of_values = sorted(list_of_values, key=int)
+                                    the_best_with = len(list_of_values)/2
+                                for size in dataSize['sizes']['size']:
+                                    if the_best_with == size['width']:
+                                        the_best_size = size
+                            else:
+                                max_width = 0
+                                for size in dataSizes['sizes']['size']:
+                                    if max_width <= size['width'] and size >= self._config.flickr_size_maximum:
+                                        max_width = size['width']
+                                        the_best_size = size
                             
                             name = the_best_size['source'].split('/')
                             name = name[len(name)-1]
 
                             self.createFileOnRepository(self._config.flickr_folder,name,the_best_size['source'])
                             
-                            if photo['ispublic'] == 1:
-                                visible = True
-                            else:
-                                visible = False
-                                
-                            self._mongo.insertFlickrImage(self._helper.getSerialNow(), photo['id'],[self._identifier], self._helper.getTimeNow(), the_best_size['width'],the_best_size['height'], the_best_size['source'], self._config.flickr_folder+name,visible)
+                            self._mongo.setUpdateFlickrImage(photo['id'], the_best_size['width'],the_best_size['height'], the_best_size['source'], self._config.flickr_folder+name)
                             self._logger.info('Flicker: Creating the image '+photo['id']+' with '+str(the_best_size['width'])+'x'+str(the_best_size['height']))
                                         
                         else:
                             self._logger.error('Flicker: Oh no! erro at download sizes of images =O')
                         
                     else:
+                        print str(self._current_photo)+' (skipped) from '+ str(self._session_at_mongo['total_imagens'])+ ' photos'
                         self._logger.info('Flicker: The image id '+photo['id']+' has crawled after :)')
                         image_on_mongo['sessions'].append(self._identifier)
-                        self._mongo.updateImageByIdentifier(image_on_mongo['identifier'],image_on_mongo)
+                        self._mongo.updateImageByIdentifier(image_on_mongo['image_flicker_id'],image_on_mongo)
                         
                 self._session_at_mongo['current_page'] = int(data['photos']['page'])
                 if self._session_at_mongo['current_page'] == self._session_at_mongo['total_pages']:

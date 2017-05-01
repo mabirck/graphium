@@ -61,13 +61,26 @@ class Mongo:
         self.__collection = self.__db.crawler_image
         return list(self.__collection.find(query))
     
-    # updateCrawlerByIdentifier
+    # updateImageByIdentifier
     #   permit to update informatations at mongodb
     #
     def updateImageByIdentifier(self,identifier,data):
         self.__collection = self.__db.crawler_image
         self.__collection.update({'identifier':identifier},{"$set":data},upsert=False)
     
+    # setUpdateFlickrImage
+    #   set the informations on imagens 
+    #   (with, height, source and file_path)
+    #
+    def setUpdateFlickrImage(self,image_flicker_id,width,height,source,file_path):
+        self.__collection = self.__db.crawler_image
+        document = self.__collection.find_one({'image_flicker_id':image_flicker_id})
+        document['width'] = int(width)
+        document['height'] = int(height)
+        document['repository_url'] = file_path
+        document['data_url'] = source
+        self.__collection.update({'image_flicker_id':image_flicker_id},{"$set":document},upsert=False)
+        
     # getFlickrImageById
     #   return a image or null basead on image_id passed
     #
