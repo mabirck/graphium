@@ -166,9 +166,9 @@ class Reader:
                 
         self.city = self.getCityAndCoutry(city['name'],city['country_code'])
         if self.city == None:
-            self._logger.info("Creating '"+self.city['name']+"' on system")
             print 'Creating the city on system'
             self.insertCityInformationOSM(city)
+            self._logger.info("Creating '"+city['name']+"' on system")
             self.city = self.getCityAndCoutry(city['name'],city['country_code'])
             city_id = str(self.city.get('_id'))
             
