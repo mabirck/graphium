@@ -1,3 +1,30 @@
+# Crawler
+    
+Find and crawler all imagens from repositories
+
+#### Run
+
+`$ python Main.py`
+
+#### Repositories
+
+List of repositories that you can crawl
+
+* Flickr
+
+### Dependencies
+
+You can install Python dependencies using `pip install -r requirements.txt`,
+and it should just work. If you want to install the packages manually, here's a
+list:
+
+* [bson](https://github.com/py-bson/bson)
+* [pymongo](https://pypi.python.org/pypi/pymongo)
+
+### Data and format
+
+All files will deposited on folder data/DATA_ORIGIN/
+
 # Flicker API   
 https://www.flickr.com/services/api/
     
