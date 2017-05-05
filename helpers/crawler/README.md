@@ -6,6 +6,13 @@ Find and crawler all imagens from repositories
 
 `$ python Main.py`
 
+you can run in a silent mode
+`$ nohup python Main.py -s`
+
+Attribute  | Description
+---------- | -----------
+`-s`       | don't ask nothing run! Run in silent mode
+
 #### Repositories
 
 List of repositories that you can crawl
@@ -23,7 +30,7 @@ list:
 
 ### Data and format
 
-All files will deposited on folder data/DATA_ORIGIN/
+All files crawled will deposited on folder data/DATA_ORIGIN/ID.FORMAT
 
 # Flicker API   
 https://www.flickr.com/services/api/

@@ -19,6 +19,7 @@ class Crawler:
     _identifier         = None
     _helper             = None
     _logger             = None
+    _prompt             = None
     
     def __init__(self,type_crawler='flickr'):
         self._config    = Configuration()
@@ -26,10 +27,19 @@ class Crawler:
         self._helper    = Helper()
         self._logger    = Logger()
         
-        self._identifier= self._helper.getSerialNow()
-        last_not_runnning = True
+        self._identifier    = self._helper.getSerialNow()
+        last_not_runnning   = True
+        self._prompt        = True 
         
-        if len(self._mongo.getCrawlerSessions({'active':True}))>0:
+        commands = sys.argv[1:len(sys.argv)]
+        for i in range(len(commands)):
+            commands[i] = commands[i].lower()
+
+        if '-s' in commands:
+            self._prompt = False
+        
+        
+        if len(self._mongo.getCrawlerSessions({'active':True}))>0 and self._prompt:
             
             self._logger.info('Crawler: You have sessions runing dude :]')
             
@@ -43,7 +53,7 @@ class Crawler:
             else:
                 last_not_runnning = False
                 
-        if last_not_runnning:
+        if last_not_runnning and self._prompt:
             print '=== Session Flickr API ==='
             print ''
             print 'Key          :'+self._config.flickr_public_key
@@ -52,26 +62,12 @@ class Crawler:
             input_var = raw_input("Are you sure? After start a session you can't stop under finish. Y/n").lower()
 
             if input_var == str("y"):
-                
-                self._logger.info('Flicker: Starting a Flickr Session '+self._identifier+' =D')
-                
-                self._mongo.insertCrawlerSession(self._identifier,self._config.flickr_tags,self._helper.getTimeNow())
-                self._session_at_mongo  = self._mongo.getCrawlerById(self._identifier)
-                try:
-                    flickr = Flickr(self._identifier)
-                    flickr.run()
-                    self._session_at_mongo['end_well'] = True
-                except Exception as error:
-                    self._logger.error('Flicker: Something was wrong :/ I need stop the job!')
-                    print 'Error!'
-                    print traceback.format_exc()
-                    self._session_at_mongo['end_well'] = False
-                finally:
-                    self.finish()
-
+                self.execute()
             else:
                 self._logger.info('Crawler: Ok. Not start this session =]')
-    
+        elif self._prompt == False:
+            self.execute()
+            
     def finish(self):
             
         self._session_at_mongo['end_at']      = self._helper.getTimeNow()
@@ -82,6 +78,22 @@ class Crawler:
         
         self._logger.info('Crawler: Hard work! I finish dude ;)')
 
+    def execute(self):
+        self._logger.info('Flicker: Starting a Flickr Session '+self._identifier+' =D')
+                
+        self._mongo.insertCrawlerSession(self._identifier,self._config.flickr_tags,self._helper.getTimeNow())
+        self._session_at_mongo  = self._mongo.getCrawlerById(self._identifier)
+        try:
+            flickr = Flickr(self._identifier,self._prompt)
+            flickr.run()
+            self._session_at_mongo['end_well'] = True
+        except Exception as error:
+            self._logger.error('Flicker: Something was wrong :/ I need stop the job!')
+            print 'Error!'
+            print traceback.format_exc()
+            self._session_at_mongo['end_well'] = False
+        finally:
+            self.finish()
             
 class Flickr(Thread):
     
@@ -99,9 +111,11 @@ class Flickr(Thread):
     _current_photo      = None
     _current_page       = None
     
+    _prompt             = None
+    
     url                 = None
     
-    def __init__(self,session_identifier):
+    def __init__(self,session_identifier,prompt):
         Thread.__init__(self)
         
         self._identifier    = session_identifier
@@ -114,6 +128,8 @@ class Flickr(Thread):
         self._current_photo = 0
         self._current_page  = 0
         self._session_at_mongo   = self._mongo.getCrawlerById(self._identifier)
+        
+        self._prompt        = prompt
         
         filename = self._config.flickr_folder+'README.md'
         if not os.path.exists(os.path.dirname(filename)):
@@ -175,7 +191,8 @@ class Flickr(Thread):
                     image_on_mongo = self._mongo.getFlickrImageById(photo['id'])
                     if image_on_mongo == None:
                         
-                        print str(self._current_photo)+' from '+ str(self._session_at_mongo['total_imagens'])+ ' photos'
+                        if self._prompt:
+                            print str(self._current_photo)+' from '+ str(self._session_at_mongo['total_imagens'])+ ' photos'
                         
                         if photo['ispublic'] == 1:
                             visible = True
@@ -233,7 +250,8 @@ class Flickr(Thread):
                             self._logger.error('Flicker: Oh no! erro at download sizes of images =O')
                         
                     else:
-                        print str(self._current_photo)+' (skipped) from '+ str(self._session_at_mongo['total_imagens'])+ ' photos'
+                        if self._prompt:
+                            print str(self._current_photo)+' (skipped) from '+ str(self._session_at_mongo['total_imagens'])+ ' photos'
                         self._logger.info('Flicker: The image id '+photo['id']+' has crawled after :)')
                         image_on_mongo['sessions'].append(self._identifier)
                         self._mongo.updateImageByIdentifier(image_on_mongo['image_flicker_id'],image_on_mongo)
