@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import  urllib, json, datetime, sys, traceback, time, os
+import  urllib, json, datetime, sys, traceback, time, os, copy
 
 from time import sleep
 from threading import Thread
@@ -212,21 +212,21 @@ class Flickr(Thread):
                         if 'sizes' in dataSizes:
                             #print 'creating images'
                             
-                            if self._config.flickr_size.lower() == "small":
+                            if self._config.flickr_size == "small":
                                 for size in dataSizes['sizes']['size']:
                                     if size['label'] == "Small":
                                         the_best_size = size
                                 if the_best_size == None:
                                     max_width = 99999
                                     for size in dataSizes['sizes']['size']:
-                                        if max_width >= size['width'] and size >= self._config.flickr_size_minimum:
-                                            max_width = size['width']
+                                        if max_width >= int(size['width']) and int(size['width']) >= self._config.flickr_size_minimum:
+                                            max_width = int(size['width'])
                                             the_best_size = size
                                         
-                            elif self._config.flickr_size.lower() == "medium":
+                            elif self._config.flickr_size == "medium":
                                 list_of_sizes = []
                                 for size in dataSizes['sizes']['size']:
-                                    list_of_sizes.append(size['width'])
+                                    list_of_sizes.append(int(size['width']))
                                     list_of_values = sorted(list_of_values, key=int)
                                     the_best_with = len(list_of_values)/2
                                 for size in dataSize['sizes']['size']:
@@ -235,8 +235,8 @@ class Flickr(Thread):
                             else:
                                 max_width = 0
                                 for size in dataSizes['sizes']['size']:
-                                    if max_width <= size['width'] and size >= self._config.flickr_size_maximum:
-                                        max_width = size['width']
+                                    if max_width <= int(size['width']) and int(size['width']) <= self._config.flickr_size_maximum:
+                                        max_width = int(size['width'])
                                         the_best_size = size
                             
                             name = the_best_size['source'].split('/')

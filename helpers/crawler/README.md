@@ -7,7 +7,8 @@ Find and crawler all imagens from repositories
 `$ python Main.py`
 
 you can run in a silent mode
-`$ nohup python Main.py -s`
+`$ nohup python Main.py -s` 
+next line tip `disown` and press enter.
 
 Attribute  | Description
 ---------- | -----------

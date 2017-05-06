@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "Main.py", line 8, in <module>
+    crawler = Crawler()
+  File "/Users/glaucorobertomunsbergdossantos/Projects/graphium/helpers/crawler/Crawler.py", line 69, in __init__
+    self.execute()
+  File "/Users/glaucorobertomunsbergdossantos/Projects/graphium/helpers/crawler/Crawler.py", line 88, in execute
+    flickr.run()
+  File "/Users/glaucorobertomunsbergdossantos/Projects/graphium/helpers/crawler/Crawler.py", line 245, in run
+    self.createFileOnRepository(self._config.flickr_folder,name,the_best_size['source'])
+  File "/Users/glaucorobertomunsbergdossantos/Projects/graphium/helpers/crawler/Crawler.py", line 339, in createFileOnRepository
+    file_photo = urllib.urlopen(url)
+  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib.py", line 87, in urlopen
+    return opener.open(url)
+  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib.py", line 213, in open
+    return getattr(self, name)(url)
+  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib.py", line 443, in open_https
+    h.endheaders(data)
+  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/httplib.py", line 1038, in endheaders
+    self._send_output(message_body)
+  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/httplib.py", line 882, in _send_output
+    self.send(msg)
+  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/httplib.py", line 844, in send
+    self.connect()
+  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/httplib.py", line 1255, in connect
+    HTTPConnection.connect(self)
+  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/httplib.py", line 821, in connect
+    self.timeout, self.source_address)
+  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 566, in create_connection
+    sock.connect(sa)
+  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
+    return getattr(self._sock,name)(*args)
+KeyboardInterrupt
