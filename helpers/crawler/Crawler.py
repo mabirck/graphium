@@ -88,9 +88,10 @@ class Crawler:
             flickr.run()
             self._session_at_mongo['end_well'] = True
         except Exception as error:
-            self._logger.error('Flicker: Something was wrong :/ I need stop the job!')
+            self._logger.error('Crawler: Something was wrong :/ I need stop the job!')
             print 'Error!'
             print traceback.format_exc()
+            self._logger.error('Flicker:'+str(traceback.format_exc()))
             self._session_at_mongo['end_well'] = False
         finally:
             self.finish()
