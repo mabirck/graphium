@@ -275,7 +275,7 @@ class Flickr(Thread):
             
             
     def flickrGetPage(self,page):
-        self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&tags="+self._config.flickr_tags+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?&page="+str(page)
+        self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&tags="+self._config.flickr_tags+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?&page="+str(page)+"&per_page="+str(self._config.flickr_per_page)
         self._logger.info('Flicker: flickrGetPage page '+str(page)+' :D')
         self._start_time = time.time()
         response = urllib.urlopen(self.url)
