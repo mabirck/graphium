@@ -15,6 +15,13 @@ class Mongo:
     __db 		= None
     __collection= None
 
+    _instance   = None
+    
+    
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(Mongo, cls).__new__(cls, *args, **kwargs)
+        return cls._instance
     
     def __init__(self,db='graphium',address='localhost',port=27017):
 

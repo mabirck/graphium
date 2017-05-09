@@ -12,8 +12,10 @@ class Configuration:
     
     flickr_folder           = "data/flickr/"        # folder of files
     flickr_per_page         = 500
+    flickr_year_upload_min  = 2010                  # => 1900 
+    flickr_year_upload_max  = 2017                  # <= current year
     
-    flickr_size             = "larger"               # Choose ths width size => "larger", "medium" and "small". Default
+    flickr_size             = "larger"              # Choose ths width size => "larger", "medium" and "small". Default
     flickr_size_minimum     = 240                   # minimum px on width image
     flickr_size_maximum     = 1800                  # maximum px on width image
     

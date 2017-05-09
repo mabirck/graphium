@@ -13,24 +13,48 @@
 <div class='row'>
     <div id='column_left' class="col s7">
         <div style="margin-top: 10px;">
-            <div class="z-depth-1">
-                <div class='row' style='padding: 15px 15px 10px 15px;'>
-                    <a id='play_and_stop' onClick="hearing_swarm()" class="col s2 tooltipped" style='cursor:pointer' data-position="bottom" data-delay="50" data-tooltip="Start or stop to hearing the swarm" ><i class="material-icons">sync</i>
-                    </a>  
-                    <a onClick="update()" class="col s1 offset-s6 tooltipped" style='cursor:pointer' data-position="bottom" data-delay="50" data-tooltip="Read the last stage from swarm"><i class="material-icons" >rotate_left</i></a>
-                    <a id='delete' onClick="clean()" class="col s1 tooltipped" style='cursor:pointer' data-position="bottom" data-delay="50" data-tooltip="clear the map"><i class="material-icons" >delete_sweep</i>
-                    </a>
-                    <a id='end_start' onClick='endExecutation()' class="col s1 offset-s1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="End the executation from swarm">
-                        <i class="material-icons" style='cursor:no-drop;color:gray'>pause_circle_filled</i>
-                    </a>
-                                      
-                </div>
-            </div>
         </div>
         <div id='map' class="map">
         </div>
     </div>
     <div class="col s5">
+        <ul class="collapsible" data-collapsible="accordion">
+            <li>
+                <div class="collapsible-header"><i class="material-icons">tune</i>Control</div>
+                <div class="collapsible-body">
+                    <div class='row'>
+                        <a id='play_and_stop' onClick="hearing_swarm()" class="col s2 tooltipped" style='cursor:pointer' data-position="bottom" data-delay="50" data-tooltip="Start or stop to hearing the swarm" ><i class="material-icons">sync</i>
+                        </a>  
+                        <a onClick="update()" class="col s1 offset-s6 tooltipped" style='cursor:pointer' data-position="bottom" data-delay="50" data-tooltip="Read the last stage from swarm"><i class="material-icons" >rotate_left</i></a>
+                        <a id='delete' onClick="clean()" class="col s1 tooltipped" style='cursor:pointer' data-position="bottom" data-delay="50" data-tooltip="clear the map"><i class="material-icons" >delete_sweep</i>
+                        </a>
+                        <a id='end_start' onClick='endExecutation()' class="col s1 offset-s1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="End the executation from swarm">
+                            <i class="material-icons" style='cursor:no-drop;color:gray'>pause_circle_filled</i>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header"><i class="material-icons">settings</i>Settings</div>
+                <div class="collapsible-body">
+                    <p>Update map before (seconds)</p>
+                    <p class="range-field">
+                        <input type="range" id="update_on_map" min="1" max="120" value='10' />
+                    </p>
+                    <p>
+                      Show jumps on map
+                    </p>
+                    <div class="switch">
+                        <label>
+                            Off
+                            <input id='jump_on_map' type="checkbox">
+                            <span class="lever"></span>
+                            On
+                        </label>
+                    </div>
+                </div>
+            </li>
+        </ul>
         <ul class="collapsible" data-collapsible="accordion">
             <li>
                   <div class="collapsible-header"><i class="material-icons">info_outline</i>Swarm Information</div>
@@ -88,6 +112,8 @@
     var agents = []
     var swarm_active = false; 
     var swarm_identifier = 0;
+    var update_on_map = 10;
+    var show_jump_on_map = false;
     function clean(){
         for(var a=0; a < markers.length;a++){
           markers[a].setMap(null);
@@ -177,20 +203,23 @@
             lines.push(line_finish)
             line_finish.setMap(map);
         }else{
-            line_finish = new google.maps.Polyline({
-                path: latLngCoordenates,
-                geodesic: true,
-                strokeColor: "#757575",
-                strokeOpacity: 0.4,
-                strokeWeight: 2,
-                icons: [{
-                  icon: lineSymbol,
-                  offset: '0',
-                  repeat: '20px'
-                }],
-            });
-            lines.push(line_finish)
-            line_finish.setMap(map);
+            if(show_jump_on_map === true){
+                line_finish = new google.maps.Polyline({
+                    path: latLngCoordenates,
+                    geodesic: true,
+                    strokeColor: "#757575",
+                    strokeOpacity: 0.4,
+                    strokeWeight: 2,
+                    icons: [{
+                      icon: lineSymbol,
+                      offset: '0',
+                      repeat: '20px'
+                    }],
+                });
+                lines.push(line_finish)
+                line_finish.setMap(map);
+            }
+            
         }
         
         
@@ -202,7 +231,7 @@
         agent_num = agent_num.substring(0,1)
         url_icon = "/assets/analytics/agent_"+agent_num+".png";
         
-        the_html= "<li class='collection-item avatar' onclick=\"location.href='/graphium/agent'\"><img src='"+url_icon+"' alt='' style='width: auto !important;' class='circle'><span class='title'>"+name+"</span><p>"+lat+"<br>"+lng+"</p><a href='#!' class='secondary-content'></a></li>"
+        the_html= "<li class='collection-item avatar' style='cursor:pointer' onclick=\"location.href='/graphium/agent'\"><img src='"+url_icon+"' alt='' style='width: auto !important;' class='circle'><span class='title'>"+name+"</span><p>"+lat+"<br>"+lng+"</p><a href='#!' class='secondary-content'></a></li>"
         return the_html;
     }
     
@@ -386,6 +415,9 @@
     setInterval(function(){
         
         if(play){
+            update_on_map = parseInt(document.querySelector('#update_on_map').value);
+            time_out = 1000*update_on_map;
+            show_jump_on_map = document.querySelector('#jump_on_map').checked;
             update();
         }
     }, time_out)

@@ -52,6 +52,7 @@ build-iPhoneSimulator/
 # files from project Graphium
 *.osm
 *.log
+*.pyc
 # folders from project
 /helpers/crawler/data/flickr/
-
+/helpers/crawler/nohup.out

@@ -10,6 +10,7 @@ Attribute  | Description
 ---------- | -----------
 `-c`       | remove all data crawled
 `-r`       | remove all data inserted by reader OSM
+`-s`       | remove all sessions
 
 ### Dependencies
 

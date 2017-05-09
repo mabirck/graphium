@@ -67,6 +67,9 @@ class Swarm:
                 #   
                 sleep(int(self._swarm_at_mongo['seconds_to_check_agents']))
                 self.syncFromDB()
+                if len(self._mongo.getAgentsActiveBySwarm(self._identifier)) == 0 and len( self._mongo.getStreetQuery({'street_count':0,'city_id': self._swarm_at_mongo['city_id']})):
+                    self._logger.info('%s: All streets were coveraged. I\'m done =D' % ("Swarm"))
+                    self._swarm_at_mongo['active']      = False
                     
                     
         except Exception as error:
@@ -101,8 +104,7 @@ class Swarm:
         self._swarm_at_mongo['end_at']      = self._helper.getTimeNow()
         self._swarm_at_mongo['active']      = False
         
-        self._mongo.updateSwarmByIdentifier(self._identifier,self._swarm_at_mongo)
-        self._mongo.disconnect()
+        self._mongo.updateSwarmByIdentifier(self._swarm_at_mongo['identifier'],self._swarm_at_mongo)
         
         self._logger.info('Swarm: Hard work! I finish dude ;)')
 

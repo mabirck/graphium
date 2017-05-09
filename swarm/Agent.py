@@ -45,7 +45,6 @@ class Agent(Thread):
         self._swarm_at_mongo    = self._mongo.getSwarmByIdentifier(swarm_identifier)
         self._continue_the_job  = True
         self._end_well          = True
-        self._cycles            = 0
         
         self.startAgent()
         
@@ -64,7 +63,8 @@ class Agent(Thread):
                 if self._agent_at_mongo['last_street_id_osm'] == None:
                     self._street = self.chooseTheFirstStret()
                 else:  
-                    self._street = self.chooseTheNextStreet()
+                    #self._street = self.chooseTheNextStreet()
+                    self._street = self.fastChooseTheNextStret()
                 
                 self._agent_at_mongo['last_street']         = self._street['name_osm']
                 self._agent_at_mongo['last_street_id_osm']  = self._street['id_osm']
@@ -82,7 +82,7 @@ class Agent(Thread):
 
                     # from any node of this street we get all street crossed by him
                     for node in self._street['nodes']:
-                        streets_returneds = self._api.getWaysByNode(node['id'])
+                        streets_returneds = []#self._api.getWaysByNode(node['id'])
                         for street_returned in streets_returneds:
                             cross_streets_osm_id.append(street_returned['id'])
 
@@ -91,8 +91,12 @@ class Agent(Thread):
 
                     #remove this stret id because the street can't cross youself
                     #   but the nodes will cross this street id (all of them)
-                    cross_streets_osm_id.remove(self._street['id_osm'])
-                    self._street['cross_streets_osm_id'] = cross_streets_osm_id
+                    try:
+                        cross_streets_osm_id.remove(self._street['id_osm'])
+                        self._street['cross_streets_osm_id'] = cross_streets_osm_id
+                    except:
+                        self._logger.info('%s: Try remove the street but is not present on list' % (self.getName()))
+                        
                     self._mongo.updateStreetById(self._street.get('_id'),self._street)
                     
                     # update the last lat/lng of agent
@@ -102,7 +106,7 @@ class Agent(Thread):
                 #   it is a problem! Cannot run inside him
                 if len(self._street['nodes']) == 1:
                     
-                    self._node_osm = self._street['nodes'][self._node_osm_position]
+                    self._node_osm = self._street['nodes'][0]
                     
                     self.oneNode(self._node_osm)
                     # update the street counter
@@ -142,16 +146,23 @@ class Agent(Thread):
                     self._logger.info('%s: I need stop my job!' % (self.getName()))
                     self._continue_the_job = False
                     
-                if swarm_cycles > 0 and swarm_cycles <= self.cycles:
+                if swarm_cycles > 0 and swarm_cycles <= self._agent_at_mongo['cycles']:
                     self._logger.info('%s: I need stop my job! Cycles end' % (self.getName()))
                     self._continue_the_job = False
                     
                 if swarm_active == False:
                     self._logger.info('%s: I need stop my job! The swarm end' % (self.getName()))
                     self._continue_the_job = False
-                        
-                self._cycles +=1
-                self._logger.info('%s: the cicle %s end' % (self.getName(),self._cycles))
+                    
+                # check if all street was covered 
+                street_not_counted = len(self._mongo.getStreetQuery({'street_count':0,'city_id': self._swarm_at_mongo['city_id']}))     
+                if street_not_counted == 0:
+                    self._logger.info('%s: I need stop my job! All street was coverd' % (self.getName()))
+                    self._continue_the_job = False
+                    
+                self._agent_at_mongo['cycles'] +=1
+                self._mongo.updateAgentByIdentifier(self.identifier,self._agent_at_mongo)
+                self._logger.info('%s: the cicle %s end' % (self.getName(),self._agent_at_mongo['cycles']))
                 
                 
             print('Agent %s ending' % (self.getName()))
@@ -276,8 +287,10 @@ class Agent(Thread):
 
         # rand a street between all
         return streets[random.randint(0, len(streets)-1)]
+    
     #
-    # after walk one street new need choose de next
+    # chooseTheNextStreet
+    #   after walk one street new need choose de next
     #   this method choose the way with less count
     #   and return. If any way cross he then we need
     #   get other way how? Go to other agent =]
@@ -340,9 +353,48 @@ class Agent(Thread):
             else:
                 self._logger.info('%s: Oh really? I will check wishlist or get a random way -.-' % (self.getName()))
                 return self.chooseTheFirstStret()
+    
+    #
+    # fastChooseTheNextStret
+    #   this method choose the fast way:
+    #   check the list of wish, if empty
+    #   choose the fist road that is not 
+    #   busy and count igual 0
+    #
+    def fastChooseTheNextStret(self):
+        # search all possible streets that are not busy
+        wishlist = self._mongo.getWishListNoProccessedByIdentifier(self._swarm_identifier)
+        if len(wishlist) != 0:
+            
+            self._logger.info('%s: Wishlist has a street OSM ID %s to by processed ;)' % (self.getName(),wishlist[0]['osm_way_id']))
+            
+            # try to get one of each wish street 
+            #   from the id and name
+            street = None
+            size = len(wishlist)
+            count = 0
+            while street == None or count < size:
+                street = self._mongo.getStreetByIdOSM(int(wishlist[count]['osm_way_id']))
+                if street == None:
+                    street = self._mongo.getStreetByName(wishlist[count]['address'])
+                count += 1
                 
+            if street != None:
+                wishlist[count-1]['processed'] = True
+                wishlist[count-1]['dt_processed'] = self._helper.getTimeNow()
                 
-    # choosingNewStreetToNavegate
+                self._mongo.updateWishListById(wishlist[count-1].get('_id'),wishlist[count-1])
+           
+            return street 
+        
+        self._logger.info('%s: Wishlist is processed or empty. I will get a random street :]' % (self.getName()))
+        streets = self._mongo.getStreetQuery({'street_count':0, 'busy':{'$ne':True}, 'city_id': self._swarm_at_mongo['city_id']})
+
+        # rand a street between all
+        return streets[random.randint(0, len(streets)-1)]
+         
+        
+    # choosingNewStreetToNavegate DEPRECATED METHOD
     #   choose the street with the less weight
     #   to navegate
     #
@@ -400,6 +452,7 @@ class Agent(Thread):
         self._agent_at_mongo['pathbread'].append({'node_id':node_id,'lat':lat,'lng':lng,'jump':jump})
         self._mongo.updateAgentByIdentifier(self.identifier,self._agent_at_mongo)
     
+    
     #
     # appendStreetVisited
     #   insert the name of the street if agent
@@ -410,6 +463,7 @@ class Agent(Thread):
         if street_name not in self._agent_at_mongo['visited_streets']:
             self._agent_at_mongo['visited_streets'].append(street_name)
             self._mongo.updateAgentByIdentifier(self.identifier,self._agent_at_mongo)
+    
     
     #
     # startAgent
@@ -434,7 +488,6 @@ class Agent(Thread):
         self._agent_at_mongo['end_at']      = self._helper.getTimeNow()
         self._agent_at_mongo['active']      = False
         self._agent_at_mongo['end_well']    = self._end_well
-        self._agent_at_mongo['cycles']      = self._cycles
         self._mongo.updateAgentByIdentifier(self.identifier,self._agent_at_mongo)
         
         if self._street != None:
@@ -442,6 +495,7 @@ class Agent(Thread):
             self._mongo.updateStreetById(self._street.get('_id'),self._street)
         else:
             self._logger.info('%s: I finish without update the street value :)' % (self.getName()))
+        
         
     #
     # getIdentifier

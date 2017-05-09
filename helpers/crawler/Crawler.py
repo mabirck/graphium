@@ -68,6 +68,29 @@ class Crawler:
         elif self._prompt == False:
             self.execute()
             
+    def execute(self):
+        self._logger.info('Flicker: Starting a Flickr Session '+self._identifier+' =D')
+                
+        self._mongo.insertCrawlerSession(self._identifier,self._config.flickr_tags,self._helper.getTimeNow())
+        self._session_at_mongo  = self._mongo.getCrawlerById(self._identifier)
+        for year in range(self._config.flickr_year_upload_min,self._config.flickr_year_upload_max+1):
+                for month in range(1,13):
+                    executation_not_done = True
+                    while executation_not_done:
+                        try:
+                            flickr = Flickr(self._identifier,self._prompt,year,month)
+                            flickr.run()
+                            executation_not_done = False
+                        except Exception as error:
+                            executation_not_done = True
+                            self._logger.error('Crawler: Something was wrong at data '+str(year)+'/'+str(month)+' :/ I need stop the job!')
+                            print 'Error!'
+                            print traceback.format_exc()
+                            self._logger.error('Flicker:'+str(traceback.format_exc()))
+                    
+        self._session_at_mongo['end_well'] = True
+        self.finish()
+            
     def finish(self):
             
         self._session_at_mongo['end_at']      = self._helper.getTimeNow()
@@ -78,23 +101,7 @@ class Crawler:
         
         self._logger.info('Crawler: Hard work! I finish dude ;)')
 
-    def execute(self):
-        self._logger.info('Flicker: Starting a Flickr Session '+self._identifier+' =D')
-                
-        self._mongo.insertCrawlerSession(self._identifier,self._config.flickr_tags,self._helper.getTimeNow())
-        self._session_at_mongo  = self._mongo.getCrawlerById(self._identifier)
-        try:
-            flickr = Flickr(self._identifier,self._prompt)
-            flickr.run()
-            self._session_at_mongo['end_well'] = True
-        except Exception as error:
-            self._logger.error('Crawler: Something was wrong :/ I need stop the job!')
-            print 'Error!'
-            print traceback.format_exc()
-            self._logger.error('Flicker:'+str(traceback.format_exc()))
-            self._session_at_mongo['end_well'] = False
-        finally:
-            self.finish()
+    
             
 class Flickr(Thread):
     
@@ -116,7 +123,7 @@ class Flickr(Thread):
     
     url                 = None
     
-    def __init__(self,session_identifier,prompt):
+    def __init__(self,session_identifier,prompt,year,month):
         Thread.__init__(self)
         
         self._identifier    = session_identifier
@@ -125,6 +132,9 @@ class Flickr(Thread):
         self._config        = Configuration()
         self._helper        = Helper()
         self._logger        = Logger()
+        
+        self._year          = year
+        self._month         = month
         
         self._current_photo = 0
         self._current_page  = 0
@@ -139,7 +149,7 @@ class Flickr(Thread):
             except OSError as exc: # Guard against race condition
                 if exc.errno != errno.EEXIST:
                     raise
-        
+        self._logger.info('Flicker: Start in date '+str(self._year)+'/'+str(self._month))
         
     def run(self):
         
@@ -183,11 +193,12 @@ class Flickr(Thread):
                     #print data['photos']['photo']
                     self._session_at_mongo['total_imagens'] = int(data['photos']['total'])
                     self._session_at_mongo['total_pages'] = int(data['photos']['pages'])
+                    self._logger.info("Flicker: The date "+str(self._year)+"/"+str(self._month)+" has "+str(self._session_at_mongo['total_imagens'])+" photos in "+str(self._session_at_mongo['total_pages'])+" pages to download")
                 for photo in data['photos']['photo']:
                     
                     self._current_photo += 1
                     
-                    self._logger.info(str(self._current_photo)+' from '+str(self._session_at_mongo['total_imagens'])+' photos')
+                    #self._logger.info(str(self._current_photo)+' from '+str(self._session_at_mongo['total_imagens'])+' photos')
                     
                     image_on_mongo = self._mongo.getFlickrImageById(photo['id'])
                     if image_on_mongo == None:
@@ -258,7 +269,7 @@ class Flickr(Thread):
                         self._mongo.updateImageByIdentifier(image_on_mongo['image_flicker_id'],image_on_mongo)
                         
                 self._session_at_mongo['current_page'] = int(data['photos']['page'])
-                if self._session_at_mongo['current_page'] == self._session_at_mongo['total_pages']:
+                if self._session_at_mongo['current_page'] > self._session_at_mongo['total_pages']:
                     self.url = None
                 else:
                     self._session_at_mongo['current_page'] += 1
@@ -275,7 +286,7 @@ class Flickr(Thread):
             
             
     def flickrGetPage(self,page):
-        self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&tags="+self._config.flickr_tags+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?&page="+str(page)+"&per_page="+str(self._config.flickr_per_page)
+        self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&tags="+self._config.flickr_tags+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?&page="+str(page)+"&per_page="+str(self._config.flickr_per_page)+"&min_upload_date="+str(self._year)+"-"+str(self._month)+"-01&per_page=500&max_upload_date="+str(self._year)+"-"+str(self._month)+"-31"
         self._logger.info('Flicker: flickrGetPage page '+str(page)+' :D')
         self._start_time = time.time()
         response = urllib.urlopen(self.url)
@@ -296,7 +307,7 @@ class Flickr(Thread):
     
     def flickrGetPhotoInfo(self,photo_id):  
         self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&photo_id="+photo_id+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?"
-        self._logger.info('Flicker: flickrGetPhotoInfo to '+photo_id+' :D')
+        #self._logger.info('Flicker: flickrGetPhotoInfo to '+photo_id+' :D')
         self._start_time = time.time()
         response = urllib.urlopen(self.url)
         data = json.loads(response.read())
@@ -311,13 +322,13 @@ class Flickr(Thread):
         #print self._elapsed_time
         if self._elapsed_time < 1.0 and self._config.safe_mode:
             sleep_for = 1.0 - self._elapsed_time
-            self._logger.info('Flicker: flickrGetPhotoInfo need Zzz for '+str(sleep_for))
+            #self._logger.info('Flicker: flickrGetPhotoInfo need Zzz for '+str(sleep_for))
             sleep(sleep_for)
         return data
     
     def flickrGetPhotoSizes(self,photo_id): 
         self.url = "https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&photo_id="+photo_id+"&api_key="+self._config.flickr_public_key+"&format=json&nojsoncallback=?"
-        self._logger.info('Flicker: flickrGetPhotoSizes to '+photo_id+' :D')
+        #self._logger.info('Flicker: flickrGetPhotoSizes to '+photo_id+' :D')
         self._start_time = time.time()
         response = urllib.urlopen(self.url)
         data = json.loads(response.read())
@@ -330,7 +341,7 @@ class Flickr(Thread):
         self._elapsed_time = self._end_time - self._start_time
         if self._elapsed_time < 1.0 and self._config.safe_mode:
             sleep_for = 1.0 - self._elapsed_time
-            self._logger.info('Flicker: flickrGetPhotoSizes need Zzz for '+str(sleep_for))
+            #self._logger.info('Flicker: flickrGetPhotoSizes need Zzz for '+str(sleep_for))
             sleep(sleep_for)
         return data
     
