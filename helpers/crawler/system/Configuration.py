@@ -17,7 +17,7 @@ class Configuration:
     
     flickr_size             = "larger"              # Choose ths width size => "larger", "medium" and "small". Default
     flickr_size_minimum     = 240                   # minimum px on width image
-    flickr_size_maximum     = 1800                  # maximum px on width image
+    flickr_size_maximum     = 1400                  # maximum px on width image
     
     safe_mode               = True          # Protect to require only 3600 per hour
     
