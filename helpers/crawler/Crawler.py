@@ -151,7 +151,7 @@ class Flickr(Thread):
             except OSError as exc: # Guard against race condition
                 if exc.errno != errno.EEXIST:
                     raise
-        self._logger.info('Flicker: Start in date '+str(self._year)+'/'+str(self._month)+'/'+str(self._day))
+        self._logger.info('Flicker: Start in date '+str(self._year)+'-'+str(self._month)+'-'+str(self._day))
         
     def run(self):
         
@@ -195,7 +195,7 @@ class Flickr(Thread):
                     #print data['photos']['photo']
                     self._session_at_mongo['total_imagens'] = int(data['photos']['total'])
                     self._session_at_mongo['total_pages'] = int(data['photos']['pages'])
-                    self._logger.info("Flicker: The date "+str(self._year)+"/"+str(self._month)+" has "+str(self._session_at_mongo['total_imagens'])+" photos in "+str(self._session_at_mongo['total_pages'])+" pages to download")
+                    self._logger.info("Flicker: The date "+str(self._year)+"-"+str(self._month)+"-"+str(self._day)+" has "+str(self._session_at_mongo['total_imagens'])+" photos in "+str(self._session_at_mongo['total_pages'])+" pages to download")
                 for photo in data['photos']['photo']:
                     
                     self._current_photo += 1
