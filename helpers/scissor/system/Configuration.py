@@ -5,17 +5,16 @@ class Configuration:
     
     _instance               = None
     
-    folder_origin           = "../crawler/data/flickr/"
+    folder_origin           = "../crawler/data/flickr/"#"data/origin/"
     folder_destiny          = "data/destiny/"
-    
-    # windows Px size
-    window_size_width       = 144
-    window_size_heght       = 144
     
     # target
     target_window_porcent   = 0.8 # 0% to 100%. If 100 only one image with target will be create
-    target_max_width        = 800
-    target_max_height       = 500
+    target_max_width        = 224
+    target_max_height       = 224
+    
+    target_min_width        = 224
+    target_min_height       = 224
     
     # MongoDB
     mongo_db                = "graphium"    # databse default

@@ -6,11 +6,12 @@ Erase the database from helper or application and files generated from those act
 
 `$ python Main.py [-c|-r]`
 
-Attribute  | Description
----------- | -----------
-`-c`       | remove all data crawled
-`-r`       | remove all data inserted by reader OSM
-`-s`       | remove all sessions
+Attribute  |    Helper   | Description
+---------- | ----------- | -----------
+`-c`       |   Crawler   | remove all data crawled
+`-r`       |   Reader    | remove all data inserted by reader OSM
+`-s`       |   Swarm     | remove all sessions
+`-i`       |   Scissor   | remove all cutted image
 
 ### Dependencies
 

@@ -39,3 +39,11 @@ if __name__ == "__main__":
         print 'Agents total', db.agent.count({})
         db.swarm.delete_many({})
         db.agent.delete_many({})
+        
+    if '-i'in commands:
+        print 'Removing Scissor data'
+        os.chdir('../scissor/data/destiny/')
+        filelist = [ f for f in os.listdir(".") if f.endswith(".jpg") ]
+        print 'Images at data folder',len(filelist)
+        for f in filelist:
+            os.remove(f)

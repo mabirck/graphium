@@ -53,6 +53,7 @@ build-iPhoneSimulator/
 *.osm
 *.log
 *.pyc
+*.npz
 # folders from project
 /helpers/crawler/data/flickr/
 /helpers/crawler/nohup.out

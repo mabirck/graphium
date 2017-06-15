@@ -31,7 +31,7 @@ class Scissor:
                     #print(img.size)
                     #display(img)
                     image = Img(file_name)
-                    image.cut_to_fit(self._config.target_max_width, self._config.target_max_height, self._config.target_window_porcent)
+                    image.cut_to_fit(self._config.target_max_width, self._config.target_max_height, self._config.target_window_porcent, self._config.target_min_width,self._config.target_min_height)
             current_file += 1
                     
                 
@@ -77,7 +77,7 @@ class Img:
             
             #print 'Image ',self.original_image_url,' size: ',self.width,'x',self.height
 
-    def cut_to_fit(self,max_width=None,max_height=None,rate=1.0):
+    def cut_to_fit(self,max_width=None,max_height=None,rate=1.0,min_width=None,min_height=None):
         
         new_width   = 0
         new_height  = 0
@@ -93,40 +93,47 @@ class Img:
                 self.width          = self.window_width
                 self.height         = self.window_height
                 i.crop(width=self.window_width, height=self.window_height, gravity='center')
-                #print 'Cut and rate'#,self.width,'x',self.height
-            
+                print 'Cut and rate',self.width,'x',self.height
+                
             # Calculate if the width is greater than max width value
             if max_width != None and self.width > max_width:
                 # cut the width first
-                need_cut            = True
-                self.manipulated    = True
                 new_width           = max_width
                 new_height          = int(math.ceil((self.height*max_width)/self.width))
-                self.width          = new_width
-                self.height         = new_height
-                #print 'Need cut by max_width'#,new_width,'x',new_height
+                if new_height >= max_height:
+                    need_cut            = True
+                    self.manipulated    = True
+                    self.width          = new_width
+                    self.height         = new_height
+                    print 'Need cut by max_width',new_width,'x',new_height
                 
             # Calculate if the width is greater than max width value
             if max_height != None and self.height > max_height:
-                # cut the height if necessary
-                need_cut            = True
-                self.manipulated    = True
+            #   # cut the height if necessary
                 new_height          = max_height
                 new_width           = int(math.ceil((self.width*max_height)/self.height))
-                self.width          = new_width
-                self.height         = new_height
-                #print 'Need cut by max_height'#,new_width,'x',new_height
+                if new_width >= max_width:
+                    need_cut            = True
+                    self.manipulated    = True
+                    self.width          = new_width
+                    self.height         = new_height
+                    print 'Need cut by max_height',new_width,'x',new_height
                 
             # Save the file
             if need_cut:
-                i.resize(new_width,new_height)
-                self.image = i.clone()  
+                i.resize(self.width,self.height)
+                print 'Need resize ',self.width,'x',self.height
+                
+            i.crop(width=max_width, height=max_height, gravity='center')
+            self.image = i.clone()  
             if need_cut or need_rate:
                 self._logger.info('Scissor: new image {0}-{1}x{2}_resized.{3}'.format( self.image_name, i.width, i.height, i.format.lower()))
                 i.save(filename='{0}{1}-{2}x{3}_resized.{4}'.format(self._config.folder_destiny, self.image_name, i.width, i.height, i.format.lower()))
-            else:
+            elif max_height != None and max_width != None and max_height >= self.height and max_width >= self.width:
                 self._logger.info('Scissor: new image {0}-{1}x{2}_original.{3}'.format( self.image_name, i.width, i.height, i.format.lower()))
                 i.save(filename='{0}{1}-{2}x{3}_original.{4}'.format(self._config.folder_destiny, self.image_name, i.width, i.height, i.format.lower()))
+            else:
+                self._logger.info('Scissor: not create new image {0}-{1}x{2}.{3} on repository'.format( self.image_name, i.width, i.height, i.format.lower()))
             self.image = i.clone()
         
         
