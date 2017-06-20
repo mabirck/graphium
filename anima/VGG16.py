@@ -242,29 +242,29 @@ class VGG16:
             fc3b = tf.Variable(tf.constant(1.0, shape=[1000], dtype=tf.float32),
                                  trainable=True, name='biases')
             self.fc3l = tf.nn.bias_add(tf.matmul(self.fc2, fc3w), fc3b)
-            self.fc3 = tf.nn.relu(fc3l)
+            #self.fc3 = tf.nn.relu(fc3l)
             self.parameters += [fc3w, fc3b]
         
         # fc4
-        with tf.name_scope('fc4') as scope:
-            fc4w = tf.Variable(tf.truncated_normal([1000,500],
-                                                        dtype=tf.float32,
-                                                        stddev=1e-1), name='weights')
-            fc4b = tf.Variable(tf.constant(1.0, shape=[1000], dtype=tf.float32),
-                                 trainable=True, name='biases')
-            self.fc4l = tf.nn.bias_add(tf.matmul(self.fc3,fc4w),fc4b)
-            self.fc4 = tf.nn.relu(fc4l)
-            self.parameters += [fc4w,fc4b]
-            
+        #with tf.name_scope('fc4') as scope:
+        #    fc4w = tf.Variable(tf.truncated_normal([1000,500],
+        #                                                dtype=tf.float32,
+        #                                                stddev=1e-1), name='weights')
+        #    fc4b = tf.Variable(tf.constant(1.0, shape=[1000], dtype=tf.float32),
+        #                         trainable=True, name='biases')
+        #    self.fc4l = tf.nn.bias_add(tf.matmul(self.fc3,fc4w),fc4b)
+        #    self.fc4 = tf.nn.relu(fc4l)
+        #    self.parameters += [fc4w,fc4b]
+        #    
         # fc5 
-        with tf.name_scope('fc5') as scope:
-            fc5w = tf.Variable(tf.truncated_normal([500,2],
-                                                        dtype=tf.float32,
-                                                        stddev=1e-1),name='weights')
-            fc5b = tf.Variable(tf.constant(1.0,shape=[1000], dtype=tf.float32),
-                               trainable=True,name='biases')
-            self.fc5l = tf.nn.bias_add(tf.matmul(self.fc4,fc5w),fc5b)
-            self.parameters += [fc5w, fc5b]
+        #with tf.name_scope('fc5') as scope:
+        #    fc5w = tf.Variable(tf.truncated_normal([500,2],
+        #                                                dtype=tf.float32,
+        #                                                stddev=1e-1),name='weights')
+        #    fc5b = tf.Variable(tf.constant(1.0,shape=[1000], dtype=tf.float32),
+        #                       trainable=True,name='biases')
+        #    self.fc5l = tf.nn.bias_add(tf.matmul(self.fc4,fc5w),fc5b)
+        #    self.parameters += [fc5w, fc5b]
             
     def load_weights(self, weight_file, sess):
         weights = np.load(weight_file)

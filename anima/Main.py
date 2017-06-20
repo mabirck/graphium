@@ -39,6 +39,7 @@ if __name__ == '__main__':
     
     file_output_csv         = open(config.output_csv_file,'w')
     
+    self._logger.info('Anima: Write file from output...')
     the_header = "Image Name;"
     for class_name in class_names:
         the_header += class_name+";"
