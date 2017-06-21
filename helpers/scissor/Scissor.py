@@ -93,7 +93,7 @@ class Img:
                 self.width          = self.window_width
                 self.height         = self.window_height
                 i.crop(width=self.window_width, height=self.window_height, gravity='center')
-                print 'Cut and rate',self.width,'x',self.height
+                #print 'Cut and rate',self.width,'x',self.height
                 
             # Calculate if the width is greater than max width value
             if max_width != None and self.width > max_width:
@@ -105,7 +105,7 @@ class Img:
                     self.manipulated    = True
                     self.width          = new_width
                     self.height         = new_height
-                    print 'Need cut by max_width',new_width,'x',new_height
+                    #print 'Need cut by max_width',new_width,'x',new_height
                 
             # Calculate if the width is greater than max width value
             if max_height != None and self.height > max_height:
@@ -117,12 +117,12 @@ class Img:
                     self.manipulated    = True
                     self.width          = new_width
                     self.height         = new_height
-                    print 'Need cut by max_height',new_width,'x',new_height
+                    #print 'Need cut by max_height',new_width,'x',new_height
                 
             # Save the file
             if need_cut:
                 i.resize(self.width,self.height)
-                print 'Need resize ',self.width,'x',self.height
+                #print 'Need resize ',self.width,'x',self.height
                 
             i.crop(width=max_width, height=max_height, gravity='center')
             self.image = i.clone()  
