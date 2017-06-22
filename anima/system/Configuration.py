@@ -5,7 +5,7 @@ class Configuration:
     
     _instance               = None
     
-    folder_origin           = "../helpers/scissor/data/destiny/"
+    folder_origin           = "data/images/"#"../helpers/scissor/data/destiny/"
     vgg16_weights_path      = "data/vgg16_weights.npz"
     output_csv_file         = "data/out_put.csv"
     
