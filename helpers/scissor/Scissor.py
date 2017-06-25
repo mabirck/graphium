@@ -11,12 +11,13 @@ class Scissor:
     _config = None
     _logger = None
     _files  = []
+    _tmp_dir= None
     
     def __init__(self,type_crawler='flickr'):
         self._config    = Configuration()
         self._files     = ['data/mona-lisa.jpg','data/neural-style.png']
         self._logger    = Logger()
-        
+        self._tmp_dir   = "/tmp/"
     def start(self):
         self._logger.info('Scissor: Start a new session')
         path = self._config.folder_origin
@@ -27,14 +28,16 @@ class Scissor:
             file_name = path+file
             if os.path.isfile(os.path.join(path, file)) and file != ".DS_Store" and os.stat(file_name).st_size!=0:
                 #print 'file path',file
-                with Image(filename=file_name) as img:
-                    #print(img.size)
-                    #display(img)
-                    image = Img(file_name)
-                    image.cut_to_fit(self._config.target_max_width, self._config.target_max_height, self._config.target_window_porcent, self._config.target_min_width,self._config.target_min_height)
-            current_file += 1
-            diretory = "/tmp/"
-            for magickfile in glob.iglob(os.path.join(diretory, 'magick-*')):
+                try:
+                    with Image(filename=file_name) as img:
+                        #print(img.size)
+                        #display(img)
+                        image = Img(file_name)
+                        image.cut_to_fit(self._config.target_max_width, self._config.target_max_height, self._config.target_window_porcent, self._config.target_min_width,self._config.target_min_height)
+                    current_file += 1
+                except Exception as error:
+                    self._logger.error('Scissor: Something was wrong at image '+file_name+' :/')
+            for magickfile in glob.iglob(os.path.join(self._tmp_dir, 'magick-*')):
                 os.remove(magickfile)
                     
                 
