@@ -1,4 +1,4 @@
-import math, os
+import math, os, glob
 
 from wand.image import Image
 from wand.display import display
@@ -33,6 +33,9 @@ class Scissor:
                     image = Img(file_name)
                     image.cut_to_fit(self._config.target_max_width, self._config.target_max_height, self._config.target_window_porcent, self._config.target_min_width,self._config.target_min_height)
             current_file += 1
+            diretory = "/tmp/"
+            for magickfile in glob.iglob(os.path.join(diretory, 'magick-*')):
+                os.remove(magickfile)
                     
                 
 class Img:
