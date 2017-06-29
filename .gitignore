@@ -58,3 +58,4 @@ build-iPhoneSimulator/
 # folders from project
 /helpers/crawler/data/flickr/
 /helpers/crawler/nohup.out
+/helpers/scissor/data/destiny/

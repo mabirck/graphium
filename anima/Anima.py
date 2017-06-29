@@ -59,6 +59,7 @@ class Anima:
         probabilities_by_image  = self._session.run(self._vgg.probs, feed_dict={self._vgg.imgs: self._images})
 
         file_output_csv         = open(self._config.output_csv_file,'w')
+        file_onehot_csv         = open(self._config.output_onehot_csv_file,'w')
 
         self._logger.info('Anima: Write file from output...')
         the_header = "Image Name;"
@@ -66,15 +67,43 @@ class Anima:
             the_header += class_name+";"
         the_header+= os.linesep
         file_output_csv.write(the_header)
+        file_onehot_csv.write(the_header)
 
-        position = 0
+        img_position    = 0
+        hot_position    = 0
+        column_position = 0
+        hot_value       = 0
         for probabilities in probabilities_by_image:
-            row = self._images_names[position]+";"
-            for probalility in probabilities:
-                row += str(probalility)+";"
-            position+=1
-            file_output_csv.write(row+os.linesep)
-
+            
+            # register the probabilities on output
+            row_output    = self._images_names[img_position]+";"
+            for probability in probabilities:
+                row_output += str(probability)+";"
+            file_output_csv.write(row_output+os.linesep)
+            
+            # register the one hot value
+            hot_position    = 0
+            hot_value       = -99999
+            column_position = 0
+            for probability in probabilities:
+                if hot_value <= probability:
+                    hot_value       = probability
+                    hot_position    = column_position
+                column_position+=1
+            
+            # create the file with the one hot
+            row_onehot  = self._images_names[img_position]+";"
+            for i in range(len(probabilities)):
+                if i == hot_position:
+                    row_onehot += "1;"
+                else:
+                    row_onehot += "0;"
+            file_onehot_csv.write(row_onehot+os.linesep)
+            
+            # next image row processed
+            img_position+=1
+            
+        file_onehot_csv.close()
         file_output_csv.close()
         
         

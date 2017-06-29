@@ -5,9 +5,10 @@ class Configuration:
     
     _instance               = None
     
-    folder_origin           = "data/images/"#"../helpers/scissor/data/destiny/"
+    folder_origin           = "../helpers/scissor/data/destiny/"#"data/images/"#
     vgg16_weights_path      = "data/vgg16_weights.npz"
     output_csv_file         = "data/out_put.csv"
+    output_onehot_csv_file  = "data/out_onehot.csv"
     
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
