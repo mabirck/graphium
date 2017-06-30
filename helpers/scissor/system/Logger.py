@@ -12,7 +12,7 @@ class Logger:
     
     def __init__(self,level='INFO'):
         self.logging            = logging
-        self.logging.basicConfig(filename='log/scissor.log',level=logging.DEBUG)
+        self.logging.basicConfig(filename="log/"+self._helper.getSerialNow()+"_scissor.log",level=logging.DEBUG)
         self.logging.Formatter(fmt='%(asctime)s %(message)s',datefmt='%Y-%m-%d %H:%M:%S')
         self.level              = level
     
