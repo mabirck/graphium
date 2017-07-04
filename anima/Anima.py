@@ -7,6 +7,8 @@ from VGG16 import VGG16
 from Imagenet_classes import class_names
 from system.Configuration import Configuration
 from system.Logger import Logger
+from services.HotClasses import HotClasses
+from services.HotHistogram import HotHistogram
 
 
 class Anima:
@@ -25,7 +27,6 @@ class Anima:
     _total_sessions         = None
     _current_file           = None
     
-    _file_onehot_csv        = None
     _file_output_csv        = None
     
     def __init__(self):
@@ -46,7 +47,6 @@ class Anima:
         self._total_sessions        = 0
         
         self._file_output_csv       = open(self._config.output_csv_file,'w')
-        self._file_onehot_csv       = open(self._config.output_onehot_csv_file,'w')
         
     def start(self):
         
@@ -63,7 +63,6 @@ class Anima:
             the_header += class_name+";"
         the_header+= os.linesep
         self._file_output_csv.write(the_header)
-        self._file_onehot_csv.write(the_header)
         
         self._logger.info('Anima: Read and send files to session')
         
@@ -96,7 +95,6 @@ class Anima:
         if self._total_image_session != 0:
             self.executeSession()
                 
-        self._file_onehot_csv.close()
         self._file_output_csv.close()
     
     def executeSession(self):
@@ -122,26 +120,7 @@ class Anima:
             for probability in probabilities:
                 row_output += str(probability)+";"
             self._file_output_csv.write(row_output+os.linesep)
-
-            # register the one hot value
-            hot_position    = 0
-            hot_value       = -99999
-            column_position = 0
-            for probability in probabilities:
-                if hot_value <= probability:
-                    hot_value       = probability
-                    hot_position    = column_position
-                column_position+=1
-
-            # create the file with the one hot
-            row_onehot  = self._images_names[(self._total_sessions * self._config.session_batch_size)+img_position-1]+";"
-            for i in range(len(probabilities)):
-                if i == hot_position:
-                    row_onehot += "1;"
-                else:
-                    row_onehot += "0;"
-            self._file_onehot_csv.write(row_onehot+os.linesep)
-
+            
             # next image row processed
             img_position+=1
 
@@ -149,5 +128,14 @@ class Anima:
         self._total_sessions += 1
         self._total_image_session   =0
         self._images_session = []
-
-    
+        
+    def generate_csvs(self):
+        oneHotClasses   = HotClasses(self._config.output_csv_file,1)
+        oneHotClasses.start()
+        oneHotHistogram = HotHistogram(oneHotClasses.getFilePath(),1)
+        oneHotHistogram.start()
+        
+        fiveHotClasses  = HotClasses(self._config.output_csv_file,5)
+        fiveHotClasses.start()
+        fiveHotHistogram = HotHistogram(fiveHotClasses.getFilePath(),5)
+        fiveHotHistogram.start()

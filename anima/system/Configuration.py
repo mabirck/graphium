@@ -7,10 +7,9 @@ class Configuration:
     _instance               = None
     _helper                 = Helper()
     
-    folder_origin           = "../helpers/scissor/data/destiny/"#"data/images/"#
+    folder_origin           = "data/images/"#"../helpers/scissor/data/destiny/"#"data/images/"#
     vgg16_weights_path      = "data/vgg16_weights.npz"
-    output_csv_file         = "data/"+_helper.getSerialNow()+"_out_putout_.csv"
-    output_onehot_csv_file  = "data/"+_helper.getSerialNow()+"_out_onehot.csv"
+    output_csv_file         = "data/"+_helper.getSerialNow()+"_out_put_.csv"
     
     session_batch_size      = 256 # number of imagens at each session
     

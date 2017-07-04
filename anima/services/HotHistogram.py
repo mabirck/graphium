@@ -2,19 +2,24 @@ import os, csv, sys
 
 from system.Helper import Helper
 
-class oneHotHistogram:
+class HotHistogram:
     
-    file_name       = None
-    file_name_out   = None
-    helper          = None
+    file_name               = None
+    file_name_out           = None
+    helper                  = None
+    number_of_hot_classes   = 0
     
-    def __init__(self,file):
+    def __init__(self,file,number_of_classes=0):
         
-        self.file_name      = file
-        self.helper         = Helper()
-        self.file_name_out  = "data/"+self.helper.getSerialNow()+"_onehot_histogram.csv"
+        self.helper                 = Helper()
         
-        print 'file used ',self.file_name
+        self.file_name              = file
+        self.number_of_hot_classes  = number_of_classes
+        
+        self.file_name_out          = "../data/"+self.helper.getSerialNow()+"_"+str(self.number_of_hot_classes)+"hot_histogram.csv"
+        
+        print 'HotHistogram: File          ', self.file_name
+        print 'HotHistogran: File generated', self.file_name_out
         
     def start(self):
         
@@ -26,9 +31,8 @@ class oneHotHistogram:
         with open(self.file_name,'r') as csvfile:
             reader_csv = csv.reader(csvfile,delimiter=';')
             for row in reader_csv:
-                print 'processing row',num_row
+                print 'HotHistogram: Processing row',num_row
                 if num_row == 0:
-                    
                     the_header = ""
                     for colum in row:
                         if num_coll != 1001:
@@ -41,7 +45,7 @@ class oneHotHistogram:
                 else:
                     for collum in row:
                         if num_coll== 0:
-                            array_values[num_coll]+= 0  
+                            array_values[num_coll] = row[0]  
                         elif num_coll != 1001:
                             array_values[num_coll]  += int(collum)
                         num_coll+=1
@@ -53,6 +57,7 @@ class oneHotHistogram:
         the_values += os.linesep
         file_out_csv.write(the_values)
         file_out_csv.close()
+        print 'HotHistogram: Finish!'
 
 if __name__ == "__main__":
     
@@ -64,5 +69,5 @@ if __name__ == "__main__":
         t_index = commands.index('-f')
         file_name = commands[t_index+1]
         
-    oneHotHistogram = oneHotHistogram(file_name)
-    oneHotHistogram.start()
+    hotHistogram = hotHistogram(file_name)
+    hotHistogram.start()
