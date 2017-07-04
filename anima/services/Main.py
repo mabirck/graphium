@@ -18,3 +18,8 @@ if __name__ == "__main__":
     oneHistogram = HotHistogram(oneClasses.getFilePath(),1)
     oneHistogram.start()
     
+    fiveClasses = HotClasses(file_name,5)
+    fiveClasses.start()
+    fiveHistogram = HotHistogram(fiveClasses.getFilePath(),5)
+    fiveHistogram.start()
+    

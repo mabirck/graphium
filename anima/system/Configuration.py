@@ -9,9 +9,9 @@ class Configuration:
     
     folder_origin           = "data/images/"#"../helpers/scissor/data/destiny/"#"data/images/"#
     vgg16_weights_path      = "data/vgg16_weights.npz"
-    output_csv_file         = "data/"+_helper.getSerialNow()+"_out_put_.csv"
+    output_csv_file         = "data/"+_helper.getSerialNow()+"_output_anima.csv"
     
-    session_batch_size      = 256 # number of imagens at each session
+    session_batch_size      = 128 # number of imagens at each session
     
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
