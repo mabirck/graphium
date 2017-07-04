@@ -149,4 +149,5 @@ class Anima:
         self._total_sessions += 1
         self._total_image_session   =0
         self._images_session = []
-        
+
+    
