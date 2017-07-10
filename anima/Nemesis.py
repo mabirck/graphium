@@ -15,8 +15,7 @@ class Nemesis:
     _number_of_epoch    = 150
     _number_of_classes  = 1000
     
-    _callback_history   = LossHistory()
-    
+    _callback_history   = None
     
     def __init__(self):
         # create the base pre-trained model
