@@ -7,8 +7,8 @@ class Extractor:
     _destiny        = None
     _transfers      = []
     def __init__(self):
-        self._files_imagenet    = "data/"
-        self._destiny           = "data/imagenet/"
+        self._files_imagenet    = "/mnt/dataWD1/ulisses/ImageNet/"#"data/"
+        self._destiny           = "/mnt/dataWD1/glauco/ImageNet/"#"data/imagenet/"
         self._transfers.append(Transfer('data/imagenet/honeycomb/','data/imagenet/honeycomb_2/',10,'random')) 
         #with file in op
        
@@ -52,7 +52,7 @@ class Extractor:
             if not os.path.exists(path_new_directory):
                 os.makedirs(path_new_directory)
             
-            call(["tar", "zxvf", file_tar, "-C", path_new_directory])    
+            call(["tar", "xvf", file_tar, "-C", path_new_directory])    
         
         
         
@@ -60,11 +60,21 @@ class Extractor:
     #   from synset sended
     def giveMeTheNames(self,synset):
         
-        # require names
-        namesOnHTML = urllib2.urlopen("http://www.image-net.org/api/text/wordnet.synset.getwords?wnid="+synset,timeout=100)
-        names       = namesOnHTML.read()
-        names       = names.split("\n")
-        names       = names[:len(names)-1]
+        needGet = True
+        names   = ""
+        while needGet:
+            
+            # require names
+            namesOnHTML = urllib2.urlopen("http://www.image-net.org/api/text/wordnet.synset.getwords?wnid="+synset,timeout=100)
+            try:
+                print 'Waiting Imagenet-API...'
+                names       = namesOnHTML.read()
+                names       = names.split("\n")
+                names       = names[:len(names)-1]
+                needGet     = False
+            except e:
+                print 'Will try again... Wait'
+        
         if not "Invalid url!" in names:
             namesToFolder = ""
             for name in names:
@@ -73,6 +83,7 @@ class Extractor:
             return namesToFolder
         else:
             return False
+        
 class Transfer:
     
     images_folder   = None
