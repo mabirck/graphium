@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import math, os, glob, traceback
 
 from wand.image import Image

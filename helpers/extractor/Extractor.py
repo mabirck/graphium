@@ -1,5 +1,4 @@
-import glob, os, sys, urllib2, random
-from shutil import copyfile
+import glob, os, sys, urllib2
 from subprocess import call
 
 class Extractor:
@@ -10,19 +9,8 @@ class Extractor:
     def __init__(self):
         self._files_imagenet    = "/mnt/dataWD1/ulisses/ImageNet/"#"data/"#
         self._destiny           = "/mnt/dataWD1/glauco/ImageNet/"#"data/imagenet/"#
-        self._transfers.append(Transfer('data/imagenet/honeycomb/','data/imagenet/honeycomb_2/',10,'random',True)) 
-        #with file in op
-       
-    def start(self):
-        #self.untar()
-        self.transfers()
-        
-    def transfers(self):
-        for transfer in self._transfers:
-            transfer.execute()
             
-    def untar(self):
-        
+    def start(self):
         
         # check if destiny exists
         if not os.path.exists(self._destiny):
@@ -84,51 +72,7 @@ class Extractor:
             return namesToFolder
         else:
             return False
-        
-class Transfer:
-    
-    images_folder   = None
-    images_destity  = None
-    number_of_images= None
-    selection_way   = None
-    
-    def __init__(self, images_folder='data/source', images_destity='data/destity', number_of_images=10, selection_way='random',copy=True):
-        self.images_folder      = images_folder
-        self.images_destity     = images_destity
-        self.number_of_images   = number_of_images
-        self.selection_way      = selection_way
-        self.copy_way           = copy
-        
-    def execute(self):
-        moved = 0
-        if not os.path.exists(self.images_folder):
-            print 'Source',self.images_folder,'not exist!'
-            return False
-        
-        if not os.path.exists(self.images_destity):
-            print 'Destity',self.images_destity,'was created'
-            os.makedirs(self.images_destity)
-        
-        #os.chdir(self.images_folder)
-        files_to_transfer = glob.glob(self.images_folder+"*.*")
-        
-        if self.selection_way == 'random':
-            random.shuffle(files_to_transfer)
-            
-        files_names = []
-        for file in files_to_transfer:
-            files_names.append(file.split("/")[-1:][0])
-        
-        for file_name in files_names:
-            if os.path.isfile(os.path.join(self.images_folder,file_name)) and file_name != ".DS_Store" and os.stat(self.images_folder+file_name).st_size!=0:
-                if moved < self.number_of_images:
-                    print 'file ',moved, 'name', file_name
-                    if self.copy_way:
-                        copyfile(self.images_folder+file_name, self.images_destity+file_name)
-                    else:
-                        shutil.move(self.images_folder+file_name, self.images_destity+file_name)
-                    moved+=1
-        
+                
 if __name__ == "__main__":
             
     extractor = Extractor()
