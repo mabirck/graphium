@@ -1,10 +1,8 @@
 from keras.applications.vgg16 import VGG16
 from keras.preprocessing import image
 from keras.models import Model
-from keras.layers import Dense, GlobalAveragePooling2D
-from keras import backend as K
-from keras.utils import np_utils
 from keras.optimizers import SGD
+from keras.callbacks as callbacks
 
 class Nemesis:
     _base_model = None
@@ -70,7 +68,7 @@ class Generator:
         self._imageDateimage
     
 # callback history
-class LossHistory(keras.callbacks.Callback):
+class LossHistory(callbacks.Callback):
     def on_train_begin(self, logs={}):
         self.losses = []
 
