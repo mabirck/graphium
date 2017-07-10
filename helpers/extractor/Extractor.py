@@ -15,7 +15,7 @@ class Extractor:
     def start(self):
         self.untar()
         #self.transfers()
-    
+    git sta
     def transfers(self):
         for transfer in self._transfers:
             transfer.execute()
@@ -38,11 +38,13 @@ class Extractor:
             file_name           = file_name.split("/")
             file_name           = file_name[-1:][0]
             synset              = file_name.split(".")[0]
-            name_from_synset    = self.giveMeTheNames(synset)
-            path_new_directory  = self._destiny+name_from_synset
             
             print 'file tar', file_tar
             print 'synset  ', synset
+            
+            name_from_synset    = self.giveMeTheNames(synset)
+            path_new_directory  = self._destiny+name_from_synset
+            
             print 'destiny ', path_new_directory
             
             # check if directory exists
@@ -50,7 +52,7 @@ class Extractor:
             if not os.path.exists(path_new_directory):
                 os.makedirs(path_new_directory)
             
-            call(["tar", "zxvf", file_tar, "-C", path_new_directory])    
+            call(["tar", "xvf", file_tar, "-C", path_new_directory])    
         
         
         
