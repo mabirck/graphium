@@ -56,12 +56,14 @@ class Generator:
     _validation_generator   = None
     _predictions            = None
     
-    _taget_size     = 244
-    _batch_size     = 128
+    _taget_size             = 244   # size of images w x h
+    _batch_size             = 128
+    
+    _path_directory         = "/mnt/dataWD1/glauco/ImageNet/"
     
     def __init(self):
         
-        self._imageDateimage        = image.ImageDataGenerator(rescale=1./255,shuffle=False).flow_from_directory('/path/', target_size=(self._taget_size, self._taget_size),batch_size=self.batch_size,class_mode='categorical')
+        self._imageDateimage        = image.ImageDataGenerator(rescale=0,shuffle=False).flow_from_directory(self._path_directory, target_size=(self._taget_size, self._taget_size), batch_size=self.batch_size, class_mode='categorical')
         
         self.predictions = self._base_model.predict_generator(self._imageDateimage, len(self._imageDateimage.filenames))
        
