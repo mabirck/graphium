@@ -65,9 +65,9 @@ class Extractor:
         while needGet:
             
             # require names
-            namesOnHTML = urllib2.urlopen("http://www.image-net.org/api/text/wordnet.synset.getwords?wnid="+synset,timeout=100)
             try:
                 print 'Waiting Imagenet-API...'
+                namesOnHTML = urllib2.urlopen("http://www.image-net.org/api/text/wordnet.synset.getwords?wnid="+synset,timeout=100)
                 names       = namesOnHTML.read()
                 names       = names.split("\n")
                 names       = names[:len(names)-1]
