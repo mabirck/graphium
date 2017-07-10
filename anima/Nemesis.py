@@ -2,7 +2,7 @@ from keras.applications.vgg16 import VGG16
 from keras.preprocessing import image
 from keras.models import Model
 from keras.optimizers import SGD
-from keras.callbacks as callbacks
+import keras.callbacks as callbacks
 
 class Nemesis:
     _base_model = None
@@ -28,19 +28,20 @@ class Nemesis:
     def start(self):
         
         # frozen the layout after the last
-        for layer in self.base_model.layers[:self._model.layers.length-2]:
+        for layer in self._base_model.layers[:self._model.layers.length-2]:
             layer.trainable = False
             
         # traing the last layer
-        for layer in self.base_model.layers[self._model.layers.length-2:]:
+        for layer in self._base_model.layers[self._model.layers.length-2:]:
             layer.trainable = True
 
-        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy')
+        self._base_model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy')
         
-        self.model.fit_generator(Generator().getDatemageGenerator(), self._number_of_classes, self._number_of_epoch, verbose=2, show_accuracy=True, callbacks=[self._callback_history], validation_data=None, class_weight=None, nb_worker=1)
+        self._base_model.fit_generator(Generator().getDatemageGenerator(), self._number_of_classes, self._number_of_epoch, verbose=2, show_accuracy=True, callbacks=[self._callback_history], validation_data=None, class_weight=None, nb_worker=1)
 
     
     def print_layers(self):
+        pr
         for i, layer in enumerate(self._base_model.layers):
             print(i, layer.name, layer.get_config())
             

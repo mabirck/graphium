@@ -9,3 +9,4 @@ if __name__ == '__main__':
     #anima.generate_csvs()
     
     nemesis = Nemesis()
+    nemesis.start()
