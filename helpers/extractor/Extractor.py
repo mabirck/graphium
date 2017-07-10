@@ -72,7 +72,7 @@ class Extractor:
                 names       = names.split("\n")
                 names       = names[:len(names)-1]
                 needGet     = False
-            except e:
+            except Exception as inst:
                 print 'Will try again... Wait'
         
         if not "Invalid url!" in names:
