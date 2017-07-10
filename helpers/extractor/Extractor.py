@@ -13,8 +13,8 @@ class Extractor:
         #with file in op
        
     def start(self):
-        #self.untar()
-        self.transfers()
+        self.untar()
+        #self.transfers()
     
     def transfers(self):
         for transfer in self._transfers:
@@ -59,7 +59,7 @@ class Extractor:
     def giveMeTheNames(self,synset):
         
         # require names
-        namesOnHTML = urllib2.urlopen("http://www.image-net.org/api/text/wordnet.synset.getwords?wnid="+synset)
+        namesOnHTML = urllib2.urlopen("http://www.image-net.org/api/text/wordnet.synset.getwords?wnid="+synset,timeout=100)
         names       = namesOnHTML.read()
         names       = names.split("\n")
         names       = names[:len(names)-1]
