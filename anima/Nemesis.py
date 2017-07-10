@@ -7,7 +7,6 @@ import keras.callbacks as callbacks
 class Nemesis:
     _base_model = None
     _x          = None
-    _predictions= None
     
     _samples_for_epoch  = 128
     _number_of_epoch    = 150
@@ -28,11 +27,11 @@ class Nemesis:
     def start(self):
         
         # frozen the layout after the last
-        for layer in self._base_model.layers[:self._model.layers.length-2]:
+        for layer in self._base_model.layers[:len(self._base_model.layers)-2]:
             layer.trainable = False
             
         # traing the last layer
-        for layer in self._base_model.layers[self._model.layers.length-2:]:
+        for layer in self._base_model.layers[len(self._base_model.layers)-2:]:
             layer.trainable = True
 
         self._base_model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy')
@@ -41,7 +40,7 @@ class Nemesis:
 
     
     def print_layers(self):
-        pr
+
         for i, layer in enumerate(self._base_model.layers):
             print(i, layer.name, layer.get_config())
             
@@ -51,22 +50,18 @@ class Nemesis:
 class Generator:
 
     _imageDateImage         = None
-    _validation_generator   = None
-    _predictions            = None
     
-    _taget_size             = 244   # size of images w x h
+    _taget_size             = 244   # size of pic (w x h)
     _batch_size             = 128
     
     _path_directory         = "/mnt/dataWD1/glauco/ImageNet/"
     
-    def __init(self):
+    def __init__(self):
         
-        self._imageDateimage        = image.ImageDataGenerator(rescale=0,shuffle=False).flow_from_directory(self._path_directory, target_size=(self._taget_size, self._taget_size), batch_size=self.batch_size, class_mode='categorical')
+        self._imageDateimage        = image.ImageDataGenerator(rescale=0).flow_from_directory(self._path_directory, target_size=(self._taget_size, self._taget_size), batch_size= self._batch_size, class_mode='categorical', shuffle=False)
         
-        self.predictions = self._base_model.predict_generator(self._imageDateimage, len(self._imageDateimage.filenames))
-       
-    def getDatemageGenerator():
-        self._imageDateimage
+    def getDatemageGenerator(self):
+        return self._imageDateimage
     
 # callback history
 class LossHistory(callbacks.Callback):
