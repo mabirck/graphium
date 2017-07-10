@@ -15,7 +15,7 @@ class Extractor:
     def start(self):
         self.untar()
         #self.transfers()
-    git sta
+        
     def transfers(self):
         for transfer in self._transfers:
             transfer.execute()
@@ -52,7 +52,7 @@ class Extractor:
             if not os.path.exists(path_new_directory):
                 os.makedirs(path_new_directory)
             
-            call(["tar", "xvf", file_tar, "-C", path_new_directory])    
+            call(["tar", "zxvf", file_tar, "-C", path_new_directory])    
         
         
         
