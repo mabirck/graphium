@@ -10,7 +10,7 @@ class Extractor:
     
     def __init__(self):
         self._files_imagenet    = "/mnt/dataWD1/ulisses/ImageNet/"#"data/"#
-        self._destiny           = "/mnt/dataWD1/glauco/ImageNet/"#"data/imagenet/"#
+        self._destiny           = "/mnt/dataWD1/glauco/ImageNet/"#"data/imagenet/"#"data/"#
         self._syset_file        = "data/synset_words.txt"
         with open(self._syset_file) as file:
             lines = file.readlines()
@@ -51,12 +51,20 @@ class Extractor:
             
             call(["tar", "xvf", file_tar, "-C", path_new_directory])    
         
-        
+    def changeName(self):
+        dirs = [d for d in os.listdir(self._destiny) if os.path.isdir(os.path.join(self._destiny, d))]
+        for directory in dirs:
+            name_class = self.giveMeTheNames(directory)
+            os.rename(self._destiny+directory,self._destiny+name_class)
         
     # send the exacty name used on imagent
     #   from synset sended
     def giveMeTheNames(self,synset):
-        return self._syset_file[synset]
+        print 'folder', synset
+        if synset in self._synset_name:
+            return self._synset_name[synset]
+        else:
+            return synset
         #needGet = True
         #names   = ""
         #while needGet:
@@ -85,5 +93,5 @@ if __name__ == "__main__":
             
     extractor = Extractor()
     #extractor.start()
-    
+    extractor.changeName()
     
