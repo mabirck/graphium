@@ -55,10 +55,17 @@ class Generator:
     _batch_size             = 128
     
     _path_directory         = "/mnt/dataWD1/glauco/ImageNet/"
+    _path_directory_classes = "../helpers/extractor/data/synset_words.txt"
+    _path_classes_name      = []
     
     def __init__(self):
         
-        self._imageDateimage        = image.ImageDataGenerator(rescale=0).flow_from_directory(self._path_directory, target_size=(self._taget_size, self._taget_size), batch_size= self._batch_size, class_mode='categorical', shuffle=False)
+        with open(self._path_directory_classes) as file:
+            lines = file.readlines()
+            for line in lines:
+                self._path_classes_name.append(line[:9])
+        
+        self._imageDateimage        = image.ImageDataGenerator(rescale=0).flow_from_directory(self._path_directory, target_size=(self._taget_size, self._taget_size), batch_size= self._batch_size, class_mode='categorical', shuffle=False,classes=self._path_classes_name)
         
     def getDatemageGenerator(self):
         return self._imageDateimage
