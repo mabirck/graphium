@@ -3,7 +3,7 @@ from keras.preprocessing import image
 from keras.models import Model
 from keras.optimizers import SGD
 import keras.callbacks as callbacks
-from Helper import Helper
+from system.Helper import Helper
 import json
 
 class Nemesis:
@@ -14,13 +14,14 @@ class Nemesis:
     _number_of_epoch    = 150
     _number_of_classes  = 1000
     
-    _callback_history   = None
+    _callbacks          = []
     
     def __init__(self):
         # create the base pre-trained model
         self._base_model = VGG16(weights='imagenet', include_top=True)
         
-        self._callback_history = LossHistory()
+        self._callbacks.append(LossHistory())
+        self._callbacks.append(SaveMetrics())
         
         self.x = self._base_model.output
         
@@ -38,7 +39,7 @@ class Nemesis:
 
         self._base_model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy')
         
-        self._base_model.fit_generator(Generator().getDatemageGenerator(), self._number_of_classes, self._number_of_epoch, verbose=2, callbacks=[self._callback_history], validation_data=None, class_weight=None)
+        self._base_model.fit_generator(Generator().getDatemageGenerator(), self._number_of_classes, self._number_of_epoch, verbose=2, callbacks=self._callbacks, validation_data=None, class_weight=None)
 
     
     def print_layers(self):
@@ -80,7 +81,8 @@ class LossHistory(callbacks.Callback):
     def on_batch_end(self, batch, logs={}):
         self.losses.append(logs.get('loss'))
 
-class SaveMetrics(Callback):
+
+class SaveMetrics(callbacks.Callback):
     _helper = None
     _serial = None
     
@@ -98,8 +100,7 @@ class SaveMetrics(Callback):
                 json.dump(self.metrics, f)
  			
     def on_epoch_end(self, epoch, logs):
-         
         self.metrics['loss'].append(logs.get('loss'))
         self.metrics['acc'].append(logs.get('acc'))
-		with open('metrics.json', 'w') as f:    
+        with open("data/"+self._serial+"_menesis_metrics.json", 'w') as f:
             data = json.dump(self.metrics, f)
