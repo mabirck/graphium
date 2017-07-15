@@ -43,7 +43,8 @@ class JSONMetrics(callbacks.Callback):
     
     def on_batch_end(self, batch, logs={}):
         if self._batch % self._each_epoch == 0:
-            print 'Salving weights'
-            file_name = self._config.output_folder+self._serial+'_weights%08d.h5' % self.batch
+            
+            file_name = self._config.output_folder+self._serial+'_weights%08d.h5' % self._batch
+            print 'Salving weights at',file_name
             self._model.save_weights(file_name)
         self._batch += 1
