@@ -1,14 +1,18 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from keras.applications.vgg16 import VGG16
 from keras.preprocessing import image
 from keras.models import Model
 from keras.optimizers import SGD
-import keras.callbacks as callbacks
+from system.Configuration import Configuration
 from system.Helper import Helper
-import json
+from Callbacks import JSONMetrics
 
 class Nemesis:
-    _base_model = None
-    _x          = None
+    
+    _config             = None
+    _base_model         = None
     
     _samples_for_epoch  = 128
     _number_of_epoch    = 150
@@ -18,10 +22,11 @@ class Nemesis:
     
     def __init__(self):
         # create the base pre-trained model
-        self._base_model = VGG16(weights='imagenet', include_top=True)
+        self._config    = Configuration()
         
-        self._callbacks.append(LossHistory())
-        self._callbacks.append(SaveMetrics())
+        self._base_model= VGG16(weights='imagenet', include_top=True)
+        
+        self._callbacks.append(JSONMetrics(self._base_model,2))
         
         self.x = self._base_model.output
         
@@ -37,10 +42,11 @@ class Nemesis:
         for layer in self._base_model.layers[len(self._base_model.layers)-2:]:
             layer.trainable = True
 
-        self._base_model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy')
+        self._base_model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
         
         self._base_model.fit_generator(Generator().getDatemageGenerator(), self._number_of_classes, self._number_of_epoch, verbose=2, callbacks=self._callbacks, validation_data=None, class_weight=None)
-
+       
+        self._base_model.save_weights(self._config.output_weights_file)
     
     def print_layers(self):
         print self._base_model.summary()
@@ -72,35 +78,3 @@ class Generator:
         
     def getDatemageGenerator(self):
         return self._imageDateimage
-    
-# callback history
-class LossHistory(callbacks.Callback):
-    def on_train_begin(self, logs={}):
-        self.losses = []
-
-    def on_batch_end(self, batch, logs={}):
-        self.losses.append(logs.get('loss'))
-
-
-class SaveMetrics(callbacks.Callback):
-    _helper = None
-    _serial = None
-    
-    def __init__(self):
-        self._helper = Helper()
-        self._serial = self._helper.getSerialNow()
-        
-    def on_epoch_begin(self, epoch, logs):
-        try:
-            with open("data/"+self._serial+"_menesis_metrics.json", 'r') as f:   
-                self.metrics = json.load(f)
-        except:
-            with open("data/"+self._serial+"_menesis_metrics.json", 'w') as f:
-                self.metrics = {'loss':[], 'acc':[]}
-                json.dump(self.metrics, f)
- 			
-    def on_epoch_end(self, epoch, logs):
-        self.metrics['loss'].append(logs.get('loss'))
-        self.metrics['acc'].append(logs.get('acc'))
-        with open("data/"+self._serial+"_menesis_metrics.json", 'w') as f:
-            data = json.dump(self.metrics, f)

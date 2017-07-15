@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from Anima import Anima
 from Nemesis import Nemesis

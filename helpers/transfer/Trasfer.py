@@ -50,7 +50,8 @@ class Transfer:
 if __name__ == "__main__":
             
     transfers   = []
-    transfers.append(Transfer('/home/glauco/graphium/helpers/scissor/data/destiny_graffiti/', '/mnt/dataWD1/glauco/ImageNet/n03530642/', 25000, 'random', True)) transfers.append(Transfer('/home/glauco/graphium/helpers/scissor/data/destiny_no_graffiti/', '/mnt/dataWD1/glauco/ImageNet/n01843065/', 25000, 'random', True)) 
+    transfers.append(Transfer('/home/glauco/data/graffiti_cropped/', '/home/glauco/data/ImageNetGraffiti/n06596364/', 25000, 'random', True))
+    transfers.append(Transfer('/home/glauco/data/street_cropped/', '/home/glauco/data/ImageNetGraffiti/n01843065/', 25000, 'random', True)) 
     
     for transfer in transfers:
         transfer.execute()
