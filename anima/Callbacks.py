@@ -20,7 +20,7 @@ class JSONMetrics(callbacks.Callback):
         self._config    = Configuration()
         self._serial    = self._helper.getSerialNow()
         
-        self._file_json = config.output_folder+self._serial+"_menesis_metrics.json"
+        self._file_json = self._config.output_folder+self._serial+"_menesis_metrics.json"
         self._model     = model
         self._each_epoch= each_epoch
         self._batch     = 0
@@ -44,6 +44,6 @@ class JSONMetrics(callbacks.Callback):
     def on_batch_end(self, batch, logs={}):
         if self._batch % self._each_epoch == 0:
             print 'Salving weights'
-            file_name = config.output_folder+self._serial+'_weights%08d.h5' % self.batch
+            file_name = self._config.output_folder+self._serial+'_weights%08d.h5' % self.batch
             self._model.save_weights(file_name)
         self._batch += 1
