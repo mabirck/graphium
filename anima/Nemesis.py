@@ -73,8 +73,12 @@ class Generator:
             lines = file.readlines()
             for line in lines:
                 self._path_classes_name.append(line[:9])
-        
-        self._imageDateimage        = image.ImageDataGenerator(rescale=0).flow_from_directory(self._path_directory, target_size=(self._taget_size, self._taget_size), batch_size= self._batch_size, class_mode='categorical', shuffle=False,classes=self._path_classes_name)
+        self._imageDateimage        = image.ImageDataGenerator(rescale=0).flow_from_directory(self._path_directory, target_size=(self._taget_size, self._taget_size), batch_size= self._batch_size, class_mode='categorical', shuffle=True,classes=self._path_classes_name)
         
     def getDatemageGenerator(self):
         return self._imageDateimage
+    
+
+if __name__ == '__main__':
+        
+    generator = Generator()
