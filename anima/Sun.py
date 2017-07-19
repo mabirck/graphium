@@ -11,7 +11,7 @@ from services.HotClasses import HotClasses
 from services.HotHistogram import HotHistogram
 
 
-class Anima:
+class Sun:
     
     _config     = None
     _logger     = None
@@ -34,7 +34,7 @@ class Anima:
         self._logger  = Logger()
         self._config  = Configuration()
         
-        self._logger.info('Anima: init the anima...')
+        self._logger.info('Sun: init the sun...')
         
         self._images        = []
         self._images_session= []
@@ -50,7 +50,7 @@ class Anima:
         
     def start(self):
         
-        self._logger.info('Anima: Starting executation')
+        self._logger.info('Sun: Starting executation')
         self._session   = tf.Session()
         self._imgs      = tf.placeholder(tf.float32, [None, 224, 224, 3])
         self._vgg       = VGG16(self._imgs, self._config.vgg16_weights_path, self._session)
@@ -64,7 +64,7 @@ class Anima:
         the_header+= os.linesep
         self._file_output_csv.write(the_header)
         
-        self._logger.info('Anima: Read and send files to session')
+        self._logger.info('Sun: Read and send files to session')
         
         # each file on directory
         #   if file is not empty or is image
@@ -80,12 +80,12 @@ class Anima:
             if os.path.isfile(os.path.join(self._path, file)) and file != ".DS_Store" and os.stat(file_name).st_size!=0:
                 img1 = imread(file_name, mode='RGB')
                 img1 = imresize(img1, (224, 224))
-                self._logger.info('Anima: Appending image {0} {2} from {1}'.format( file, self._total_files, self._current_file))
+                self._logger.info('Sun: Appending image {0} {2} from {1}'.format( file, self._total_files, self._current_file))
                 self._images_session.append(img1)
                 self._images_names.append(file)
                 self._total_image_session   += 1
             else:
-                self._logger.info("Anima: Can't apppend image {0} to session".format(file))
+                self._logger.info("Sun: Can't apppend image {0} to session".format(file))
             self._current_file          += 1
             
             
@@ -98,7 +98,7 @@ class Anima:
         self._file_output_csv.close()
     
     def executeSession(self):
-        self._logger.info('Anima: Start sessing {0} with {1} images'.format(self._total_sessions, len(self._images_session)))
+        self._logger.info('Sun: Start sessing {0} with {1} images'.format(self._total_sessions, len(self._images_session)))
         
         # Start a tf session from list of imagens session
         #   for each probability in probabilities
@@ -112,7 +112,7 @@ class Anima:
         column_position = 0
         hot_value       = 0
         
-        self._logger.info('Anima: Adding probabilities...')
+        self._logger.info('Sun: Adding probabilities...')
         for probabilities in probabilities_by_image:
 
             # register the probabilities on output
@@ -124,7 +124,7 @@ class Anima:
             # next image row processed
             img_position+=1
 
-        self._logger.info('Anima: End the session executation')
+        self._logger.info('Sun: End the session executation')
         self._total_sessions += 1
         self._total_image_session   =0
         self._images_session = []

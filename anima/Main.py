@@ -6,9 +6,9 @@ from Nemesis import Nemesis
 
 if __name__ == '__main__':
     
-    #anima = Anima()
-    #anima.start()
-    #anima.generate_csvs()
+    #sun = Sun()
+    #sun.start()
+    #sun.generate_csvs()
     
     nemesis = Nemesis()
     nemesis.start()
